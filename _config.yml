@@ -103,7 +103,7 @@ analytics:
 # Site Author
 author:
   name: "Nick Huang"
-  avatar: # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar: /assets/images/bio-photo.jpg # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio: "iOS/Android Developer. Focus on IoT."
   location: "Taiwan, Taipei"
   email:
