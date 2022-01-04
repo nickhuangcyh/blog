@@ -113,13 +113,15 @@ KVS 的 Signaling server 是用 WebSocket 去實作的
 
 理解這些 P2P 相關的知識，我們就可以很清楚的實作每一步驟，出錯時也能清楚哪一部分出錯，甚至是替換 Stun / TURN / signaling server 都沒問題，下面貼一下成果圖
 
-![ios_webrtc](/assets/images/ios_webrtc.png)
+![ios_webrtc](/blog/assets/images/ios_webrtc.png)
 
 ## 踩雷補充
 
 - 在串接 AWS KVS 時，AWS Android 的 sample code 是使用 tyrus 套件連 signaling server，但此套件在舊版有一些 SSL 問題有機會失敗，所以我把 tyrus 換成 okhttp 去連 signaling server，但一直連不上 403 Forbidden，iOS 用 starscream 連線正常，後來比對兩平台 URL 發現，Android 的會多做一次 url encode，在 tyrus 沒問題，但在 okhttp 上會有問題 (解法請參考 : <https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-android/issues/74>)
 
 ## 總結
+
+P2P 的基本觀念大致就到這邊，如果想要更深入的理解 P2P 的朋友，可以看參考資源欄中的文章，或直接看 RFC ，裡面會說到每個協議的格式細節．
 
 ## 參考資源
 
