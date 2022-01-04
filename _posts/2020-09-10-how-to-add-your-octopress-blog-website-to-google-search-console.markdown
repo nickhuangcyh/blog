@@ -2,8 +2,13 @@
 layout: single
 title: "如何使Octopress website能被Google搜索到"
 date: 2020-09-10 23:29:22 +0800
+header:
+  overlay_image: /assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg
+  teaser: /assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg
 tags: [Octopress]
 categories: [Blog]
+---
+
 ---
 
 1. 登入[Google search console](https://search.google.com/search-console/welcome)

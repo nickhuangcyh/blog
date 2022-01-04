@@ -2,8 +2,13 @@
 layout: single
 title: "3D Graphic Engine Tips - 三角形 x UV mapping x Vertices & Indices"
 date: 2022-01-02 10:04:00 +0800
+header:
+  overlay_image: /assets/images/nick-brunner-k4xDXNskVsQ-unsplash.jpg
+  teaser: /assets/images/nick-brunner-k4xDXNskVsQ-unsplash.jpg
 tags: [iOS, Android, 3D, OpenGL, ARKit, ARCore, Sceneform, SceneKit]
 categories: [Mobile]
+---
+
 ---
 
 ## 前言

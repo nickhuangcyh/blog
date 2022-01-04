@@ -2,8 +2,13 @@
 layout: single
 title: "如何使 Jekyll website 能被 Google 搜索到"
 date: 2021-12-31 11:26:00 +0800
+header:
+  overlay_image: /assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg
+  teaser: /assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg
 tags: [Jekyll, Google]
 categories: [Blog]
+---
+
 ---
 
 ## 在 Google 搜尋不到我的 Blog

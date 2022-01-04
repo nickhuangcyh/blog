@@ -2,8 +2,13 @@
 layout: single
 title: "使用Octopress架設靜態Blog"
 date: 2020-09-10 23:18:16 +0800
+header:
+  overlay_image: /assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg
+  teaser: /assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg
 tags: [Octopress]
 categories: [Blog]
+---
+
 ---
 
 ## 為什麼要寫 Blog?

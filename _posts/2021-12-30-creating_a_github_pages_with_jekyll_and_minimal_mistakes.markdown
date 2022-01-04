@@ -2,8 +2,13 @@
 layout: single
 title: "使用 Jekyll + minimal-mistakes 在 Github pages 上架設自己的部落格"
 date: 2021-12-29 15:45:03 +0800
+header:
+  overlay_image: /assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg
+  teaser: /assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg
 tags: [Jekyll, Minimal-Mistakes, Theme]
 categories: [Blog]
+---
+
 ---
 
 ## 為什麼寫 Blog 文章

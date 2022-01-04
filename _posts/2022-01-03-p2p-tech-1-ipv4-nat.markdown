@@ -2,8 +2,13 @@
 layout: single
 title: "搞懂 P2P 技術 (1) - P2P、IPv4、NAT"
 date: 2022-01-03 23:45:03 +0800
+header:
+  overlay_image: /assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg
+  teaser: /assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg
 tags: [iOS, Android, IPv4, NAT]
 categories: [P2P]
+---
+
 ---
 
 ## 前言

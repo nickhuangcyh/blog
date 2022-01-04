@@ -2,8 +2,13 @@
 layout: single
 title: "搞懂 P2P 技術 (3) - WebRTC、AWS KVS"
 date: 2022-01-04 23:13:00 +0800
+header:
+  overlay_image: /assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg
+  teaser: /assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg
 tags: [iOS, Android, WebRTC, KVS]
 categories: [P2P, AWS]
+---
+
 ---
 
 ## WebRTC
