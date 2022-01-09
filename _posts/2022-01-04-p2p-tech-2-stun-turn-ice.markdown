@@ -1,14 +1,13 @@
 ---
 layout: single
-title: "搞懂 P2P 技術 (2) - STUN、TURN、ICE"
+title: "搞懂 P2P 技術 (2) - STUN x TURN x ICE"
 date: 2022-01-04 15:09:00 +0800
+excerpt: "STUN x TURN x ICE"
 header:
   overlay_image: /assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg
   teaser: /assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg
 tags: [iOS, Android, STUN, TURN, ICE]
 categories: [P2P]
----
-
 ---
 
 ## 前言
