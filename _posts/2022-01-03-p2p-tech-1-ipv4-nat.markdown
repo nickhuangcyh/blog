@@ -154,7 +154,7 @@ Internet 能夠如此成功進入人類的生活中，IP 的設計可以說是�
 
 > Symmetric NAT 無法實現 P2P ，原因就在於對稱型每次的請求都會對應到不同的外部 IP 和 Port
 
-### 結論
+## 結論
 
 有關 P2P、IPv4、NAT 就先介紹到此，下一篇會介紹實現 P2P 需要哪些協定工具，STUN、TURN、ICE 是什麼
 

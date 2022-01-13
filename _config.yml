@@ -290,3 +290,5 @@ defaults:
         overlay_filter: 0.5
         overlay_image: /assets/images/fabien-moline-XaQXyRU9pgo-unsplash.jpg
         caption: "Photo credit: [**Unsplash**](https://unsplash.com)"
+      toc: true
+      toc_sticky: true

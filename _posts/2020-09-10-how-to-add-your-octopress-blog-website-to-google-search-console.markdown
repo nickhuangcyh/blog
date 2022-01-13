@@ -10,15 +10,26 @@ tags: [Octopress]
 categories: [Blog]
 ---
 
-1. 登入[Google search console](https://search.google.com/search-console/welcome)
-2. 選擇`網址前置字元`
-3. 提交 Blog 的 Domain name`http://[username].github.io/`
-4. 下載驗證的 html 檔案
-5. 放到`octopress/source`目錄下
-6. 建置及部署
+## 在 Google 搜尋不到我的 Blog
 
-   ```bash
-   rake gen_deploy
-   ```
+當我們在建立完 Jekyll Blog 後，會發現竟然 Google 不到我們的 Blog 網站，別擔心這是因為我們尚未將網站提交加入 Google Search Console 中
 
-7. 回到 Google search console，點擊驗證，完成
+## 將網站加入 Google Search Console
+
+進入 [Google Search Console](https://search.google.com/search-console/welcome?hl=zh-CN&utm_source=about-page&pli=1)
+
+這邊使用網址前綴方式添加，加你的 Blog domain 填入並繼續
+
+![google_search_console](/blog/assets/images/google_search_console.png)
+
+下載 `googlexxxxxxxxxx.html` 檔案放到 `octopress/source` 目錄下，commit 上傳到 GitHub 上，點擊驗證
+
+```bash
+rake gen_deploy
+```
+
+![google_search_console_verify](/blog/assets/images/google_search_console_verify.png)
+
+驗證成功 👍
+
+![google_search_console_verify](/blog/assets/images/google_search_console_verified.png)
