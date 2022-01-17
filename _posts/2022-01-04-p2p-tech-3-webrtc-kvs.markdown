@@ -14,7 +14,7 @@ categories: [P2P, AWS]
 
 全名 Web Real-Time Communication，是一個支援網頁瀏覽器進行即時語音對話或影片對話的 API
 
-> [WebRTC Wiki] (<https://zh.wikipedia.org/wiki/WebRTC>)
+> [WebRTC Wiki](https://zh.wikipedia.org/wiki/WebRTC)
 
 WebRTC 的底層就是使用 ICE 來進行 P2P 打洞
 
