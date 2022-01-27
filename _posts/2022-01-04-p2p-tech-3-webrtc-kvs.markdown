@@ -117,7 +117,8 @@ KVS 的 Signaling server 是用 WebSocket 去實作的
 
 理解這些 P2P 相關的知識，我們就可以很清楚的實作每一步驟，出錯時也能清楚哪一部分出錯，甚至是替換 Stun / TURN / signaling server 都沒問題，下面貼一下成果圖
 
-![ios_webrtc](/blog/assets/images/ios_webrtc.png)
+[![ios_webrtc](/blog/assets/images/ios_webrtc.png)](/blog/assets/images/ios_webrtc.png)
+[![android_webrtc](/blog/assets/images/android_webrtc.png)](/blog/assets/images/android_webrtc.png)
 
 ## 踩雷補充
 
