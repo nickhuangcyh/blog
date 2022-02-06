@@ -10,6 +10,8 @@ tags: [UML]
 categories: [Design Pattern]
 ---
 
+> 您可於此 [design_pattern repo](https://github.com/nickhuang9527/design_pattern) 下載 Design Pattern 系列程式碼。
+
 ## UML (Unified Modeling Language)
 
 UML 是一種用視覺圖形化來規劃建構軟體的方法。

@@ -34,19 +34,19 @@ Design Principle 是用來幫助我們改善物件導向設計的建議，幫助
 
 ### Encapsulation 封裝
 
-> 將屬性及方法實作細節隱藏起來在類別當中，只暴露部分方法給使用者，使用者無法任意修改內部屬性及方法實作細節。
+將屬性及方法實作細節隱藏起來在類別當中，只暴露部分方法給使用者，使用者無法任意修改內部屬性及方法實作細節。
 
 ### Inheritance 繼承
 
-> 子類別可以繼承父類別的屬性及方法，達到程式碼重複使用之目的。
+子類別可以繼承父類別的屬性及方法，達到程式碼重複使用之目的。
 
 ### Polymorphism 多型
 
-> 為不同的類別提供統一介面或抽象類別，以操作不同的實體物件。
+為不同的類別提供統一介面或抽象類別，以操作不同的實體物件。
 
 ### Abstraction 抽象
 
-> 透過類型子類及抽象方式，隱藏依賴於類型或接口的實作細節。
+透過類型子類及抽象方式，隱藏依賴於類型或接口的實作細節。
 
 ## Object-Oriented Concepts, Design Principle, Design Pattern 之間關係
 
@@ -62,7 +62,7 @@ Design Principle 是用來幫助我們改善物件導向設計的建議，幫助
 
 ## Encapsulate What Varies 封裝變化
 
-> 找出程式中可能需要更動之處，把它們獨立出來，不要和那些不需要更動的程式碼混再一起。
+找出程式中可能需要更動之處，把它們獨立出來，不要和那些不需要更動的程式碼混再一起。
 
 假設今天要設計一間鬆餅店，可以訂購鬆餅
 
@@ -130,7 +130,7 @@ func orderPancakeWithFactory(type: String) {
 
 ## Favor composition over inheritance 多用合成，少用繼承
 
-> HAS-A (composition) can be better than IS-A (inheritance)
+HAS-A (composition) can be better than IS-A (inheritance)
 
 盡量使用合成來取代繼承，並不是完全不使用繼承，而是多數情況下你應該考慮使用合成而不是繼承
 
@@ -156,7 +156,7 @@ func orderPancakeWithFactory(type: String) {
 
 ## Loose Coupling 鬆耦合
 
-> 將每個組件獨立開來，使部件之間的相互影響降低
+將每個組件獨立開來，使部件之間的相互影響降低
 
 再來看一個範例，今天要做一個 Weather App，他可以取得溫度並顯示在螢幕上。
 
@@ -172,7 +172,7 @@ func orderPancakeWithFactory(type: String) {
 
 ## Program to Interfaces 基於介面編程
 
-> 寫程式是針對介面而寫，而不是針對實踐方式而寫。
+寫程式是針對介面而寫，而不是針對實踐方式而寫。
 
 當你針對介面編寫，你會發現任何物件都變得非常好抽換，當你需要注入假資料測試，你可以作假物件實作此介面即可，當你在做 MVC MVP 等架構，只需要實作此介面就能輕易替換組件，當你開始已介面去思考，你會發現程式碼變得非常有彈性、且好擴充測試，Apple 甚至在 WWDC15 中提到 Swift 的 [Protocol-Oriented Programming](https://developer.apple.com/videos/play/wwdc2015/408/)，代表介面(協議)思考的重要性，所以從現在起開始從介面思考吧!
 
@@ -193,7 +193,7 @@ func orderPancakeWithFactory(type: String) {
 
 ### Single Responsibility Principle (SRP) 單一職責原則
 
-> 物件應該僅具有一種單一功能，應只會有一個理由去改變此物件
+物件應該僅具有一種單一功能，應只會有一個理由去改變此物件
 
 e.g.
 我們要做登入頁面功能，我們會這樣寫
@@ -257,7 +257,7 @@ class LoginViewControllerSRP {
 
 ### Open Closed Principle (OCP) 開放封閉原則
 
-> 對於擴充開放，對於修改封閉
+對於擴充開放，對於修改封閉
 
 e.g.
 我們常常會需要檢查使用者登入的帳密等等，我們來做一個檢查器吧
@@ -339,7 +339,7 @@ class PasswordValidator: ValidatorConvertible {
 
 ### Liskov Substitution Principle (LSP) 里氏替換原則
 
-> 程式中的物件應該是可以在不改變程式正確性的前提下被它的子類所替換的
+程式中的物件應該是可以在不改變程式正確性的前提下被它的子類所替換的
 
 e.g. 我們需要計算正方形及長方形的面積
 
@@ -381,7 +381,7 @@ print("\(square.getArea())")
 
 ### Interface Segregation Principle (ISP) 介面隔離原則
 
-> 多個特定客戶端介面要好於一個寬泛用途的介面
+多個特定客戶端介面要好於一個寬泛用途的介面
 
 e.g.
 今天需要設計如何讓使用者操作車子
@@ -463,8 +463,8 @@ class Engineer1: Car1, Debuggable {
 
 ### Dependency Inversion Principle (DIP) 依賴反向原則
 
-> 高階模組不應該依賴於低階模組，兩者都應該依賴抽象，
-> 抽象不應該依賴細節，細節應該依賴抽象。
+高階模組不應該依賴於低階模組，兩者都應該依賴抽象，
+抽象不應該依賴細節，細節應該依賴抽象。
 
 e.g. 設計一個能不同房間加入不同 IoT 設備的系統，可以新增刪除房間，例如客廳有智慧音箱、溫度控制器，廚房有煙霧偵測器等...
 

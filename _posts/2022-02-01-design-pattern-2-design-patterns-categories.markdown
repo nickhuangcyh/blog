@@ -18,7 +18,7 @@ Design Pattern 可以分為三種基本的類型
 
 ### Creational 創建型
 
-> 創建實例化物件有關的 Patterns
+創建實例化物件有關的 Patterns
 
 - Factory Method Pattern
 - Abstract Factory Pattern
@@ -28,7 +28,7 @@ Design Pattern 可以分為三種基本的類型
 
 ### Structural 結構型
 
-> 物件之間如何組成更大結構的 Patterns
+物件之間如何組成更大結構的 Patterns
 
 - Adapter Pattern
 - Bridge Pattern
@@ -40,7 +40,7 @@ Design Pattern 可以分為三種基本的類型
 
 ### Behavioural 行為型
 
-> 物件之間行為交互的 Patterns
+物件之間行為交互的 Patterns
 
 - Chain of Responsibility Pattern
 - Mediator Pattern
