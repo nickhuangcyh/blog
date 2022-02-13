@@ -291,4 +291,6 @@ defaults:
         overlay_image: /assets/images/fabien-moline-XaQXyRU9pgo-unsplash.jpg
         caption: "Photo credit: [**Unsplash**](https://unsplash.com)"
       toc: true
-      classes: wide
+      toc_label: "Table of contents"
+      toc_sticky: true
+      # classes: wide
