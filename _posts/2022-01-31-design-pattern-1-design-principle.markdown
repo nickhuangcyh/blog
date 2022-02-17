@@ -66,6 +66,10 @@ Design Principle 是用來幫助我們改善物件導向設計的建議，幫助
 
 假設今天要設計一間鬆餅店，可以訂購鬆餅
 
+{% tabs encapsulate-what-varies-1 %}
+
+{% tab encapsulate-what-varies-1 Swift %}
+
 ```swift
 func orderPancake(type: String) {
     var pancake: Pancake?
@@ -91,7 +95,38 @@ func orderPancake(type: String) {
 }
 ```
 
+{% endtab %}
+
+{% tab encapsulate-what-varies-1 Kotlin %}
+
+```kotlin
+fun orderPancake(type: String) {
+
+    // Code that is varying
+    val pancake: Pancake = when (type) {
+        "classic" -> ClassicPancake()
+        "blueberry" -> BlueberryPancake()
+        "banana" -> BananaPancake()
+//        "chocolate chip" -> ChocolateChipPancake()
+        else -> ClassicPancake()
+    }
+
+    // Important code that does not vary
+    pancake.cook()
+    pancake.plate()
+    pancake.addButter()
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 但老闆今天想增加新口味 `ChocolateChip`，但 cook(), plate(), addButter() 這些程式並不需要修改，所以我們應該將會變化的程式碼抽出來封裝，減少對不需變動的程式碼產生影響。
+
+{% tabs encapsulate-what-varies-2 %}
+
+{% tab encapsulate-what-varies-2 Swift %}
 
 ```swift
 public class SimplePancakeFactory {
@@ -125,6 +160,37 @@ func orderPancakeWithFactory(type: String) {
     pancake?.addButter()
 }
 ```
+
+{% endtab %}
+
+{% tab encapsulate-what-varies-2 Kotlin %}
+
+```kotlin
+object SimplePancakeFactory {
+    fun createPancake(type: String): Pancake {
+        return when (type) {
+            "classic" -> ClassicPancake()
+            "blueberry" -> BlueberryPancake()
+            "banana" -> BananaPancake()
+//        "chocolate chip" -> ChocolateChipPancake()
+            else -> ClassicPancake()
+        }
+    }
+}
+
+fun orderPancakeWithFactory(type: String) {
+    val pancake = SimplePancakeFactory.createPancake(type)
+
+    // Important code that does not vary
+    pancake.cook()
+    pancake.plate()
+    pancake.addButter()
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
 
 如此我們就可以隨時添加新口味且不會影響其他不會變動的程式碼。
 
@@ -198,6 +264,10 @@ HAS-A (composition) can be better than IS-A (inheritance)
 e.g.
 我們要做登入頁面功能，我們會這樣寫
 
+{% tabs srp-1 %}
+
+{% tab srp-1 Swift %}
+
 ```swift
 class LoginViewController {
     func loginToServer(account: String, password: String, callback: Result<String, Error>) {
@@ -215,7 +285,36 @@ class LoginViewController {
 }
 ```
 
+{% endtab %}
+
+{% tab srp-1 Kotlin %}
+
+```kotlin
+class LoginActivity {
+    fun loginToServer(account: String, password: String, callback:  model.Result<String, Error>) {
+//        Alamofire... { callback() }
+//        Volley... { callback() }
+    }
+
+    fun saveToDB(account: String, password: String) {
+        // sql.save()...
+    }
+
+    fun deleteFromDB(account: String) {
+        // sql.delete()
+    }
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 依照單一職責原則，我們應該要將 API 及 DB 的功能分開，修改如下
+
+{% tabs srp-2 %}
+
+{% tab srp-2 Swift %}
 
 ```swift
 class ServerApiRequestService {
@@ -253,6 +352,50 @@ class LoginViewControllerSRP {
 }
 ```
 
+{% endtab %}
+
+{% tab srp-2 Kotlin %}
+
+```kotlin
+class ServerApiRequestService {
+    fun login(account: String, password: String, callback: model.Result<String, Error>) {
+//        Alamofire... { callback() }
+//        Volley... { callback() }
+    }
+}
+
+class DBService {
+    fun save(account: String, password: String) {
+//        sql.save()
+    }
+
+    fun delete(account: String) {
+//        sql.delete()
+    }
+}
+
+class LoginActivitySRP {
+    var apiRequestService: ServerApiRequestService? = null
+    var dbService: DBService? = null
+
+    fun loginToServer(account: String, password: String, callback: model.Result<String, Error>) {
+        apiRequestService?.login(account, password, callback)
+    }
+
+    fun saveToDB(account: String, password: String) {
+        dbService?.save(account, password)
+    }
+
+    fun deleteFromDB(account: String) {
+        dbService?.delete(account)
+    }
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 有些文章會說 save, delete function 也須拆開在不同 class(DeleteDBService, SaveDBService)處理, 因為 save. delete 是不同職責修改項目, 不應動到另一個 class, 但我認為這樣 Over Design 反而不好維護, 拆分職責應適當不過度
 
 ### Open Closed Principle (OCP) 開放封閉原則
@@ -261,6 +404,10 @@ class LoginViewControllerSRP {
 
 e.g.
 我們常常會需要檢查使用者登入的帳密等等，我們來做一個檢查器吧
+
+{% tabs ocp-1 %}
+
+{% tab ocp-1 Swift %}
 
 ```swift
 enum ValidatorType {
@@ -304,7 +451,55 @@ class Validator {
 }
 ```
 
+{% endtab %}
+
+{% tab ocp-1 Kotlin %}
+
+```kotlin
+enum class ValidatorType {
+    Username,
+    Password;
+}
+
+sealed class ValidationException: Exception() {
+    class IsEmpty(val errorMessage: String): ValidationException()
+    class ContainsSpecialChar(val errorMessage: String): ValidationException()
+
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this is IsEmpty && other is IsEmpty -> true
+            this is ContainsSpecialChar && other is ContainsSpecialChar -> true
+            else -> false
+        }
+    }
+}
+
+class Validator {
+    @Throws(ValidationException::class)
+    fun validated(value: String, validatorType: ValidatorType): String {
+        when (validatorType) {
+            ValidatorType.Username -> when {
+                value.isEmpty() -> throw ValidationException.IsEmpty("isEmpty")
+                value.isContainsSpecialChars() -> throw ValidationException.ContainsSpecialChar("containsSpecialChar")
+            }
+            ValidatorType.Password -> when {
+                value.isEmpty() -> throw ValidationException.IsEmpty("isEmpty")
+            }
+        }
+        return value
+    }
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 但假如今天客戶想要增加 Email、Phone Number、Device Mac 等等的格式檢查，那我們必須修改到 Validator class 的程式碼，這樣會影響到其他程式碼，打破了 Open-Closed Principle，對於擴充開放，對於修改封閉，那我們可以怎麼改進，如下
+
+{% tabs ocp-2 %}
+
+{% tab ocp-2 Swift %}
 
 ```swift
 protocol ValidatorConvertible {
@@ -335,6 +530,42 @@ class PasswordValidator: ValidatorConvertible {
 }
 ```
 
+{% endtab %}
+
+{% tab ocp-2 Kotlin %}
+
+```kotlin
+interface ValidatorConvertible {
+    @Throws(ValidationException::class)
+    fun validated(value: String): String
+}
+
+class UserNameValidator: ValidatorConvertible {
+
+    override fun validated(value: String): String {
+        when {
+            value.isEmpty() -> throw ValidationException.IsEmpty("isEmpty")
+            value.isContainsSpecialChars() -> throw ValidationException.ContainsSpecialChar("containsSpecialChar")
+        }
+        return value
+    }
+}
+
+class PasswordValidator: ValidatorConvertible {
+
+    override fun validated(value: String): String {
+        when {
+            value.isEmpty() -> throw ValidationException.IsEmpty("isEmpty")
+        }
+        return value
+    }
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 如此要新增 Email、Phone Number、Device Mac 格式檢查，我們只需要新增相對應的檢查器即可 EmailValidator、PhoneNumberValidator 及 DeviceMacValidator，既不會影響其他程式碼(對修改封閉)，也容易擴充新的檢查器(對擴充開放)
 
 ### Liskov Substitution Principle (LSP) 里氏替換原則
@@ -342,6 +573,10 @@ class PasswordValidator: ValidatorConvertible {
 程式中的物件應該是可以在不改變程式正確性的前提下被它的子類所替換的
 
 e.g. 我們需要計算正方形及長方形的面積
+
+{% tabs lsp-1 %}
+
+{% tab lsp-1 Swift %}
 
 ```swift
 class Rectangle {
@@ -374,6 +609,38 @@ let square = Square(height: 2, weight: 3)
 print("\(square.getArea())")
 ```
 
+{% endtab %}
+
+{% tab lsp-1 Kotlin %}
+
+```kotlin
+open class Rectangle(protected val height: Int, protected val width: Int) {
+
+    open fun getArea(): String {
+        return "${height * width}"
+    }
+}
+
+class Square(height: Int, width: Int) : Rectangle(height, width) {
+    override fun getArea(): String {
+        return if (height != width) {
+            "長寬需一致"
+        } else {
+            super.getArea()
+        }
+    }
+}
+
+val rectangle = Rectangle(2, 3)
+println("${rectangle.getArea()}")
+val square = Square(2, 3)
+println("${square.getArea()}")
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 上面的例子我們將正方形繼承長方形，但正方形的 getArea() 卻不符合長方形的結果，這就打破了 LSP。
 
 - 增加程式碼的健全度，在使用不同的子類別的時候，可以大幅度的保證彼此之間的相容性。只要父類別可以使用，基本上子類別也可以使用
@@ -385,6 +652,10 @@ print("\(square.getArea())")
 
 e.g.
 今天需要設計如何讓使用者操作車子
+
+{% tabs isp-1 %}
+
+{% tab isp-1 Swift %}
 
 ```swift
 protocol Car {
@@ -422,7 +693,55 @@ class Engineer: Car {
 }
 ```
 
+{% endtab %}
+
+{% tab isp-1 Kotlin %}
+
+```kotlin
+interface Car {
+    fun startEngine()
+    fun stopEngine()
+    fun enableDebugMode()
+}
+
+class Driver: Car {
+    override fun startEngine() {
+        println("start engine")
+    }
+
+    override fun stopEngine() {
+        println("stop engine")
+    }
+
+    override fun enableDebugMode() {
+        println("enable debug mode")
+    }
+}
+
+class Engineer: Car {
+    override fun startEngine() {
+        println("start engine")
+    }
+
+    override fun stopEngine() {
+        println("stop engine")
+    }
+
+    override fun enableDebugMode() {
+        println("enable debug mode")
+    }
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 工程師可以開啟 DebugMode, 但駕駛使用者不應該可以開啟 DebugMode，因此我們來改變程式碼將 enableDebugMode() 隔離成獨立介面吧!
+
+{% tabs isp-2 %}
+
+{% tab isp-2 Swift %}
 
 ```swift
 protocol Car1 {
@@ -459,6 +778,49 @@ class Engineer1: Car1, Debuggable {
 }
 ```
 
+{% endtab %}
+
+{% tab isp-2 Kotlin %}
+
+```kotlin
+interface Car1 {
+    fun startEngine()
+    fun stopEngine()
+}
+
+interface Debuggable {
+    fun enableDebugMode()
+}
+
+class Driver1: Car1 {
+    override fun startEngine() {
+        println("start engine")
+    }
+
+    override fun stopEngine() {
+        println("stop engine")
+    }
+}
+
+class Engineer1: Car1, Debuggable {
+    override fun startEngine() {
+        println("start engine")
+    }
+
+    override fun stopEngine() {
+        println("stop engine")
+    }
+
+    override fun enableDebugMode() {
+        println("enable debug mode")
+    }
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 如此就只有工程師能進入 DebugMode
 
 ### Dependency Inversion Principle (DIP) 依賴反向原則
@@ -467,6 +829,10 @@ class Engineer1: Car1, Debuggable {
 抽象不應該依賴細節，細節應該依賴抽象。
 
 e.g. 設計一個能不同房間加入不同 IoT 設備的系統，可以新增刪除房間，例如客廳有智慧音箱、溫度控制器，廚房有煙霧偵測器等...
+
+{% tabs dip-1 %}
+
+{% tab dip-1 Swift %}
 
 ```swift
 class Room {
@@ -511,8 +877,63 @@ roomVC.saveRoomToDB(room: room)
 roomVC.deleteRoomFromDB(no: room.no)
 ```
 
+{% endtab %}
+
+{% tab dip-1 Kotlin %}
+
+```kotlin
+class Room {
+    val no: Int
+    val device: List<String>
+
+    constructor(no: Int, device: List<String>) {
+        this.no = no
+        this.device = device
+    }
+}
+
+class SQLiteService {
+    fun saveRoom(room: Room) {
+        println("SQLiteService save")
+    }
+
+    fun deleteRoom(no: Int) {
+        println("SQLiteService delete")
+    }
+}
+
+class RoomActivity {
+    var sqlDBService: SQLiteService? = null
+
+    constructor(sqlDBService: SQLiteService) {
+        this.sqlDBService = sqlDBService
+    }
+
+    fun saveRoomToDB(room: Room) {
+        sqlDBService?.saveRoom(room)
+    }
+
+    fun deleteRoomFromDB(no: Int) {
+        sqlDBService?.deleteRoom(no)
+    }
+}
+
+val roomVC = RoomActivity(SQLiteService())
+val room = Room(1, listOf("IPCam", "VDP"))
+roomVC.saveRoomToDB(room)
+roomVC.deleteRoomFromDB(room.no)
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 如果今天 SQLite 因某些問題(速度過慢等等...)因素，導致我們必須換成 CoreData 或其他 Database 呢?
 你會發現我們無法抽換，但如果依賴於抽象編寫，程式碼就會非常好抽換及測試，下面讓我們修改一下程式碼
+
+{% tabs dip-2 %}
+
+{% tab dip-2 Swift %}
 
 ```swift
 protocol DataBaseService {
@@ -587,6 +1008,88 @@ room2VC.databaseService = mysqlDB
 room2VC.saveRoomToDB(room: room2)
 room2VC.deleteRoomFromDB(no: room2.no)
 ```
+
+{% endtab %}
+
+{% tab dip-2 Kotlin %}
+
+```kotlin
+interface DataBaseService {
+    fun saveRoom(room: Room)
+    fun deleteRoom(no: Int)
+}
+
+class SQLiteDBService: DataBaseService {
+    override fun saveRoom(room: Room) {
+        println("SQLiteDBService save")
+    }
+
+    override fun deleteRoom(no: Int) {
+        println("SQLiteDBService delete")
+    }
+}
+
+class CoreDataDBService: DataBaseService {
+    override fun saveRoom(room: Room) {
+        println("CoreDataDBService save")
+    }
+
+    override fun deleteRoom(no: Int) {
+        println("CoreDataDBService delete")
+    }
+}
+
+class MySQLDBService: DataBaseService {
+    override fun saveRoom(room: Room) {
+        println("MySQLDBService save")
+    }
+
+    override fun deleteRoom(no: Int) {
+        println("MySQLDBService delete")
+    }
+}
+
+class Room2Activity {
+    var databaseService: DataBaseService? = null
+
+    constructor(databaseService: DataBaseService) {
+        this.databaseService = databaseService
+    }
+
+    fun saveRoomToDB(room: Room) {
+        databaseService?.saveRoom(room)
+    }
+
+    fun deleteRoomFromDB(no: Int) {
+        databaseService?.deleteRoom(no)
+    }
+}
+
+val sqliteDB = SQLiteDBService()
+val coreDataDB = CoreDataDBService()
+val mysqlDB = MySQLDBService()
+
+val room2VC = Room2Activity(sqliteDB)
+val room2 = Room(2, listOf("IPCam", "VDP"))
+
+// sql
+room2VC.saveRoomToDB(room2)
+room2VC.deleteRoomFromDB(room2.no)
+
+// coredata
+room2VC.databaseService = coreDataDB
+room2VC.saveRoomToDB(room2)
+room2VC.deleteRoomFromDB(room2.no)
+
+// mysql
+room2VC.databaseService = mysqlDB
+room2VC.saveRoomToDB(room2)
+room2VC.deleteRoomFromDB(room2.no)
+```
+
+{% endtab %}
+
+{% endtabs %}
 
 抽象 - interface, protocol, abstract class
 
