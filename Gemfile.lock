@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:nickhuang9527/jekyll-tabs
+  remote: https://github.com/nickhuang9527/jekyll-tabs.git
   revision: c444b35509e72e985e3251d940035b7f33ddb7a9
   specs:
     jekyll-tabs (1.2.0)
