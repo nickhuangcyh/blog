@@ -16,6 +16,10 @@ categories: [Design Pattern]
 
 ![design_pattern_4_simple_factory_pattern_uml_1](/blog/assets/images/design_pattern_4_simple_factory_pattern_uml_1.png)
 
+{% tabs simple-factory-pattern-1 %}
+
+{% tab simple-factory-pattern-1 Swift %}
+
 ```swift
 public protocol Beverage {
     func addSuger(level: Int)
@@ -79,9 +83,65 @@ let blackTea = beverageShop.order(beverageName: "black tea")
 let greenTea = beverageShop.order(beverageName: "green tea")
 ```
 
+{% endtab %}
+
+{% tab simple-factory-pattern-1 Kotlin %}
+
+```kotlin
+interface Beverage {
+    fun addSuger(level: Int) {
+        println("[$this] addSuger $level")
+    }
+
+    fun addIce(level: Int) {
+        println("[$this] addIce $level")
+    }
+
+    fun shake() {
+        println("[$this] shake")
+    }
+
+    fun packageUp() {
+        println("[$this] packageUp")
+    }
+}
+
+class BlackTea: Beverage {
+}
+
+class GreenTea: Beverage {
+}
+
+class BeverageShop {
+    fun order(beverageName: String): Beverage? {
+        val beverage: Beverage? = when (beverageName) {
+            "black tea" -> BlackTea()
+            "green tea" -> GreenTea()
+            else -> null
+        }
+
+        beverage?.addSuger(5)
+        beverage?.addIce(5)
+        beverage?.shake()
+        beverage?.packageUp()
+
+        return  beverage
+    }
+}
+
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 隨著飲料店越來越多新飲品，我們也需要修改 order 方法，但這樣容易影響不會變動的程式碼，於是我們需要找出 `需要變動` 以及 `不需變動` 的程式碼，把它們分隔開來
 
 需要變動的程式碼
+
+{% tabs simple-factory-pattern-2 %}
+
+{% tab simple-factory-pattern-2 Swift %}
 
 ```swift
 switch beverageName {
@@ -96,7 +156,27 @@ default:
 }
 ```
 
+{% endtab %}
+
+{% tab simple-factory-pattern-2 Kotlin %}
+
+```kotlin
+val beverage: Beverage? = when (beverageName) {
+    "black tea" -> BlackTea()
+    "green tea" -> GreenTea()
+    else -> null
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 不需變動的程式碼
+
+{% tabs simple-factory-pattern-3 %}
+
+{% tab simple-factory-pattern-3 Swift %}
 
 ```swift
 beverage?.addSuger(level: 5)
@@ -104,6 +184,21 @@ beverage?.addIce(level: 5)
 beverage?.shake()
 beverage?.packageUp()
 ```
+
+{% endtab %}
+
+{% tab simple-factory-pattern-3 Kotlin %}
+
+```kotlin
+beverage?.addSuger(5)
+beverage?.addIce(5)
+beverage?.shake()
+beverage?.packageUp()
+```
+
+{% endtab %}
+
+{% endtabs %}
 
 找出後該如何做呢，這時候需要用到 `簡單工廠模式` 來將其分離
 
@@ -113,6 +208,10 @@ beverage?.packageUp()
 那就讓我們修改一下上面的 UML 及程式碼吧
 
 ![design_pattern_4_simple_factory_pattern_uml_2](/blog/assets/images/design_pattern_4_simple_factory_pattern_uml_2.png)
+
+{% tabs simple-factory-pattern-4 %}
+
+{% tab simple-factory-pattern-4 Swift %}
 
 ```swift
 class BeverageFactory {
@@ -148,6 +247,39 @@ public class BeverageShop {
 }
 ```
 
+{% endtab %}
+
+{% tab simple-factory-pattern-4 Kotlin %}
+
+```kotlin
+object BeverageFactory {
+    fun createBeverage(beverageName: String): Beverage? {
+        return when (beverageName) {
+            "black tea" -> BlackTea()
+            "green tea" -> GreenTea()
+            else -> null
+        }
+    }
+}
+
+class BeverageShop {
+    fun order(beverageName: String): Beverage? {
+        val beverage: Beverage? = BeverageFactory.createBeverage(beverageName)
+
+        beverage?.addSuger(5)
+        beverage?.addIce(5)
+        beverage?.shake()
+        beverage?.packageUp()
+
+        return  beverage
+    }
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 透過簡單工廠模式，我們就將 `需要變動` 以及 `不需變動` 的程式碼成功分隔開來，當要修改菜單時，只需修改 `BeverageFactory` 即可，不會影響到其他程式碼。
 
 > 簡單工廠其實不是設計模式，反而比較像是一種編成習慣
@@ -170,3 +302,11 @@ public class BeverageShop {
 - Single Responsibility Principle
 
 下一篇正式進入 23 個 Design Pattern 的第一個 Factory Method Pattern 工廠方法模式
+
+## 參考
+
+- [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
+- [大話設計模式](https://www.tenlong.com.tw/products/9789866761799)
+- [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+- [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+- [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
