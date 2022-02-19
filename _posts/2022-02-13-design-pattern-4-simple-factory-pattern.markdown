@@ -214,8 +214,10 @@ beverage?.packageUp()
 {% tab simple-factory-pattern-4 Swift %}
 
 ```swift
-class BeverageFactory {
-    class func createBeverage(beverageName: String) -> Beverage? {
+open class BeverageFactory {
+    public init() {}
+
+    func createBeverage(beverageName: String) -> Beverage? {
         var beverage: Beverage?
 
         switch beverageName {
@@ -232,10 +234,15 @@ class BeverageFactory {
 }
 
 public class BeverageShop {
-    public init() {}
+
+    private let factory: BeverageFactory
+
+    public init(factory: BeverageFactory) {
+        self.factory = factory
+    }
 
     public func order(beverageName: String) -> Beverage? {
-        let beverage: Beverage? = BeverageFactory.createBeverage(beverageName: beverageName)
+        let beverage: Beverage? = factory.createBeverage(beverageName: beverageName)
 
         beverage?.addSuger(level: 5)
         beverage?.addIce(level: 5)
@@ -245,6 +252,10 @@ public class BeverageShop {
         return beverage
     }
 }
+
+let beverageShop = BeverageShop(factory: BeverageFactory())
+let blackTea = beverageShop.order(beverageName: "black tea")
+let greenTea = beverageShop.order(beverageName: "green tea")
 ```
 
 {% endtab %}
@@ -252,7 +263,7 @@ public class BeverageShop {
 {% tab simple-factory-pattern-4 Kotlin %}
 
 ```kotlin
-object BeverageFactory {
+class BeverageFactory {
     fun createBeverage(beverageName: String): Beverage? {
         return when (beverageName) {
             "black tea" -> BlackTea()
@@ -262,9 +273,10 @@ object BeverageFactory {
     }
 }
 
-class BeverageShop {
+class BeverageShop(private val factory: BeverageFactory) {
+
     fun order(beverageName: String): Beverage? {
-        val beverage: Beverage? = BeverageFactory.createBeverage(beverageName)
+        val beverage: Beverage? = factory.createBeverage(beverageName)
 
         beverage?.addSuger(5)
         beverage?.addIce(5)
@@ -274,6 +286,10 @@ class BeverageShop {
         return  beverage
     }
 }
+
+val beverage = BeverageShop(BeverageFactory())
+val blackTea = beverage.order("black tea")
+val greenTea = beverage.order("green tea")
 ```
 
 {% endtab %}
