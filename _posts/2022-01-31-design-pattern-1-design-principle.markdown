@@ -22,7 +22,7 @@ categories: [Design Pattern]
 
 設計模式在軟體工程上是非常重要的核心知識，設計模式之於軟體工程師，就像內功心法之於習武之人一樣重要，神鵰俠侶中的楊過精通各式各樣的武功，也是因為內功深厚，後期不論學任何武功都非常快速，而軟體工程師的核心技能就是演算法、資料結構、設計模式、架構等...，只要將這些共通技能學好，在不同的程式語言及領域都能非常快上手。
 
-![design_pattern_design_principle_mind](/blog/assets/images/design_pattern_design_principle_mind.png)
+![design_pattern_design_principle_mind]({{ site.baseurl }}/assets/images/design_pattern_design_principle_mind.png)
 
 ## Design Principle
 
@@ -52,7 +52,7 @@ Design Principle 是用來幫助我們改善物件導向設計的建議，幫助
 
 三者關係是由下至上的概念，Design Principle 由 Object-Oriented Concepts 概念所衍生，Design Pattern 由 Design Principle 概念所衍生
 
-![design_pattern_design_principle_architecture](/blog/assets/images/design_pattern_design_principle_architecture.png)
+![design_pattern_design_principle_architecture]({{ site.baseurl }}/assets/images/design_pattern_design_principle_architecture.png)
 
 有點像鬼滅之刃中呼吸法都源自於日之呼吸的概念
 
@@ -202,14 +202,14 @@ HAS-A (composition) can be better than IS-A (inheritance)
 
 假設今天要設計一間咖啡店，裡面有賣很多咖啡，我們可以這樣設計
 
-![design_pattern_design_principle_favor_composition_over_inheritance_1](/blog/assets/images/design_pattern_design_principle_favor_composition_over_inheritance_1.png)
+![design_pattern_design_principle_favor_composition_over_inheritance_1]({{ site.baseurl }}/assets/images/design_pattern_design_principle_favor_composition_over_inheritance_1.png)
 
 但如果今天客人要加 Butter 及 Milk，我們又要定義一個新的 class CoffeeWithButterAndMilk 繼承 Coffee
 我們會發現，隨著調味料種類越多，咖啡的組合也會越來越多，以及牛奶價格上漲，那所有包含牛奶的 Coffee 都必須修改
 
 如果我們用合成取代繼承呢，從牛奶咖啡是(is-A)咖啡，變成咖啡有(has-A)各種調味料
 
-![design_pattern_design_principle_favor_composition_over_inheritance_2](/blog/assets/images/design_pattern_design_principle_favor_composition_over_inheritance_2.png)
+![design_pattern_design_principle_favor_composition_over_inheritance_2]({{ site.baseurl }}/assets/images/design_pattern_design_principle_favor_composition_over_inheritance_2.png)
 
 你會發現使用合成取代繼承有下列好處
 
@@ -226,13 +226,13 @@ HAS-A (composition) can be better than IS-A (inheritance)
 
 再來看一個範例，今天要做一個 Weather App，他可以取得溫度並顯示在螢幕上。
 
-![design_pattern_design_principle_loose_coupling_1](/blog/assets/images/design_pattern_design_principle_loose_coupling_1.png)
+![design_pattern_design_principle_loose_coupling_1]({{ site.baseurl }}/assets/images/design_pattern_design_principle_loose_coupling_1.png)
 
 你會發現 WeatherApp 與 LCDScreen 緊密耦合，今天如果老闆想改成在 Widget 或 LED 上來顯示，WeatherApp 的 screen 屬性及 display 方法都要修改，且不能在 Run time 任意替換。
 
 我們改一下 UML 來將兩者之間做解耦
 
-![design_pattern_design_principle_loose_coupling_2](/blog/assets/images/design_pattern_design_principle_loose_coupling_2.png)
+![design_pattern_design_principle_loose_coupling_2]({{ site.baseurl }}/assets/images/design_pattern_design_principle_loose_coupling_2.png)
 
 這樣不管老闆想改成什麼螢幕都能夠很輕易替換，因為 WeatherApp 依賴的是介面，不再是實體，善用抽象介面解耦兩個實體物件吧!
 
@@ -244,14 +244,14 @@ HAS-A (composition) can be better than IS-A (inheritance)
 
 來個例子，今天我們要設計一個基本網站，有一個 WebSystem 及 DB 來存讀資料
 
-![design_pattern_design_principle_program_to_interface_1](/blog/assets/images/design_pattern_design_principle_program_to_interface_1.png)
+![design_pattern_design_principle_program_to_interface_1]({{ site.baseurl }}/assets/images/design_pattern_design_principle_program_to_interface_1.png)
 
 今天我們想在上 Production 前，將 CommercialDB 換成 TestDB
 做測試，但目前 KillerWebSystem 的 db 型別為 CommercialDB 無法抽換
 
 讓我們修改一下
 
-![design_pattern_design_principle_program_to_interface_2](/blog/assets/images/design_pattern_design_principle_program_to_interface_2.png)
+![design_pattern_design_principle_program_to_interface_2]({{ site.baseurl }}/assets/images/design_pattern_design_principle_program_to_interface_2.png)
 
 寫一個 AbstractDB 的介面或抽象類別，讓 CommercialDB 及 TestDB 都實作此介面，這樣就能很輕鬆的在測試環境替換 DB
 

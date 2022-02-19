@@ -20,15 +20,15 @@ categories: [Blog]
 
 這邊使用網址前綴方式添加，加你的 Blog domain 填入並繼續
 
-![google_search_console](/blog/assets/images/google_search_console.png)
+![google_search_console]({{ site.baseurl }}/assets/images/google_search_console.png)
 
 下載 `googlexxxxxxxxxx.html` 檔案放到 Jekyll 根目錄，commit 上傳到 GitHub 上，點擊驗證
 
-![google_search_console_verify](/blog/assets/images/google_search_console_verify.png)
+![google_search_console_verify]({{ site.baseurl }}/assets/images/google_search_console_verify.png)
 
 驗證成功 👍
 
-![google_search_console_verify](/blog/assets/images/google_search_console_verified.png)
+![google_search_console_verify]({{ site.baseurl }}/assets/images/google_search_console_verified.png)
 
 ## 提交 Sitemap
 
@@ -60,6 +60,6 @@ bundle exec jekyll serve
 
 將 code commit 推上 GitHub，回到 Google Search Console 提交 sitemap
 
-![google_search_console](/blog/assets/images/google_search_console_sitemap.png)
+![google_search_console]({{ site.baseurl }}/assets/images/google_search_console_sitemap.png)
 
 完成，等待下次 Google Search Engine 下更新檢索就能搜尋到我們 Blog 的內容囉! 🙌

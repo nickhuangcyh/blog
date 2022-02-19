@@ -14,7 +14,7 @@ categories: [Design Pattern]
 
 今天我們想做一套飲料點餐系統，很快的我們畫出 UML 並寫出了下面的程式碼
 
-![design_pattern_4_simple_factory_pattern_uml_1](/blog/assets/images/design_pattern_4_simple_factory_pattern_uml_1.png)
+![design_pattern_4_simple_factory_pattern_uml_1]({{ site.baseurl }}/assets/images/design_pattern_4_simple_factory_pattern_uml_1.png)
 
 {% tabs simple-factory-pattern-1 %}
 
@@ -207,7 +207,7 @@ beverage?.packageUp()
 其實就是定義一個工廠類別來專門處理創建物件的邏輯
 那就讓我們修改一下上面的 UML 及程式碼吧
 
-![design_pattern_4_simple_factory_pattern_uml_2](/blog/assets/images/design_pattern_4_simple_factory_pattern_uml_2.png)
+![design_pattern_4_simple_factory_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_4_simple_factory_pattern_uml_2.png)
 
 {% tabs simple-factory-pattern-4 %}
 
@@ -291,12 +291,12 @@ class BeverageShop {
 > -- Head First Design Pattern Ch.4 P.117
 
 最後來看一下 **簡單工廠模式** 的 UML 圖
-![design_pattern_4_simple_factory_pattern_uml_3](/blog/assets/images/design_pattern_4_simple_factory_pattern_uml_3.png)
+![design_pattern_4_simple_factory_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_4_simple_factory_pattern_uml_3.png)
 
 ## 總結
 
 簡單工廠雖然不是 23 個設計模式之中的一種，但它非常簡單，且能訓練我們將變動及不會變動的程式碼分離的習慣
-來看一下我們在簡單工廠用到了哪些 [Design Principle](https://nickhuang9527.github.io/blog/design%20pattern/design-pattern-1-design-principle/)
+來看一下我們在簡單工廠用到了哪些 [Design Principle]({{ site.baseurl }}/design%20pattern/design-pattern-1-design-principle/)
 
 - Encapsulate What Varies
 - Single Responsibility Principle

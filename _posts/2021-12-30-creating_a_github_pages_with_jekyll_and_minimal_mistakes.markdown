@@ -182,7 +182,7 @@ bundle exec jekyll serve
 
 點擊 Server address: `http://localhost:4000` 預覽你的網站
 
-![create_a_new_repo_on_github](/blog/assets/images/jekyll_local_test.png)
+![create_a_new_repo_on_github]({{ site.baseurl }}/assets/images/jekyll_local_test.png)
 
 恭喜，你已經完成了你的第一個 Jekyll 網站 🎉🎉🎉🎉🎉
 但我們只能在 local 欣賞，不能分享給朋友同事看，接上來我們將他推上去 GitHub，讓 GitHub Pages 幫我們建置 Blog 吧!
@@ -191,7 +191,7 @@ bundle exec jekyll serve
 
 首先要到 GitHub 網站創建一個 repository，請使用 Public 專案，名字隨便你取 `(e.g. blog)`
 
-![create_a_new_repo_on_github](/blog/assets/images/create_a_new_repo_on_github.png)
+![create_a_new_repo_on_github]({{ site.baseurl }}/assets/images/create_a_new_repo_on_github.png)
 
 複製 repo 的 URL 等等會用到
 
@@ -216,7 +216,7 @@ git push -u origin BRANCH   # 因為上面是用 gh-pages 作為 source，這邊
 
 回到 GitHub 網頁 -> Settings -> Pages 點擊上面的網址 `https://USERNAME.github.io/`
 
-![jekyll_github_pages](/blog/assets/images/jekyll_github_pages.png)
+![jekyll_github_pages]({{ site.baseurl }}/assets/images/jekyll_github_pages.png)
 
 恭喜，你已經成功將 Jekyll 網站推上 GitHub Pages，現在全世界都看得到你的 Blog 了 🎉🎉🎉🎉🎉
 
@@ -265,7 +265,7 @@ bundle install
 bundle exec jekyll serve
 ```
 
-![jekyll_with_minimal_mistakes_theme_local_test](/blog/assets/images/jekyll_with_minimal_mistakes_theme_local_test.png)
+![jekyll_with_minimal_mistakes_theme_local_test]({{ site.baseurl }}/assets/images/jekyll_with_minimal_mistakes_theme_local_test.png)
 
 恭喜，你已經成功套用 `Minimal-mistakes` 主題進你的 Jekyll Blog 了 🎉🎉🎉🎉🎉
 
@@ -277,6 +277,6 @@ git commit -m "[feature] Add Minimal-mistakes theme to Jekyll"
 git push origin gh-pages
 ```
 
-![jekyll_with_minimal_mistakes_theme_github_pages](/blog/assets/images/jekyll_with_minimal_mistakes_theme_github_pages.png)
+![jekyll_with_minimal_mistakes_theme_github_pages]({{ site.baseurl }}/assets/images/jekyll_with_minimal_mistakes_theme_github_pages.png)
 
 Done! 🎉🎉🎉🎉🎉

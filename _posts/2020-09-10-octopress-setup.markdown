@@ -155,7 +155,7 @@ git commit -m 'your message'
 git push origin source
 ```
 
-![octopress_github_pages](/blog/assets/images/octopress_github_pages.png)
+![octopress_github_pages]({{ site.baseurl }}/assets/images/octopress_github_pages.png)
 
 ## 總結
 

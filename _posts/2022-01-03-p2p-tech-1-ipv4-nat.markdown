@@ -24,7 +24,7 @@ categories: [P2P]
 
 ### 中心化網路 (Centralized)
 
-![p2p_centralized](/blog/assets/images/p2p_centralized.png)
+![p2p_centralized]({{ site.baseurl }}/assets/images/p2p_centralized.png)
 
 所有 client 都連接到同一台 Server，Server 擁有所有 client 的數據訊息
 
@@ -40,7 +40,7 @@ categories: [P2P]
 
 ### 去中心化網路 (Decentralized)
 
-![p2p_decentralized](/blog/assets/images/p2p_decentralized.png)
+![p2p_decentralized]({{ site.baseurl }}/assets/images/p2p_decentralized.png)
 
 顧名思義就是不只有一台 server，會有多台 server ，所以當一台或多台 server 故障時，client 還是可以繼續從其他 server 存取數據
 
@@ -56,7 +56,7 @@ categories: [P2P]
 
 ### 分佈式網路 (Distributed)
 
-![p2p_distributed](/blog/assets/images/p2p_distributed.png)
+![p2p_distributed]({{ site.baseurl }}/assets/images/p2p_distributed.png)
 
 類似 Decentralized ， 沒有唯一的中心 server，用戶間可以共享資料所有權，消除了中心 server 的概念，如此可以避免中心 server 故障導致所有 user 無法使用的問題，internet 就是一個分佈式網路，p2p 也屬於此類
 
@@ -75,10 +75,10 @@ categories: [P2P]
 在 IoT 應用中，假如你要控制家中的 IPCam，就會有以下兩種做法
 
 - 中心化方式為透過 Server 轉發 command 給 IPCam
-  - ![p2p_centralized_connect](/blog/assets/images/p2p_centralized_connect.png)
+  - ![p2p_centralized_connect]({{ site.baseurl }}/assets/images/p2p_centralized_connect.png)
   - 這種作法的優點在於好部署修改，有新增功能時只要 Server 改完部署，其他設備就可更新支援此功能，缺點就是 Server 只要故障就完全不能控制 IoT 裝置，且 Server 的硬體效能要很好才足以應對龐大的 client，需要每月一筆租 Server 機器及流量的費用
 - 分佈式方式為不透過 Server 直接向 IPCam 下達指令
-  - ![p2p_distributed_connect](/blog/assets/images/p2p_distributed_connect.png)
+  - ![p2p_distributed_connect]({{ site.baseurl }}/assets/images/p2p_distributed_connect.png)
   - 這種作法的優點在於不需要每月一筆租 server 機器及流量的費用，不會有 Server 故障導致無法操作 IoT 裝置的問題，硬體效能也不需要很好，缺點就是部署程式變得複雜，因為不是每個人都會定期更新手機 app 及 IoT Firmware，還有程式碼會變得複雜，需要處理 p2p tunnel 斷線重新 p2p 流程，也叫容易發生斷線重連，e.g. 手機由 4G/5G 環境走到有 Wifi 環境，網卡自動切換成 Wifi 就會導致斷線需重新 p2p．
 
 > 疑問 : 分佈式方式在複雜的 Internet 下，如何讓手機與 IoT 裝置溝通，就是接下來我們要講解 P2P 技術的部分
@@ -95,29 +95,29 @@ Internet 能夠如此成功進入人類的生活中，IP 的設計可以說是�
 
 就如同字面上的意思，他會在私有網域及公有網域之間做將封包的 IP 做轉換，根據 [RFC1918](https://datatracker.ietf.org/doc/rfc1918/) 保留了三段 IP 地址給內部網路做使用，10.0.0.0-10.255.255.255；172.16.0.0-172.31.255.255；192.168.0.0-192.168.255.255，這些地址在公有網路上是沒有意義的，且不需像 IANA 做申請，如此就大大增加了 IPv4 環境可以容納的上網裝置，因為一個組織只需要一個公有 IP 即可讓所有內部裝置連上 Internet．
 
-![p2p_nat_1](/blog/assets/images/p2p_nat_1.png)
+![p2p_nat_1]({{ site.baseurl }}/assets/images/p2p_nat_1.png)
 
 但是 NAT 這樣的設計是有缺點的，外部網路主機無法直接與在 NAT 路由器內的內網主機進行連線
 
 一般沒有 NAT 情況下，Internet 上的兩台主機只要知道彼此 IP 就能進行通訊
 
-![p2p_nat_2](/blog/assets/images/p2p_nat_2.png)
+![p2p_nat_2]({{ site.baseurl }}/assets/images/p2p_nat_2.png)
 
 在有一方於 NAT 情況下，外部網路主機 B 要與內部網路主機 A 通訊，就會遇到 NAT 不知道要將來自 B 的封包轉給哪一台內部主機
 
-![p2p_nat_3](/blog/assets/images/p2p_nat_3.png)
+![p2p_nat_3]({{ site.baseurl }}/assets/images/p2p_nat_3.png)
 
 除非 A 已經先訪問過 B 主機的情況下，NAT 會將 A 的轉址紀錄在 mapping table 中，之後由 B 發給 A 的封包，NAT 就會透過 mapping table 轉址將封包正確轉發給 A
 
-![p2p_nat_4](/blog/assets/images/p2p_nat_4.png)
+![p2p_nat_4]({{ site.baseurl }}/assets/images/p2p_nat_4.png)
 
 但如果兩台主機皆在 NAT 下，此時不管是由 A 或 B 發起 (A → B 或 B → A)，都無法連接到對方，因為兩邊的 mapping table 都是空的沒有紀錄
 
-![p2p_nat_5](/blog/assets/images/p2p_nat_5.png)
+![p2p_nat_5]({{ site.baseurl }}/assets/images/p2p_nat_5.png)
 
 此時就必須要由任一方先發起封包，假設由 A 發起 (1)，此時 A 的 NAT mapping table 會留下 A 的轉換 IP (2)，但封包到了 B 的 NAT 時，因 B 的 NAT mapping table 為空，所以會先失敗 (3)，再來由 B 發起封包給 A (4)，會在 B NAT mapping table 留下 B 的轉換 IP (5)，封包到了 A NAT 後 (6)，因 A 的 NAT mapping table 存在 A 的 IP，所以封包可以順利到達 A (7)，A 在發送封包到 B (8)，此時雙方的 NAT mapping table 皆有紀錄(9, 10)，在 NAT 裡的 Client 就能順利相互通訊，此時 P2P 就成功了，反之亦然
 
-![p2p_nat_6](/blog/assets/images/p2p_nat_6.png)
+![p2p_nat_6]({{ site.baseurl }}/assets/images/p2p_nat_6.png)
 
 ## NAT 類型
 
@@ -126,14 +126,14 @@ Internet 能夠如此成功進入人類的生活中，IP 的設計可以說是�
 - 一旦內部位址（iAddr:iPort）對映到外部位址（eAddr:ePort），所有發自 iAddr:iPort 的封包都經由 eAddr:ePort 向外傳送。
 - 任意外部主機都能經由發送封包給 eAddr:ePort 到達 iAddr:iPort。
 
-![p2p_full_cone_nat](/blog/assets/images/p2p_full_cone_nat.png)
+![p2p_full_cone_nat]({{ site.baseurl }}/assets/images/p2p_full_cone_nat.png)
 
 ### Restricted cone NAT (受限錐型 NAT)
 
 - 一旦內部位址（iAddr:iPort）對映到外部位址（eAddr:ePort），所有發自 iAddr:iPort 的封包都經由 eAddr:ePort 向外傳送。
 - 唯 iAddr:iPort 曾經發送封包到外部主機（nAddr:any），外部主機才能經由發送封包給 eAddr:ePort 到達 iAddr:iPort。（註：any 指外部主機源埠不受限制。）
 
-![p2p_full_cone_nat](/blog/assets/images/p2p_restricted_cone_nat.png)
+![p2p_full_cone_nat]({{ site.baseurl }}/assets/images/p2p_restricted_cone_nat.png)
 
 ### Port-Restricted cone NAT (端口受限錐型 NAT)
 
@@ -142,7 +142,7 @@ Internet 能夠如此成功進入人類的生活中，IP 的設計可以說是�
 - 一旦內部位址（iAddr:iPort）對映到外部位址（eAddr:ePort），所有發自 iAddr:iPort 的封包都經由 eAddr:ePort 向外傳送。
 - 在受限圓錐型 NAT 基礎上增加了外部主機源埠必須是固定的。
 
-![p2p_full_cone_nat](/blog/assets/images/p2p_port_restricted_cone_nat.png)
+![p2p_full_cone_nat]({{ site.baseurl }}/assets/images/p2p_port_restricted_cone_nat.png)
 
 ### Symmetric NAT (對稱型 NAT)
 
@@ -150,7 +150,7 @@ Internet 能夠如此成功進入人類的生活中，IP 的設計可以說是�
   同一內部 IP 與埠發到不同的目的地和埠的資訊包，都使用不同的對映
 - 只有曾經收到過內部主機資料的外部主機，才能夠把封包發回
 
-![p2p_full_cone_nat](/blog/assets/images/p2p_symmetric_nat.png)
+![p2p_full_cone_nat]({{ site.baseurl }}/assets/images/p2p_symmetric_nat.png)
 
 > Symmetric NAT 無法實現 P2P ，原因就在於對稱型每次的請求都會對應到不同的外部 IP 和 Port
 

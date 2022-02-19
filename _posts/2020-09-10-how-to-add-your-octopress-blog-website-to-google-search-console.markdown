@@ -20,7 +20,7 @@ categories: [Blog]
 
 這邊使用網址前綴方式添加，加你的 Blog domain 填入並繼續
 
-![google_search_console](/blog/assets/images/google_search_console.png)
+![google_search_console]({{ site.baseurl }}/assets/images/google_search_console.png)
 
 下載 `googlexxxxxxxxxx.html` 檔案放到 `octopress/source` 目錄下，commit 上傳到 GitHub 上，點擊驗證
 
@@ -28,8 +28,8 @@ categories: [Blog]
 rake gen_deploy
 ```
 
-![google_search_console_verify](/blog/assets/images/google_search_console_verify.png)
+![google_search_console_verify]({{ site.baseurl }}/assets/images/google_search_console_verify.png)
 
 驗證成功 👍
 
-![google_search_console_verify](/blog/assets/images/google_search_console_verified.png)
+![google_search_console_verify]({{ site.baseurl }}/assets/images/google_search_console_verified.png)

@@ -76,7 +76,7 @@ Ice Candidate 描述 WebRTC 能與 遠程設備通訊所需的協議和路由，
 
 ## WebRTC Flow
 
-![p2p_webrtc](/blog/assets/images/p2p_webrtc.png)
+![p2p_webrtc]({{ site.baseurl }}/assets/images/p2p_webrtc.png)
 
 1. 雙方 Peer 先連上 Signaling Server
 2. PeerA 取得自身 SDP 並呼叫 setLocalDescription
@@ -117,8 +117,8 @@ KVS 的 Signaling server 是用 WebSocket 去實作的
 
 理解這些 P2P 相關的知識，我們就可以很清楚的實作每一步驟，出錯時也能清楚哪一部分出錯，甚至是替換 Stun / TURN / signaling server 都沒問題，下面貼一下成果圖
 
-[![ios_webrtc](/blog/assets/images/ios_webrtc.png)](/blog/assets/images/ios_webrtc.png)
-[![android_webrtc](/blog/assets/images/android_webrtc.png)](/blog/assets/images/android_webrtc.png)
+[![ios_webrtc]({{ site.baseurl }}/assets/images/ios_webrtc.png)]({{ site.baseurl }}/assets/images/ios_webrtc.png)
+[![android_webrtc]({{ site.baseurl }}/assets/images/android_webrtc.png)]({{ site.baseurl }}/assets/images/android_webrtc.png)
 
 ## 踩雷補充
 
