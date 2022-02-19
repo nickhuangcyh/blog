@@ -24,6 +24,10 @@ categories: [Design Pattern]
 
 於是我們修改簡單工廠的程式碼，新增 USBeverageFactory 及 EUBeverageFactory 來製作符合美國及歐洲當地口味的飲品
 
+{% tabs data-struct %}
+
+{% tab data-struct Swift %}
+
 ```swift
 public class CeylonBlackTea: Beverage {
 
@@ -82,6 +86,48 @@ open class EUBeverageFactory {
 }
 ```
 
+{% endtab %}
+
+{% tab data-struct Kotlin %}
+
+```kotlin
+class CeylonBlackTea: Beverage {
+}
+
+class EarlGreyBlackTea: Beverage {
+}
+
+class GyokuroGreenTea: Beverage {
+}
+
+class SenchaGreenTea: Beverage {
+}
+
+class USBeverageFactory {
+    fun createBeverage(beverageName: String): Beverage? {
+        return when (beverageName) {
+            "black tea" -> CeylonBlackTea()
+            "green tea" -> GyokuroGreenTea()
+            else -> null
+        }
+    }
+}
+
+class EUBeverageFactory {
+    fun createBeverage(beverageName: String): Beverage? {
+        return when (beverageName) {
+            "black tea" -> EarlGreyBlackTea()
+            "green tea" -> SenchaGreenTea()
+            else -> null
+        }
+    }
+}
+```
+
+{% endtab %}
+
+{% endtabs %}
+
 這樣做雖然可以滿足分店從不同工廠取得該地區的飲品，但每當有新的分店加入，就必須動到 BeverageShop 的程式碼來添加新的分店工廠，違反了 **Open Closed Principle**，如何解決就要介紹今天的主角 **Factory Method Pattern**。
 
 ## Factory Method Pattern
@@ -90,6 +136,10 @@ open class EUBeverageFactory {
 讓我們修改一下上面的 UML 及程式碼吧
 
 ![design_pattern_5_factory_method_pattern_uml_1]({{ site.baseurl }}/assets/images/design_pattern_5_factory_method_pattern_uml_1.png)
+
+{% tabs data-struct %}
+
+{% tab data-struct Swift %}
 
 ```swift
 public protocol BeverageFactory {
@@ -144,6 +194,48 @@ let euBeverageShop = BeverageShop(factory: EUBeverageFactory())
 let euBlackTea = euBeverageShop.order(beverageName: "black tea")
 let euGreenTea = euBeverageShop.order(beverageName: "green tea")
 ```
+
+{% endtab %}
+
+{% tab data-struct Kotlin %}
+
+```kotlin
+interface BeverageFactory {
+    fun createBeverage(beverageName: String): Beverage?
+}
+
+class USBeverageFactory: BeverageFactory {
+    override fun createBeverage(beverageName: String): Beverage? {
+        return when (beverageName) {
+            "black tea" -> CeylonBlackTea()
+            "green tea" -> GyokuroGreenTea()
+            else -> null
+        }
+    }
+}
+
+class EUBeverageFactory: BeverageFactory {
+    override fun createBeverage(beverageName: String): Beverage? {
+        return when (beverageName) {
+            "black tea" -> EarlGreyBlackTea()
+            "green tea" -> SenchaGreenTea()
+            else -> null
+        }
+    }
+}
+
+val usBeverageShop = BeverageShop(USBeverageFactory())
+val usBlackTea = usBeverageShop.order("black tea")
+val usGreenTea = usBeverageShop.order("green tea")
+
+val euBeverageShop = BeverageShop(EUBeverageFactory())
+val euBlackTea = euBeverageShop.order("black tea")
+val euGreenTea = euBeverageShop.order("green tea")
+```
+
+{% endtab %}
+
+{% endtabs %}
 
 透過工廠方法模式，我們透過將工廠抽象化，達到可擴充性，之後如果要拓展其他分店像是日本分店，只需新增一個 JPBeverageFactory ，就能創建能做出符合日本人口味的飲料工廠，而不需修改到其他不需變動的程式碼。
 
