@@ -290,6 +290,7 @@ DEPENDENCIES
   github-pages (~> 219)
   jekyll-archives
   jekyll-feed (~> 0.12)
+  jekyll-gist
   jekyll-include-cache
   jekyll-sitemap
   jekyll-tabs!

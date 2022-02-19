@@ -18,6 +18,7 @@ gem "jekyll-include-cache", group: :jekyll_plugins
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-sitemap"
+  gem "jekyll-gist"
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-archives"
   gem "jekyll-tabs", git: "https://github.com/nickhuang9527/jekyll-tabs.git"
