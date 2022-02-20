@@ -27,103 +27,11 @@ categories: [Design Pattern]
 {% tabs data-struct %}
 
 {% tab data-struct Swift %}
-
-```swift
-public class CeylonBlackTea: Beverage {
-
-}
-
-public class EarlGreyBlackTea: Beverage {
-
-}
-
-public class GyokuroGreenTea: Beverage {
-
-}
-
-public class SenchaGreenTea: Beverage {
-
-}
-
-open class USBeverageFactory {
-
-    public init() {}
-
-    func createBeverage(beverageName: String) -> Beverage? {
-        var beverage: Beverage?
-
-        switch beverageName {
-        case "black tea":
-            beverage = CeylonBlackTea()
-        case "green tea":
-            beverage = GyokuroGreenTea()
-        default:
-            break
-        }
-
-        return beverage
-    }
-}
-
-open class EUBeverageFactory {
-
-    public init() {}
-
-    class func createBeverage(beverageName: String) -> Beverage? {
-        var beverage: Beverage?
-
-        switch beverageName {
-        case "black tea":
-            beverage = EarlGreyBlackTea()
-        case "green tea":
-            beverage = SenchaGreenTea()
-        default:
-            break
-        }
-
-        return beverage
-    }
-}
-```
-
+{% gist 5c03101f45a1144fffbd5173d906d286 %}
 {% endtab %}
 
 {% tab data-struct Kotlin %}
-
-```kotlin
-class CeylonBlackTea: Beverage {
-}
-
-class EarlGreyBlackTea: Beverage {
-}
-
-class GyokuroGreenTea: Beverage {
-}
-
-class SenchaGreenTea: Beverage {
-}
-
-class USBeverageFactory {
-    fun createBeverage(beverageName: String): Beverage? {
-        return when (beverageName) {
-            "black tea" -> CeylonBlackTea()
-            "green tea" -> GyokuroGreenTea()
-            else -> null
-        }
-    }
-}
-
-class EUBeverageFactory {
-    fun createBeverage(beverageName: String): Beverage? {
-        return when (beverageName) {
-            "black tea" -> EarlGreyBlackTea()
-            "green tea" -> SenchaGreenTea()
-            else -> null
-        }
-    }
-}
-```
-
+{% gist 47bcb79696354e083cdc99a8d53c22cb %}
 {% endtab %}
 
 {% endtabs %}
@@ -140,99 +48,11 @@ class EUBeverageFactory {
 {% tabs data-struct %}
 
 {% tab data-struct Swift %}
-
-```swift
-public protocol BeverageFactory {
-    func createBeverage(beverageName: String) -> Beverage?
-}
-
-open class USBeverageFactory: BeverageFactory {
-
-    public init() {}
-
-    public func createBeverage(beverageName: String) -> Beverage? {
-        var beverage: Beverage?
-
-        switch beverageName {
-        case "black tea":
-            beverage = CeylonBlackTea()
-        case "green tea":
-            beverage = GyokuroGreenTea()
-        default:
-            break
-        }
-
-        return beverage
-    }
-}
-
-open class EUBeverageFactory: BeverageFactory {
-
-    public init() {}
-
-    public func createBeverage(beverageName: String) -> Beverage? {
-        var beverage: Beverage?
-
-        switch beverageName {
-        case "black tea":
-            beverage = EarlGreyBlackTea()
-        case "green tea":
-            beverage = SenchaGreenTea()
-        default:
-            break
-        }
-
-        return beverage
-    }
-}
-
-let usBeverageShop = BeverageShop(factory: USBeverageFactory())
-let usBlackTea = usBeverageShop.order(beverageName: "black tea")
-let usGreenTea = usBeverageShop.order(beverageName: "green tea")
-
-let euBeverageShop = BeverageShop(factory: EUBeverageFactory())
-let euBlackTea = euBeverageShop.order(beverageName: "black tea")
-let euGreenTea = euBeverageShop.order(beverageName: "green tea")
-```
-
+{% gist 2504aa439c085480b77a709e1304b141 %}
 {% endtab %}
 
 {% tab data-struct Kotlin %}
-
-```kotlin
-interface BeverageFactory {
-    fun createBeverage(beverageName: String): Beverage?
-}
-
-class USBeverageFactory: BeverageFactory {
-    override fun createBeverage(beverageName: String): Beverage? {
-        return when (beverageName) {
-            "black tea" -> CeylonBlackTea()
-            "green tea" -> GyokuroGreenTea()
-            else -> null
-        }
-    }
-}
-
-class EUBeverageFactory: BeverageFactory {
-    override fun createBeverage(beverageName: String): Beverage? {
-        return when (beverageName) {
-            "black tea" -> EarlGreyBlackTea()
-            "green tea" -> SenchaGreenTea()
-            else -> null
-        }
-    }
-}
-
-val usBeverageShop = BeverageShop(USBeverageFactory())
-val usBlackTea = usBeverageShop.order("black tea")
-val usGreenTea = usBeverageShop.order("green tea")
-
-val euBeverageShop = BeverageShop(EUBeverageFactory())
-val euBlackTea = euBeverageShop.order("black tea")
-val euGreenTea = euBeverageShop.order("green tea")
-```
-
+{% gist f9d13d1e1bbb7d1736c031e5e3cd2e26 %}
 {% endtab %}
 
 {% endtabs %}

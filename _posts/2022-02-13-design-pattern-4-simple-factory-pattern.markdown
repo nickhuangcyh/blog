@@ -19,118 +19,11 @@ categories: [Design Pattern]
 {% tabs simple-factory-pattern-1 %}
 
 {% tab simple-factory-pattern-1 Swift %}
-
-```swift
-public protocol Beverage {
-    func addSuger(level: Int)
-    func addIce(level: Int)
-    func shake()
-    func packageUp()
-}
-
-public extension Beverage {
-    func addSuger(level: Int) {
-        print("[\(self)] addSuger \(level)")
-    }
-
-    func addIce(level: Int) {
-        print("[\(self)] addIce \(level)")
-    }
-
-    func shake() {
-        print("[\(self)] shake")
-    }
-
-    func packageUp() {
-        print("[\(self)] packageUp")
-    }
-}
-
-public class BlackTea: Beverage {
-
-}
-
-public class GreenTea: Beverage {
-
-}
-
-public class BeverageShop {
-    public init() {}
-
-    public func order(beverageName: String) -> Beverage? {
-        var beverage: Beverage?
-
-        switch beverageName {
-        case "black tea":
-            beverage = BlackTea()
-        case "green tea":
-            beverage = GreenTea()
-        default:
-            break
-        }
-
-        beverage?.addSuger(level: 5)
-        beverage?.addIce(level: 5)
-        beverage?.shake()
-        beverage?.packageUp()
-
-        return beverage
-    }
-}
-
-let beverageShop = BeverageShop()
-let blackTea = beverageShop.order(beverageName: "black tea")
-let greenTea = beverageShop.order(beverageName: "green tea")
-```
-
+{% gist 524687369cea9156cfa845b0bf002996 %}
 {% endtab %}
 
 {% tab simple-factory-pattern-1 Kotlin %}
-
-```kotlin
-interface Beverage {
-    fun addSuger(level: Int) {
-        println("[$this] addSuger $level")
-    }
-
-    fun addIce(level: Int) {
-        println("[$this] addIce $level")
-    }
-
-    fun shake() {
-        println("[$this] shake")
-    }
-
-    fun packageUp() {
-        println("[$this] packageUp")
-    }
-}
-
-class BlackTea: Beverage {
-}
-
-class GreenTea: Beverage {
-}
-
-class BeverageShop {
-    fun order(beverageName: String): Beverage? {
-        val beverage: Beverage? = when (beverageName) {
-            "black tea" -> BlackTea()
-            "green tea" -> GreenTea()
-            else -> null
-        }
-
-        beverage?.addSuger(5)
-        beverage?.addIce(5)
-        beverage?.shake()
-        beverage?.packageUp()
-
-        return  beverage
-    }
-}
-
-```
-
+{% gist 0d007a8b715cdcb55ab7c928c619c712 %}
 {% endtab %}
 
 {% endtabs %}
@@ -142,32 +35,11 @@ class BeverageShop {
 {% tabs simple-factory-pattern-2 %}
 
 {% tab simple-factory-pattern-2 Swift %}
-
-```swift
-switch beverageName {
-case "black tea":
-    beverage = BlackTea()
-case "green tea":
-    beverage = GreenTea()
-// case "milk tea":
-    // beverage = MilkTea()
-default:
-    break
-}
-```
-
+{% gist 4286ac98cd3b7065abbdfb977896e5af %}
 {% endtab %}
 
 {% tab simple-factory-pattern-2 Kotlin %}
-
-```kotlin
-val beverage: Beverage? = when (beverageName) {
-    "black tea" -> BlackTea()
-    "green tea" -> GreenTea()
-    else -> null
-}
-```
-
+{% gist b6fc75b9612175a1f0b1b02972555fd3 %}
 {% endtab %}
 
 {% endtabs %}
@@ -177,25 +49,11 @@ val beverage: Beverage? = when (beverageName) {
 {% tabs simple-factory-pattern-3 %}
 
 {% tab simple-factory-pattern-3 Swift %}
-
-```swift
-beverage?.addSuger(level: 5)
-beverage?.addIce(level: 5)
-beverage?.shake()
-beverage?.packageUp()
-```
-
+{% gist d4c281f4826ebfe031f13c6b794bab94 %}
 {% endtab %}
 
 {% tab simple-factory-pattern-3 Kotlin %}
-
-```kotlin
-beverage?.addSuger(5)
-beverage?.addIce(5)
-beverage?.shake()
-beverage?.packageUp()
-```
-
+{% gist 118247f29320ce89ddcbab8e0f68557a %}
 {% endtab %}
 
 {% endtabs %}
@@ -212,86 +70,11 @@ beverage?.packageUp()
 {% tabs simple-factory-pattern-4 %}
 
 {% tab simple-factory-pattern-4 Swift %}
-
-```swift
-open class BeverageFactory {
-    public init() {}
-
-    func createBeverage(beverageName: String) -> Beverage? {
-        var beverage: Beverage?
-
-        switch beverageName {
-        case "black tea":
-            beverage = BlackTea()
-        case "green tea":
-            beverage = GreenTea()
-        default:
-            break
-        }
-
-        return beverage
-    }
-}
-
-public class BeverageShop {
-
-    private let factory: BeverageFactory
-
-    public init(factory: BeverageFactory) {
-        self.factory = factory
-    }
-
-    public func order(beverageName: String) -> Beverage? {
-        let beverage: Beverage? = factory.createBeverage(beverageName: beverageName)
-
-        beverage?.addSuger(level: 5)
-        beverage?.addIce(level: 5)
-        beverage?.shake()
-        beverage?.packageUp()
-
-        return beverage
-    }
-}
-
-let beverageShop = BeverageShop(factory: BeverageFactory())
-let blackTea = beverageShop.order(beverageName: "black tea")
-let greenTea = beverageShop.order(beverageName: "green tea")
-```
-
+{% gist ae11dfd9eb50874a151dc04b5051bb3d %}
 {% endtab %}
 
 {% tab simple-factory-pattern-4 Kotlin %}
-
-```kotlin
-class BeverageFactory {
-    fun createBeverage(beverageName: String): Beverage? {
-        return when (beverageName) {
-            "black tea" -> BlackTea()
-            "green tea" -> GreenTea()
-            else -> null
-        }
-    }
-}
-
-class BeverageShop(private val factory: BeverageFactory) {
-
-    fun order(beverageName: String): Beverage? {
-        val beverage: Beverage? = factory.createBeverage(beverageName)
-
-        beverage?.addSuger(5)
-        beverage?.addIce(5)
-        beverage?.shake()
-        beverage?.packageUp()
-
-        return  beverage
-    }
-}
-
-val beverage = BeverageShop(BeverageFactory())
-val blackTea = beverage.order("black tea")
-val greenTea = beverage.order("green tea")
-```
-
+{% gist 94ea6cf630fd9b3b92e476d5273a08cb %}
 {% endtab %}
 
 {% endtabs %}

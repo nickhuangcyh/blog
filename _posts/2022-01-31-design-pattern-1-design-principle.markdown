@@ -70,53 +70,13 @@ Design Principle 是用來幫助我們改善物件導向設計的建議，幫助
 
 {% tab encapsulate-what-varies-1 Swift %}
 
-```swift
-func orderPancake(type: String) {
-    var pancake: Pancake?
-
-    // Code that is varying
-    switch type {
-    case "classic":
-        pancake = ClassicPancake()
-    case "blueberry":
-        pancake = BlueberryPancake()
-    case "banana":
-        pancake = BananaPancake()
-//    case "chocolate chip":
-//        pancake = ChocolateChipPancake()
-    default:
-        pancake = ClassicPancake()
-    }
-
-    // Important code that does not vary
-    pancake?.cook()
-    pancake?.plate()
-    pancake?.addButter()
-}
-```
+{% gist 835acb7a2496ff7b39cda8a47e665c08 %}
 
 {% endtab %}
 
 {% tab encapsulate-what-varies-1 Kotlin %}
 
-```kotlin
-fun orderPancake(type: String) {
-
-    // Code that is varying
-    val pancake: Pancake = when (type) {
-        "classic" -> ClassicPancake()
-        "blueberry" -> BlueberryPancake()
-        "banana" -> BananaPancake()
-//        "chocolate chip" -> ChocolateChipPancake()
-        else -> ClassicPancake()
-    }
-
-    // Important code that does not vary
-    pancake.cook()
-    pancake.plate()
-    pancake.addButter()
-}
-```
+{% gist 0f4b98c8be72d377a2b38aa81f5a8dbf %}
 
 {% endtab %}
 
@@ -128,65 +88,13 @@ fun orderPancake(type: String) {
 
 {% tab encapsulate-what-varies-2 Swift %}
 
-```swift
-public class SimplePancakeFactory {
-    public class func createPancake(type: String) -> Pancake? {
-        var pancake: Pancake?
-
-        // Code that is varying
-        switch type {
-        case "classic":
-            pancake = ClassicPancake()
-        case "blueberry":
-            pancake = BlueberryPancake()
-        case "banana":
-            pancake = BananaPancake()
-        //    case "chocolate chip":
-        //        pancake = ChocolateChipPancake()
-        default:
-            pancake = ClassicPancake()
-        }
-
-        return pancake
-    }
-}
-
-func orderPancakeWithFactory(type: String) {
-    let pancake = SimplePancakeFactory.createPancake(type: type)
-
-    // Important code that does not vary
-    pancake?.cook()
-    pancake?.plate()
-    pancake?.addButter()
-}
-```
+{% gist 07f751fc0716f9194e1aca18b2bc88e4 %}
 
 {% endtab %}
 
 {% tab encapsulate-what-varies-2 Kotlin %}
 
-```kotlin
-object SimplePancakeFactory {
-    fun createPancake(type: String): Pancake {
-        return when (type) {
-            "classic" -> ClassicPancake()
-            "blueberry" -> BlueberryPancake()
-            "banana" -> BananaPancake()
-//        "chocolate chip" -> ChocolateChipPancake()
-            else -> ClassicPancake()
-        }
-    }
-}
-
-fun orderPancakeWithFactory(type: String) {
-    val pancake = SimplePancakeFactory.createPancake(type)
-
-    // Important code that does not vary
-    pancake.cook()
-    pancake.plate()
-    pancake.addButter()
-}
-```
+{% gist 22a42676343d12b474b15c5ffe7cb063 %}
 
 {% endtab %}
 
@@ -267,45 +175,11 @@ e.g.
 {% tabs srp-1 %}
 
 {% tab srp-1 Swift %}
-
-```swift
-class LoginViewController {
-    func loginToServer(account: String, password: String, callback: Result<String, Error>) {
-//        Alamofire... { callback() }
-//        Volley... { callback() }
-    }
-
-    func saveToDB(account: String, password: String) {
-        // sql.save()...
-    }
-
-    func deleteFromDB(account: String) {
-        // sql.delete()
-    }
-}
-```
-
+{% gist f07646e50fa8d3bcac3758b214339a9c %}
 {% endtab %}
 
 {% tab srp-1 Kotlin %}
-
-```kotlin
-class LoginActivity {
-    fun loginToServer(account: String, password: String, callback:  model.Result<String, Error>) {
-//        Alamofire... { callback() }
-//        Volley... { callback() }
-    }
-
-    fun saveToDB(account: String, password: String) {
-        // sql.save()...
-    }
-
-    fun deleteFromDB(account: String) {
-        // sql.delete()
-    }
-}
-```
-
+{% gist fbfdba6544f6ad8f13a578e0eb118806 %}
 {% endtab %}
 
 {% endtabs %}
@@ -315,83 +189,11 @@ class LoginActivity {
 {% tabs srp-2 %}
 
 {% tab srp-2 Swift %}
-
-```swift
-class ServerApiRequestService {
-    func login(account: String, password: String, callback: Result<String, Error>) {
-//        Alamofire... { callback() }
-//        Volley... { callback() }
-    }
-}
-
-class DBService {
-    func save(account: String, password: String) {
-//        sql.save()
-    }
-
-    func delete(account: String) {
-//        sql.delete()
-    }
-}
-
-class LoginViewControllerSRP {
-    var apiRequestService: ServerApiRequestService? = nil
-    var dbService: DBService? = nil
-
-    func loginToServer(account: String, password: String, callback: Result<String, Error>) {
-        apiRequestService?.login(account: account, password: password, callback: callback)
-    }
-
-    func saveToDB(account: String, password: String) {
-        dbService?.save(account: account, password: password)
-    }
-
-    func deleteFromDB(account: String) {
-        dbService?.delete(account: account)
-    }
-}
-```
-
+{% gist 05d0878df1f90659159a5416f7078fea %}
 {% endtab %}
 
 {% tab srp-2 Kotlin %}
-
-```kotlin
-class ServerApiRequestService {
-    fun login(account: String, password: String, callback: model.Result<String, Error>) {
-//        Alamofire... { callback() }
-//        Volley... { callback() }
-    }
-}
-
-class DBService {
-    fun save(account: String, password: String) {
-//        sql.save()
-    }
-
-    fun delete(account: String) {
-//        sql.delete()
-    }
-}
-
-class LoginActivitySRP {
-    var apiRequestService: ServerApiRequestService? = null
-    var dbService: DBService? = null
-
-    fun loginToServer(account: String, password: String, callback: model.Result<String, Error>) {
-        apiRequestService?.login(account, password, callback)
-    }
-
-    fun saveToDB(account: String, password: String) {
-        dbService?.save(account, password)
-    }
-
-    fun deleteFromDB(account: String) {
-        dbService?.delete(account)
-    }
-}
-```
-
+{% gist 8fed9a96831bc8cffeaace60fd474399 %}
 {% endtab %}
 
 {% endtabs %}
@@ -408,89 +210,11 @@ e.g.
 {% tabs ocp-1 %}
 
 {% tab ocp-1 Swift %}
-
-```swift
-enum ValidatorType {
-    case username
-    case password
-}
-
-enum ValidationError: Error, Equatable {
-    case isEmpty(errorMessage: String)
-    case containsSpecialChar(errorMessage: String)
-
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case (.isEmpty(_), .isEmpty(_)):
-            return true
-        case (.containsSpecialChar(_), .containsSpecialChar(_)):
-            return true
-        default:
-            return false
-        }
-    }
-}
-
-class Validator {
-    func validated(_ value: String, validatorType: ValidatorType) throws -> String {
-        switch validatorType {
-        case .username:
-            guard !value.isEmpty else {
-                throw ValidationError.isEmpty(errorMessage: "isEmpty")
-            }
-            guard !value.isContainsSpecialChars() else {
-                throw ValidationError.containsSpecialChar(errorMessage: "containsSpecialChar")
-            }
-        case .password:
-            guard !value.isEmpty else {
-                throw ValidationError.isEmpty(errorMessage: "isEmpty")
-            }
-        }
-        return value
-    }
-}
-```
-
+{% gist abada6874d79516946038fab2ca7e395 %}
 {% endtab %}
 
 {% tab ocp-1 Kotlin %}
-
-```kotlin
-enum class ValidatorType {
-    Username,
-    Password;
-}
-
-sealed class ValidationException: Exception() {
-    class IsEmpty(val errorMessage: String): ValidationException()
-    class ContainsSpecialChar(val errorMessage: String): ValidationException()
-
-    override fun equals(other: Any?): Boolean {
-        return when {
-            this is IsEmpty && other is IsEmpty -> true
-            this is ContainsSpecialChar && other is ContainsSpecialChar -> true
-            else -> false
-        }
-    }
-}
-
-class Validator {
-    @Throws(ValidationException::class)
-    fun validated(value: String, validatorType: ValidatorType): String {
-        when (validatorType) {
-            ValidatorType.Username -> when {
-                value.isEmpty() -> throw ValidationException.IsEmpty("isEmpty")
-                value.isContainsSpecialChars() -> throw ValidationException.ContainsSpecialChar("containsSpecialChar")
-            }
-            ValidatorType.Password -> when {
-                value.isEmpty() -> throw ValidationException.IsEmpty("isEmpty")
-            }
-        }
-        return value
-    }
-}
-```
-
+{% gist 66cfe3ac77321120241f1dd5efae8db8 %}
 {% endtab %}
 
 {% endtabs %}
@@ -500,68 +224,11 @@ class Validator {
 {% tabs ocp-2 %}
 
 {% tab ocp-2 Swift %}
-
-```swift
-protocol ValidatorConvertible {
-    func validated(_ value: String) throws -> String
-}
-
-class UserNameValidator: ValidatorConvertible {
-
-    func validated(_ value: String) throws -> String {
-        guard !value.isEmpty else {
-            throw ValidationError.isEmpty(errorMessage: "isEmpty")
-        }
-        guard !value.isContainsSpecialChars() else {
-            throw ValidationError.containsSpecialChar(errorMessage: "containsSpecialChar")
-        }
-        return value
-    }
-}
-
-class PasswordValidator: ValidatorConvertible {
-
-    func validated(_ value: String) throws -> String {
-        guard !value.isEmpty else {
-            throw ValidationError.isEmpty(errorMessage: "isEmpty")
-        }
-        return value
-    }
-}
-```
-
+{% gist 4781d9bdbc57915e0e38e99bdee48dc6 %}
 {% endtab %}
 
 {% tab ocp-2 Kotlin %}
-
-```kotlin
-interface ValidatorConvertible {
-    @Throws(ValidationException::class)
-    fun validated(value: String): String
-}
-
-class UserNameValidator: ValidatorConvertible {
-
-    override fun validated(value: String): String {
-        when {
-            value.isEmpty() -> throw ValidationException.IsEmpty("isEmpty")
-            value.isContainsSpecialChars() -> throw ValidationException.ContainsSpecialChar("containsSpecialChar")
-        }
-        return value
-    }
-}
-
-class PasswordValidator: ValidatorConvertible {
-
-    override fun validated(value: String): String {
-        when {
-            value.isEmpty() -> throw ValidationException.IsEmpty("isEmpty")
-        }
-        return value
-    }
-}
-```
-
+{% gist 21cf84cbe4b4c0790e62c9025e37ef9c %}
 {% endtab %}
 
 {% endtabs %}
@@ -577,66 +244,11 @@ e.g. 我們需要計算正方形及長方形的面積
 {% tabs lsp-1 %}
 
 {% tab lsp-1 Swift %}
-
-```swift
-class Rectangle {
-    var height: Int
-    var width: Int
-
-    init(height: Int, weight: Int) {
-        self.height = height
-        self.width = weight
-    }
-
-    func getArea() -> String {
-        return "\(height * width)"
-    }
-}
-
-class Square: Rectangle {
-    override func getArea() -> String {
-        if height != width {
-            return "長寬需一致"
-        } else {
-            return super.getArea()
-        }
-    }
-}
-
-let rectangle = Rectangle(height: 2, weight: 3)
-print("\(rectangle.getArea())")
-let square = Square(height: 2, weight: 3)
-print("\(square.getArea())")
-```
-
+{% gist b4cc5cbc43afc9239a63e568ea7581ed %}
 {% endtab %}
 
 {% tab lsp-1 Kotlin %}
-
-```kotlin
-open class Rectangle(protected val height: Int, protected val width: Int) {
-
-    open fun getArea(): String {
-        return "${height * width}"
-    }
-}
-
-class Square(height: Int, width: Int) : Rectangle(height, width) {
-    override fun getArea(): String {
-        return if (height != width) {
-            "長寬需一致"
-        } else {
-            super.getArea()
-        }
-    }
-}
-
-val rectangle = Rectangle(2, 3)
-println("${rectangle.getArea()}")
-val square = Square(2, 3)
-println("${square.getArea()}")
-```
-
+{% gist 09845484c41ce34c42edd8f096550089 %}
 {% endtab %}
 
 {% endtabs %}
@@ -656,83 +268,11 @@ e.g.
 {% tabs isp-1 %}
 
 {% tab isp-1 Swift %}
-
-```swift
-protocol Car {
-    func startEngine()
-    func stopEngine()
-    func enableDebugMode()
-}
-
-class Driver: Car {
-    func startEngine() {
-        print("start engine")
-    }
-
-    func stopEngine() {
-        print("stop engine")
-    }
-
-    func enableDebugMode() {
-        print("enable debug mode")
-    }
-}
-
-class Engineer: Car {
-    func startEngine() {
-        print("start engine")
-    }
-
-    func stopEngine() {
-        print("stop engine")
-    }
-
-    func enableDebugMode() {
-        print("enable debug mode")
-    }
-}
-```
-
+{% gist 5be469e13f08dcd903d165f74649c9ce %}
 {% endtab %}
 
 {% tab isp-1 Kotlin %}
-
-```kotlin
-interface Car {
-    fun startEngine()
-    fun stopEngine()
-    fun enableDebugMode()
-}
-
-class Driver: Car {
-    override fun startEngine() {
-        println("start engine")
-    }
-
-    override fun stopEngine() {
-        println("stop engine")
-    }
-
-    override fun enableDebugMode() {
-        println("enable debug mode")
-    }
-}
-
-class Engineer: Car {
-    override fun startEngine() {
-        println("start engine")
-    }
-
-    override fun stopEngine() {
-        println("stop engine")
-    }
-
-    override fun enableDebugMode() {
-        println("enable debug mode")
-    }
-}
-```
-
+{% gist 68390dc1d479837df0fe70d2057d8c97 %}
 {% endtab %}
 
 {% endtabs %}
@@ -742,81 +282,11 @@ class Engineer: Car {
 {% tabs isp-2 %}
 
 {% tab isp-2 Swift %}
-
-```swift
-protocol Car1 {
-    func startEngine()
-    func stopEngine()
-}
-
-protocol Debuggable {
-    func enableDebugMode()
-}
-
-class Driver1: Car1 {
-    func startEngine() {
-        print("start engine")
-    }
-
-    func stopEngine() {
-        print("stop engine")
-    }
-}
-
-class Engineer1: Car1, Debuggable {
-    func startEngine() {
-        print("start engine")
-    }
-
-    func stopEngine() {
-        print("stop engine")
-    }
-
-    func enableDebugMode() {
-        print("enable debug mode")
-    }
-}
-```
-
+{% gist 0a935483e1713954181eb0b8ad4c71ca %}
 {% endtab %}
 
 {% tab isp-2 Kotlin %}
-
-```kotlin
-interface Car1 {
-    fun startEngine()
-    fun stopEngine()
-}
-
-interface Debuggable {
-    fun enableDebugMode()
-}
-
-class Driver1: Car1 {
-    override fun startEngine() {
-        println("start engine")
-    }
-
-    override fun stopEngine() {
-        println("stop engine")
-    }
-}
-
-class Engineer1: Car1, Debuggable {
-    override fun startEngine() {
-        println("start engine")
-    }
-
-    override fun stopEngine() {
-        println("stop engine")
-    }
-
-    override fun enableDebugMode() {
-        println("enable debug mode")
-    }
-}
-```
-
+{% gist 5e8adc0ccfcde8a411a555fc40f960e9 %}
 {% endtab %}
 
 {% endtabs %}
@@ -833,97 +303,11 @@ e.g. 設計一個能不同房間加入不同 IoT 設備的系統，可以新增�
 {% tabs dip-1 %}
 
 {% tab dip-1 Swift %}
-
-```swift
-class Room {
-    var no: Int
-    var device: [String]
-
-    init(no: Int, device: [String]) {
-        self.no = no
-        self.device = device
-    }
-}
-
-class SQLiteService {
-    func saveRoom(room: Room) {
-        print("SQLiteService save")
-    }
-
-    func deleteRoom(no: Int) {
-        print("SQLiteService delete")
-    }
-}
-
-class RoomViewController {
-    var sqlDBService: SQLiteService? = nil
-
-    init(sqlDBService: SQLiteService) {
-        sqlDBService
-    }
-
-    func saveRoomToDB(room: Room) {
-        sqlDBService?.saveRoom(room: room)
-    }
-
-    func deleteRoomFromDB(no: Int) {
-        sqlDBService?.deleteRoom(no: no)
-    }
-}
-
-let roomVC = RoomViewController(sqlDBService: SQLiteService())
-let room = Room(no: 1, device: ["IPCam", "VDP"])
-roomVC.saveRoomToDB(room: room)
-roomVC.deleteRoomFromDB(no: room.no)
-```
-
+{% gist f2ec088e47cf7d24bc89ee7ef9f82fc5 %}
 {% endtab %}
 
 {% tab dip-1 Kotlin %}
-
-```kotlin
-class Room {
-    val no: Int
-    val device: List<String>
-
-    constructor(no: Int, device: List<String>) {
-        this.no = no
-        this.device = device
-    }
-}
-
-class SQLiteService {
-    fun saveRoom(room: Room) {
-        println("SQLiteService save")
-    }
-
-    fun deleteRoom(no: Int) {
-        println("SQLiteService delete")
-    }
-}
-
-class RoomActivity {
-    var sqlDBService: SQLiteService? = null
-
-    constructor(sqlDBService: SQLiteService) {
-        this.sqlDBService = sqlDBService
-    }
-
-    fun saveRoomToDB(room: Room) {
-        sqlDBService?.saveRoom(room)
-    }
-
-    fun deleteRoomFromDB(no: Int) {
-        sqlDBService?.deleteRoom(no)
-    }
-}
-
-val roomVC = RoomActivity(SQLiteService())
-val room = Room(1, listOf("IPCam", "VDP"))
-roomVC.saveRoomToDB(room)
-roomVC.deleteRoomFromDB(room.no)
-```
-
+{% gist ae27a0ba9c9bac8489d15c9f032d620b %}
 {% endtab %}
 
 {% endtabs %}
@@ -934,159 +318,11 @@ roomVC.deleteRoomFromDB(room.no)
 {% tabs dip-2 %}
 
 {% tab dip-2 Swift %}
-
-```swift
-protocol DataBaseService {
-    func saveRoom(room: Room)
-    func deleteRoom(no: Int)
-}
-
-class SQLiteDBService: DataBaseService {
-    func saveRoom(room: Room) {
-        print("SQLiteDBService save")
-    }
-
-    func deleteRoom(no: Int) {
-        print("SQLiteDBService delete")
-    }
-}
-
-class CoreDataDBService: DataBaseService {
-    func saveRoom(room: Room) {
-        print("CoreDataDBService save")
-    }
-
-    func deleteRoom(no: Int) {
-        print("CoreDataDBService delete")
-    }
-}
-
-class MySQLDBService: DataBaseService {
-    func saveRoom(room: Room) {
-        print("MySQLDBService save")
-    }
-
-    func deleteRoom(no: Int) {
-        print("MySQLDBService delete")
-    }
-}
-
-class Room2ViewController {
-    var databaseService: DataBaseService? = nil
-
-    init(databaseService: DataBaseService) {
-        self.databaseService = databaseService
-    }
-
-    func saveRoomToDB(room: Room) {
-        databaseService?.saveRoom(room: room)
-    }
-
-    func deleteRoomFromDB(no: Int) {
-        databaseService?.deleteRoom(no: no)
-    }
-}
-
-let sqliteDB = SQLiteDBService()
-let coreDataDB = CoreDataDBService()
-let mysqlDB = MySQLDBService()
-
-let room2VC = Room2ViewController(databaseService: sqliteDB)
-let room2 = Room(no: 2, device: ["IPCam", "VDP"])
-
-// sql
-room2VC.saveRoomToDB(room: room2)
-room2VC.deleteRoomFromDB(no: room2.no)
-
-// coredata
-room2VC.databaseService = coreDataDB
-room2VC.saveRoomToDB(room: room2)
-room2VC.deleteRoomFromDB(no: room2.no)
-
-// mysql
-room2VC.databaseService = mysqlDB
-room2VC.saveRoomToDB(room: room2)
-room2VC.deleteRoomFromDB(no: room2.no)
-```
-
+{% gist a6483dc7bb915e331dfdc1bac3f9e4da %}
 {% endtab %}
 
 {% tab dip-2 Kotlin %}
-
-```kotlin
-interface DataBaseService {
-    fun saveRoom(room: Room)
-    fun deleteRoom(no: Int)
-}
-
-class SQLiteDBService: DataBaseService {
-    override fun saveRoom(room: Room) {
-        println("SQLiteDBService save")
-    }
-
-    override fun deleteRoom(no: Int) {
-        println("SQLiteDBService delete")
-    }
-}
-
-class CoreDataDBService: DataBaseService {
-    override fun saveRoom(room: Room) {
-        println("CoreDataDBService save")
-    }
-
-    override fun deleteRoom(no: Int) {
-        println("CoreDataDBService delete")
-    }
-}
-
-class MySQLDBService: DataBaseService {
-    override fun saveRoom(room: Room) {
-        println("MySQLDBService save")
-    }
-
-    override fun deleteRoom(no: Int) {
-        println("MySQLDBService delete")
-    }
-}
-
-class Room2Activity {
-    var databaseService: DataBaseService? = null
-
-    constructor(databaseService: DataBaseService) {
-        this.databaseService = databaseService
-    }
-
-    fun saveRoomToDB(room: Room) {
-        databaseService?.saveRoom(room)
-    }
-
-    fun deleteRoomFromDB(no: Int) {
-        databaseService?.deleteRoom(no)
-    }
-}
-
-val sqliteDB = SQLiteDBService()
-val coreDataDB = CoreDataDBService()
-val mysqlDB = MySQLDBService()
-
-val room2VC = Room2Activity(sqliteDB)
-val room2 = Room(2, listOf("IPCam", "VDP"))
-
-// sql
-room2VC.saveRoomToDB(room2)
-room2VC.deleteRoomFromDB(room2.no)
-
-// coredata
-room2VC.databaseService = coreDataDB
-room2VC.saveRoomToDB(room2)
-room2VC.deleteRoomFromDB(room2.no)
-
-// mysql
-room2VC.databaseService = mysqlDB
-room2VC.saveRoomToDB(room2)
-room2VC.deleteRoomFromDB(room2.no)
-```
-
+{% gist 217e20c99e2528576d13ed36df60a0ab %}
 {% endtab %}
 
 {% endtabs %}
