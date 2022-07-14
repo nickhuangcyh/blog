@@ -10,7 +10,7 @@ tags: [Simple Factory Pattern]
 categories: [Design Pattern]
 ---
 
-> 您可於此 [design_pattern repo](https://github.com/nickhuang9527/design_pattern) 下載 Design Pattern 系列程式碼。
+> 您可於此 [design_pattern repo](https://github.com/nickhuangcyh/design_pattern) 下載 Design Pattern 系列程式碼。
 
 今天我們想做一套飲料點餐系統，很快的我們畫出 UML 並寫出了下面的程式碼
 

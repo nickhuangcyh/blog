@@ -10,7 +10,7 @@ tags: [Creational Patterns, Structural Patterns, Behavioral Patterns]
 categories: [Design Pattern]
 ---
 
-> 您可於此 [design_pattern repo](https://github.com/nickhuang9527/design_pattern) 下載 Design Pattern 系列程式碼。
+> 您可於此 [design_pattern repo](https://github.com/nickhuangcyh/design_pattern) 下載 Design Pattern 系列程式碼。
 
 ## Design Patterns Categories
 

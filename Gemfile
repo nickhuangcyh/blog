@@ -21,7 +21,7 @@ group :jekyll_plugins do
   gem "jekyll-gist"
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-archives"
-  gem "jekyll-tabs", git: "https://github.com/nickhuang9527/jekyll-tabs.git"
+  gem "jekyll-tabs", git: "https://github.com/nickhuangcyh/jekyll-tabs.git"
 end
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem

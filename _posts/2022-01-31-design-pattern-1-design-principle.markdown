@@ -12,7 +12,7 @@ categories: [Design Pattern]
 
 這一系列文章我會透過工作上的經驗及研讀 [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)、[大話設計模式](https://www.tenlong.com.tw/products/9789866761799) 兩本書，加上學習 Linkedin Learning 上的兩個課程 [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)、[Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)、[Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)，理解整理後，寫成文章分享!
 
-> 您可於此 [design_pattern repo](https://github.com/nickhuang9527/design_pattern) 下載 Design Pattern 系列程式碼。
+> 您可於此 [design_pattern repo](https://github.com/nickhuangcyh/design_pattern) 下載 Design Pattern 系列程式碼。
 
 ## Design Pattern
 

@@ -10,7 +10,7 @@ tags: [Factory Method Pattern]
 categories: [Design Pattern]
 ---
 
-> 您可於此 [design_pattern repo](https://github.com/nickhuang9527/design_pattern) 下載 Design Pattern 系列程式碼。
+> 您可於此 [design_pattern repo](https://github.com/nickhuangcyh/design_pattern) 下載 Design Pattern 系列程式碼。
 
 上一篇我們利用 [簡單工廠模式](% post_url 2022-02-13-design-pattern-4-simple-factory-pattern %})成功地將 **需要變動** 以及 **不需變動** 的程式碼分離。
 

@@ -10,7 +10,7 @@ tags: [Abstract Factory Pattern]
 categories: [Design Pattern]
 ---
 
-> 您可於此 [design_pattern repo](https://github.com/nickhuang9527/design_pattern) 下載 Design Pattern 系列程式碼。
+> 您可於此 [design_pattern repo](https://github.com/nickhuangcyh/design_pattern) 下載 Design Pattern 系列程式碼。
 
 上一篇我們利用 [工廠方法模式](% post_url 2022-02-19-design-pattern-5-factory-method-pattern %}) 讓分店可以客製化飲品使用的原料，也遵守了 **開放封閉原則** 使我們可以很輕易地添加其他分店，而不改變已經存在的程式碼。
 

@@ -21,10 +21,10 @@ title_separator: "-"
 subtitle: "Just do it!" # site tagline that appears below site title in masthead
 name: "Nick Huang"
 description: "An amazing website."
-domain: nickhuang9527.github.io # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
-url: https://nickhuang9527.github.io # the base hostname & protocol for your site, e.g. http://example.com
+domain: nickhuangcyh.github.io # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
+url: https://nickhuangcyh.github.io # the base hostname & protocol for your site, e.g. http://example.com
 baseurl: /blog # the subpath of your site, e.g. /blog
-repository: "nickhuang9527/blog" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+repository: "nickhuangcyh/blog" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser: /assets/images/fabien-moline-XaQXyRU9pgo-unsplash.jpg # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo: # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title: # overrides the website title displayed in the masthead, use " " for no title
@@ -33,7 +33,7 @@ words_per_minute: 200
 comments:
   provider: "disqus" # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "giscus", "custom"
   disqus:
-    shortname: nickhuang9527 # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
+    shortname: nickhuangcyh # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
     server: # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
   facebook:
@@ -113,19 +113,19 @@ author:
       url: "https://www.linkedin.com/in/nick-huang-5485b315a/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://www.instagram.com/nickhuang9527/"
+      url: "https://www.instagram.com/nickhuangcyh/"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/nickhuang9527"
+      url: "https://twitter.com/nickhuangcyh"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/nickhuang9527"
+      url: "https://github.com/nickhuangcyh"
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
       url: "mailto:nick25932219@gmail.com"
     - label: "Website"
       icon: "fas fa-fw fa-link"
-      # url: "https://nickhuang9527.github.io/blog"
+      # url: "https://nickhuangcyh.github.io/blog"
     - label: "Facebook"
       icon: "fab fa-fw fa-facebook-square"
       # url: "https://facebook.com/"
@@ -138,13 +138,13 @@ footer:
       url: "https://www.linkedin.com/in/nick-huang-5485b315a/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://www.instagram.com/nickhuang9527/"
+      url: "https://www.instagram.com/nickhuangcyh/"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/nickhuang9527"
+      url: "https://twitter.com/nickhuangcyh"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/nickhuang9527"
+      url: "https://github.com/nickhuangcyh"
     - label: "Facebook"
       icon: "fab fa-fw fa-facebook-square"
       # url:
