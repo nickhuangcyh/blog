@@ -60,6 +60,7 @@ chmod a+x tcpdump
 adb pull /sdcard/capture.pcap
 ```
 在用 Wireshark 開啟即可
+![wireshark_test_1]({{ site.baseurl }}/assets/images/wireshark_test_1.png)
 
 ## 總結
 抓封包是很重要的 debug 工具，很多時候使用第三方的 `frameworks/libraries` 較難查出是 `server` or `client` 的問題．
