@@ -160,3 +160,6 @@ git push origin source
 ## 總結
 
 Octopress 基礎建置就到這邊，未來如果有時間會再深入研究更多 Octopress 的新功能，寫成文章分享給大家!
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

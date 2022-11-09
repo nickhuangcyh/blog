@@ -12,7 +12,11 @@ categories: [Tools]
 
 ## 前言
 
-最近工作上遇到需要抓封包分析才能釐清的問題，以前在開發 iOS 非常簡單，可以用 `rvictl -s [iOS UUID]` 在 Mac 上創建一個虛擬網卡介面，就可以開 Wireshark 抓 iOS 上的封包了，最近開發 Android 也遇到需要抓封包的情況，上網學習了一下，在這邊紀錄，希望可以幫到其他人🙂
+最近工作上遇到需要抓封包分析才能釐清的問題
+
+以前在開發 iOS 非常簡單，可以用 `rvictl -s [iOS UUID]` 在 Mac 上創建一個虛擬網卡介面，就可以開 Wireshark 抓 iOS 上的封包了
+
+最近開發 Android 也遇到需要抓封包的情況，上網學習了一下，在這邊紀錄，希望可以幫到其他人🙂
 
 ## 事前準備
 
@@ -71,3 +75,6 @@ adb pull /sdcard/capture.pcap
 之前在做 iOS FFMpeg 在串 RTSP 時原始碼沒送`GET_PARAMETER` 的 keepalive 封包，導致 1 分鐘後就斷線，之後也是透過 Wireshark 抓包，改 FFMpeg 原始碼才解決
 
 透過觀察封包能夠快速釐清問題，不需要花大量時間去猜測問題，是網路開發中很重要的技巧之一！
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

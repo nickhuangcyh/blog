@@ -137,3 +137,6 @@ P2P 的基本觀念大致就到這邊，如果想要更深入的理解 P2P 的�
 - [Amazon Kinesis Video Streams for WebRTC](https://docs.aws.amazon.com/zh_tw/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html)
 - [《P2P 技术详解》系列文章](http://www.52im.net/thread-50-1-1.html)
 - [flaticon](https://www.flaticon.com/)
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

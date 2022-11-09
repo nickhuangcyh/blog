@@ -58,8 +58,6 @@ Design Pattern 可以分為三種基本的類型
 
 接下來會一一介紹這 GoF 這 23 種 Design Pattern。
 
-2022 年除夕守歲結束了，也該去睡了，準備明天繼續努力完成 Design Pattern 系列。
-
 ## 參考
 
 - [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
@@ -67,3 +65,6 @@ Design Pattern 可以分為三種基本的類型
 - [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
 - [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
 - [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

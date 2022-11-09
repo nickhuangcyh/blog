@@ -33,3 +33,6 @@ rake gen_deploy
 驗證成功 👍
 
 ![google_search_console_verify]({{ site.baseurl }}/assets/images/google_search_console_verified.png)
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

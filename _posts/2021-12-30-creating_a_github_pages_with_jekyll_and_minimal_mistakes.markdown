@@ -280,3 +280,6 @@ git push origin gh-pages
 ![jekyll_with_minimal_mistakes_theme_github_pages]({{ site.baseurl }}/assets/images/jekyll_with_minimal_mistakes_theme_github_pages.png)
 
 Done! 🎉🎉🎉🎉🎉
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

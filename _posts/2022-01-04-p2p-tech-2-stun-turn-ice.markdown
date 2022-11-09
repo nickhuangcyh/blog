@@ -65,3 +65,6 @@ ICE（Interactive Connectivity Establishment），一種綜合性的 NAT 穿越�
 - [ICE](https://zh.wikipedia.org/wiki/%E4%BA%92%E5%8B%95%E5%BC%8F%E9%80%A3%E6%8E%A5%E5%BB%BA%E7%AB%8B)
 - [《P2P 技术详解》系列文章](http://www.52im.net/thread-50-1-1.html)
 - [flaticon](https://www.flaticon.com/)
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

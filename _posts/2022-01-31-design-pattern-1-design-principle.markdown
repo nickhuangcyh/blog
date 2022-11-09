@@ -346,8 +346,6 @@ e.g. 設計一個能不同房間加入不同 IoT 設備的系統，可以新增�
 Design Principle 是物件導向程式設計及 Design Pattern 的核心，其實這些核心技術都是通用的，只要學好核心技術，學習其他語言或設計架構都會變得非常快
 下一篇要來介紹 Design Pattern 的種類有哪些
 
-今天是 2022 除夕夜，新的一年祝大家都能夠順利達成目標，朝夢想邁進!
-
 ## 參考
 
 - [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
@@ -355,3 +353,6 @@ Design Principle 是物件導向程式設計及 Design Pattern 的核心，其�
 - [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
 - [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
 - [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

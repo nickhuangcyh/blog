@@ -63,3 +63,6 @@ bundle exec jekyll serve
 ![google_search_console]({{ site.baseurl }}/assets/images/google_search_console_sitemap.png)
 
 完成，等待下次 Google Search Engine 下更新檢索就能搜尋到我們 Blog 的內容囉! 🙌
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}

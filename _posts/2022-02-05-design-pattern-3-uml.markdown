@@ -169,8 +169,6 @@ Object 之間的數量關係，預設為 1
 
 之後的 Design Pattern 系列文章會大量使用到 UML 圖，搞懂這些圖及箭頭的含義在軟體設計上是非常有幫助的，下一篇終於要進入第一個 Design Pattern。
 
-今天是 2022 新年連假的最後一天，新年都在耍廢追六人行、Doctor X 跟 JOJO 石之海，看 [Kotlin 讀書會](https://tw.kotlin.tips/) 的前輩 [Recca Chao](https://gitpage.reccachao.net/) 過年天天在刷 leetcode 再看看自己覺得很慚愧，該收收心繼續努力朝夢想前進了!
-
 ## 參考
 
 - [【UML】Class Diagram 類別圖 (上)：Introduction 簡介](https://spicyboyd.blogspot.com/2018/07/umlclass-diagram-introduction.html)
@@ -178,3 +176,6 @@ Object 之間的數量關係，預設為 1
 - [UML Relationships Types: Association, Dependency, Generalization](https://www.guru99.com/uml-relationships-with-example.html#5)
 - [What is the difference between association, aggregation and composition?](https://stackoverflow.com/questions/885937/what-is-the-difference-between-association-aggregation-and-composition)
 - [UML Association vs Aggregation vs Composition](https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/)
+
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+{: .notice--success}
