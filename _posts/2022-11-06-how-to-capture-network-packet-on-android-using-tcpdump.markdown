@@ -12,12 +12,13 @@ categories: [Tools]
 
 ## 前言
 
-最近工作上遇到需要抓封包分析才能釐清的問題，以前在開發iOS非常簡單，可以用 `rvictl -s [iOS UUID]` 在 Mac 上創建一個虛擬網卡介面，就可以開 Wireshark 抓 iOS 上的封包了，最近開發 Android 也遇到需要抓封包的情況，上網學習了一下，在這邊紀錄，希望可以幫到其他人🙂
+最近工作上遇到需要抓封包分析才能釐清的問題，以前在開發 iOS 非常簡單，可以用 `rvictl -s [iOS UUID]` 在 Mac 上創建一個虛擬網卡介面，就可以開 Wireshark 抓 iOS 上的封包了，最近開發 Android 也遇到需要抓封包的情況，上網學習了一下，在這邊紀錄，希望可以幫到其他人🙂
 
 ## 事前準備
 
 1. 一台 root 過的 Android Device
 2. [tcpdump](https://www.androidtcpdump.com/) tool
+3. [Wireshark](https://www.wireshark.org/download.html)
 
 > 補充說明: 如果沒有 root 的 Android Device，可以嘗試用 [tPacketCapture](https://play.google.com/store/apps/details?id=jp.co.taosoftware.android.packetcapture&hl=zh_TW&gl=US) 來抓包，它的原理類似開一個類似 VPN 的 app，發送的封包此 app 會抓取，但我個人實測，有時候有些封包會好像沒發出去，影響實際情況，在此不推薦！
 
