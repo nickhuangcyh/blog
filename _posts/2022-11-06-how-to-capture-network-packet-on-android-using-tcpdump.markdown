@@ -31,17 +31,16 @@ categories: [Tools]
 ```bash
 adb push tcpdump /data/local/tcpdump
 ```
-如果出現 `can't execute: Permission denied`，請以 root 身份調整 `/data/local` 資料夾權限，如下
+
+如果出現 `can't execute: Permission denied`，請以 root 身份執行 push，結束後再退出 root 身份
+{: .notice--warning}
+
 ```bash
-adb shell
-su
-chmod 777 /data/local
-exit
-```
-調整後再試一次上面的指令
-```bash
+adb root
 adb push tcpdump /data/local/tcpdump
+adb unroot
 ```
+
 
 ## 執行 tcpdump 
 先到 `/data/local` 目錄下
