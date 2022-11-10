@@ -1,0 +1,946 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>搞懂 P2P 技術 (3) - WebRTC x AWS x KVS - Nick’s Blog</title>
+<meta name="description" content="WebRTC x AWS x KVS">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="搞懂 P2P 技術 (3) - WebRTC x AWS x KVS">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/p2p/aws/p2p-tech-3-webrtc-kvs/">
+
+
+  <meta property="og:description" content="WebRTC x AWS x KVS">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-01-04T15:13:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/p2p/aws/p2p-tech-3-webrtc-kvs/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          搞懂 P2P 技術 (3) - WebRTC x AWS x KVS
+
+        
+      </h1>
+      
+        <p class="page__lead">WebRTC x AWS x KVS
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-01-04T15:13:00+00:00">January 4, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="搞懂 P2P 技術 (3) - WebRTC x AWS x KVS">
+    <meta itemprop="description" content="WebRTC x AWS x KVS">
+    <meta itemprop="datePublished" content="2022-01-04T15:13:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#webrtc">WebRTC</a></li><li><a href="#signaling-server">Signaling Server</a><ul><li><a href="#實作-signaling-server">實作 Signaling Server</a></li></ul></li><li><a href="#sdp-session-description-protocol">SDP (Session Description Protocol)</a><ul><li><a href="#sdp-格式">SDP 格式</a></li></ul></li><li><a href="#ice-candidate">Ice Candidate</a></li><li><a href="#webrtc-flow">WebRTC Flow</a></li><li><a href="#aws-kvs-amazon-kinesis-video-streams">AWS KVS (Amazon Kinesis Video Streams)</a></li><li><a href="#成果">成果</a></li><li><a href="#踩雷補充">踩雷補充</a></li><li><a href="#總結">總結</a></li><li><a href="#參考資源">參考資源</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="webrtc">WebRTC</h2>
+
+<p>全名 Web Real-Time Communication，是一個支援網頁瀏覽器進行即時語音對話或影片對話的 API</p>
+
+<blockquote>
+  <p><a href="https://zh.wikipedia.org/wiki/WebRTC">WebRTC Wiki</a></p>
+</blockquote>
+
+<p>WebRTC 的底層就是使用 ICE 來進行 P2P 打洞</p>
+
+<h2 id="signaling-server">Signaling Server</h2>
+
+<p>信令伺服器，用來交換雙方的 SDP 及 Ice candidate 來完成 P2P 打洞</p>
+
+<h3 id="實作-signaling-server">實作 Signaling Server</h3>
+
+<p>WebRTC 沒有明確定義如何實作 Signaling Server，主要原因在於如果雙方一開始就知道對方的資訊，那其實就不需要 Signaling Server 來交換資訊</p>
+
+<p>實作一個 Signaling Server 方式有很多種，可以用 HTTP 協議也可以用 WebSocket 協議，只要能順利將雙方的資訊做交換即可</p>
+
+<h2 id="sdp-session-description-protocol">SDP (Session Description Protocol)</h2>
+
+<p>會話描述協議（Session Description Protocol 或簡寫 SDP）描述的是流媒體的初始化參數。此協議由 IETF 發表為 <a href="https://datatracker.ietf.org/doc/html/rfc2327">RFC 2327</a>。</p>
+
+<h3 id="sdp-格式">SDP 格式</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">v</span><span class="o">=</span>0
+<span class="nv">o</span><span class="o">=</span>mhandley 2890844526 2890842807 IN IP4 126.16.64.4
+<span class="nv">s</span><span class="o">=</span>SDP Seminar
+<span class="nv">i</span><span class="o">=</span>A Seminar on the session description protocol
+<span class="nv">u</span><span class="o">=</span>http://www.cs.ucl.ac.uk/staff/M.Handley/sdp.03.ps
+<span class="nv">e</span><span class="o">=</span>mjh@isi.edu <span class="o">(</span>Mark Handley<span class="o">)</span>
+<span class="nv">c</span><span class="o">=</span>IN IP4 224.2.17.12/127
+<span class="nv">t</span><span class="o">=</span>2873397496 2873404696
+<span class="nv">a</span><span class="o">=</span>recvonly
+<span class="nv">m</span><span class="o">=</span>audio 49170 RTP/AVP 0
+<span class="nv">m</span><span class="o">=</span>video 51372 RTP/AVP 31
+<span class="nv">m</span><span class="o">=</span>application 32416 udp wb
+<span class="nv">a</span><span class="o">=</span>orient:portrait
+</code></pre></div></div>
+
+<ul>
+  <li>v=協議版本</li>
+  <li>o=發起者的 Session、Session ID 及 Session 版本</li>
+  <li>s=Session 名字</li>
+  <li>i=Session 資訊</li>
+  <li>u=有關會議資訊的 url</li>
+  <li>e=Email</li>
+  <li>p=手機號碼</li>
+  <li>c=連線資訊</li>
+  <li>t = Session 活動時間</li>
+  <li>m = 媒體資訊 ((media) (port) (transport) (fmt list))</li>
+  <li>a = 媒體屬性</li>
+</ul>
+
+<h2 id="ice-candidate">Ice Candidate</h2>
+
+<p>Ice Candidate 描述 WebRTC 能與 遠程設備通訊所需的協議和路由，啟動 WebRTC P2P 後，通常會在連接的每一端提供多個 IceCandidate，直到絕定最佳線路達成為止．</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"sdpMLineIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sdpMid"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"candidate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a=candidate:2999745851 1 udp 2113937151 192.168.56.1 51411 typ host generation 0"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="webrtc-flow">WebRTC Flow</h2>
+
+<p><img src="/blog/assets/images/p2p_webrtc.png" alt="p2p_webrtc" /></p>
+
+<ol>
+  <li>雙方 Peer 先連上 Signaling Server</li>
+  <li>PeerA 取得自身 SDP 並呼叫 setLocalDescription</li>
+  <li>PeerA 將 SDP 傳給 Signaling Server</li>
+  <li>Signaling Server 將 PeerA 的 SDP 送給 PeerB</li>
+  <li>PeerB 呼叫 setRemoteDescription 將 PeerA 的 SDP 寫入</li>
+  <li>PeerB 取得自身 SDP 並呼叫 setLocalDescription</li>
+  <li>PeerB 將 SDP 傳給 Signaling Server</li>
+  <li>Signaling Server 將 PeerB 的 SDP 送給 PeerA</li>
+  <li>PeerA 呼叫 setRemoteDescription 將 PeerB 的 SDP 寫入</li>
+  <li>PeerA 向 Stun server 詢問 public IP</li>
+  <li>Stun server 回應 public IP</li>
+  <li>PeerA 向 TURN server 詢問 relay 資訊 (relay ip/port)</li>
+  <li>TURN server 回應 relay 資訊</li>
+  <li>PeerA 將 Ice candidates 傳給 Signaling Server</li>
+  <li>Signaling Server 將 PeerA 的 Ice candidates 送給 PeerB</li>
+  <li>PeerB 呼叫 setRemoteIceCandidate 將 PeerA 的 Ice candidates 寫入</li>
+  <li>PeerB 向 Stun server 詢問 public IP</li>
+  <li>Stun server 回應 public IP</li>
+  <li>PeerB 向 TURN server 詢問 relay 資訊 (relay ip/port)</li>
+  <li>TURN server 回應 relay 資訊</li>
+  <li>PeerB 將 Ice candidates 傳給 Signaling Server</li>
+  <li>Signaling Server 將 PeerB 的 Ice candidates 送給 PeerA</li>
+  <li>PeerA 呼叫 setRemoteIceCandidate 將 PeerB 的 Ice candidates 寫入</li>
+  <li>P2P 通道建立完成</li>
+</ol>
+
+<h2 id="aws-kvs-amazon-kinesis-video-streams">AWS KVS (Amazon Kinesis Video Streams)</h2>
+
+<p>Amazon Kinesis Video Streams 以全受管功能提供符合標準的 WebRTC 實作。您可以使用 Amazon Kinesis Video Streams and WebRTC 安全地即時串流媒體，或在任何攝影機 IoT 裝置與符合 WebRTC 標準的行動或 Web 播放器之間，執行雙向音訊或視訊互動。因為是全受管功能，您不需要建置、執行或擴展任何與 WebRTC 相關的雲端基礎設施，例如訊號或媒體轉送伺服器，即可在應用程式和裝置之間安全地串流媒體。</p>
+
+<blockquote>
+  <p>簡單來說 KVS 就是幫你把 STUN, TURN, Signaling Server 加密權限驗證等等都實作了，WebRTC 的部分跟 KVS 是完全獨立的，你也可以選擇自己架設 STUN, TURN, Signaling Server 搭配 Google WebRTC 也能成功串流．</p>
+</blockquote>
+
+<p>KVS 的 Signaling server 是用 WebSocket 去實作的</p>
+
+<blockquote>
+  <p>注意: WebSocket 與 Socket.IO 是不是一樣的，Socket.IO 是根據 Websocket 協議去實作，Socket.IO 有自己的通訊格式，請不要拿 Socket.IO 套件去串接 KVS，會失敗，有興趣可以參考這篇 <a href="https://leesonhsu.blogspot.com/2018/07/socketwebsocketsocketio.html">【筆記】Socket，Websocket，Socket.io 的差異</a></p>
+</blockquote>
+
+<h2 id="成果">成果</h2>
+
+<p>理解這些 P2P 相關的知識，我們就可以很清楚的實作每一步驟，出錯時也能清楚哪一部分出錯，甚至是替換 Stun / TURN / signaling server 都沒問題，下面貼一下成果圖</p>
+
+<p><a href="/blog/assets/images/ios_webrtc.png"><img src="/blog/assets/images/ios_webrtc.png" alt="ios_webrtc" /></a>
+<a href="/blog/assets/images/android_webrtc.png"><img src="/blog/assets/images/android_webrtc.png" alt="android_webrtc" /></a></p>
+
+<h2 id="踩雷補充">踩雷補充</h2>
+
+<ul>
+  <li>在串接 AWS KVS 時，AWS Android 的 sample code 是使用 tyrus 套件連 signaling server，但此套件在舊版有一些 SSL 問題有機會失敗，所以我把 tyrus 換成 okhttp 去連 signaling server，但一直連不上 403 Forbidden，iOS 用 starscream 連線正常，後來比對兩平台 URL 發現，Android 的會多做一次 url encode，在 tyrus 沒問題，但在 okhttp 上會有問題 (解法請參考 : <a href="https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-android/issues/74">https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-android/issues/74</a>)</li>
+</ul>
+
+<h2 id="總結">總結</h2>
+
+<p>P2P 的基本觀念大致就到這邊，如果想要更深入的理解 P2P 的朋友，可以看參考資源欄中的文章，或直接看 RFC ，裡面會說到每個協議的格式細節．</p>
+
+<h2 id="參考資源">參考資源</h2>
+
+<ul>
+  <li><a href="https://developer.mozilla.org/zh-TW/docs/Web/API/WebRTC_API">WebRTC API</a></li>
+  <li><a href="https://zh.wikipedia.org/wiki/WebRTC">WebRTC Wiki</a></li>
+  <li><a href="https://zh.wikipedia.org/wiki/%E4%BC%9A%E8%AF%9D%E6%8F%8F%E8%BF%B0%E5%8D%8F%E8%AE%AE">SDP Wiki</a></li>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCIceCandidate">RTCIceCandidate</a></li>
+  <li><a href="https://docs.aws.amazon.com/zh_tw/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html">Amazon Kinesis Video Streams for WebRTC</a></li>
+  <li><a href="http://www.52im.net/thread-50-1-1.html">《P2P 技术详解》系列文章</a></li>
+  <li><a href="https://www.flaticon.com/">flaticon</a></li>
+</ul>
+
+<p class="notice--success"><strong>Note:</strong> 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#android" class="page__taxonomy-item" rel="tag">Android</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#ios" class="page__taxonomy-item" rel="tag">iOS</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#kvs" class="page__taxonomy-item" rel="tag">KVS</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#webrtc" class="page__taxonomy-item" rel="tag">WebRTC</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#aws" class="page__taxonomy-item" rel="tag">AWS</a><span class="sep">, </span>
+    
+      <a href="/blog/categories/#p2p" class="page__taxonomy-item" rel="tag">P2P</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-01-04T15:13:00+00:00">January 4, 2022</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E6%90%9E%E6%87%82+P2P+%E6%8A%80%E8%A1%93+%283%29+-+WebRTC+x+AWS+x+KVS%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fp2p%2Faws%2Fp2p-tech-3-webrtc-kvs%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fp2p%2Faws%2Fp2p-tech-3-webrtc-kvs%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fp2p%2Faws%2Fp2p-tech-3-webrtc-kvs%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/p2p/p2p-tech-2-stun-turn-ice/" class="pagination--pager" title="搞懂 P2P 技術 (2) - STUN x TURN x ICE
+">Previous</a>
+    
+    
+      <a href="/blog/design%20pattern/design-pattern-1-design-principle/" class="pagination--pager" title="Design Pattern 系列 (1) - Design Principle
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/jordan-harrison-40XgDxBfYXM-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/tools/how-to-capture-network-packet-on-ios/" rel="permalink">如何抓取 iOS 的網路封包
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-11-09T03:30:00+00:00">November 9, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">利用遠端虛擬介面工具(rvictl)抓包好輕鬆!
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/jordan-harrison-40XgDxBfYXM-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/tools/how-to-capture-network-packet-on-android-using-tcpdump/" rel="permalink">如何抓取 Android 的網路封包
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-11-06T15:30:00+00:00">November 6, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">抓封包利器 - tcpdump
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-6-abstract-factory-pattern/" rel="permalink">Design Pattern 系列 (6) - Abstract Factory Pattern
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-02-21T17:00:00+00:00">February 21, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">透過將工廠抽象，使子類別能創建一系列的實體物件。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/carlos-aranda-QMjCzOGeglA-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-5-factory-method-pattern/" rel="permalink">Design Pattern 系列 (5) - Factory Method Pattern
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-02-19T09:20:00+00:00">February 19, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">提供一個介面用來創建物件，真正實體化的類別由子類別實作決定。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/p2p/aws/p2p-tech-3-webrtc-kvs/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/p2p/aws/p2p-tech-3-webrtc-kvs"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

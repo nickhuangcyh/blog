@@ -1,0 +1,865 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>如何抓取 Android 的網路封包 - Nick’s Blog</title>
+<meta name="description" content="抓封包利器 - tcpdump">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="如何抓取 Android 的網路封包">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/tools/how-to-capture-network-packet-on-android-using-tcpdump/">
+
+
+  <meta property="og:description" content="抓封包利器 - tcpdump">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/jordan-harrison-40XgDxBfYXM-unsplash.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-11-06T15:30:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/tools/how-to-capture-network-packet-on-android-using-tcpdump/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/jordan-harrison-40XgDxBfYXM-unsplash.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          如何抓取 Android 的網路封包
+
+        
+      </h1>
+      
+        <p class="page__lead">抓封包利器 - tcpdump
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-11-06T15:30:00+00:00">November 6, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="如何抓取 Android 的網路封包">
+    <meta itemprop="description" content="抓封包利器 - tcpdump">
+    <meta itemprop="datePublished" content="2022-11-06T15:30:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#前言">前言</a></li><li><a href="#事前準備">事前準備</a></li><li><a href="#將-tcpdump-放入-android-裝置">將 tcpdump 放入 Android 裝置</a></li><li><a href="#執行-tcpdump">執行 tcpdump</a></li><li><a href="#導出-android-封包檔案到電腦上">導出 Android 封包檔案到電腦上</a></li><li><a href="#總結">總結</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="前言">前言</h2>
+
+<p>最近工作上遇到需要抓封包分析才能釐清的問題</p>
+
+<p>以前在開發 iOS 非常簡單，可以用 <code class="language-plaintext highlighter-rouge">rvictl -s [iOS UUID]</code> 在 Mac 上創建一個虛擬網卡介面，就可以開 Wireshark 抓 iOS 上的封包了</p>
+
+<p>最近開發 Android 也遇到需要抓封包的情況，上網學習了一下，在這邊紀錄，希望可以幫到其他人🙂</p>
+
+<h2 id="事前準備">事前準備</h2>
+
+<ol>
+  <li>一台 root 過的 Android Device</li>
+  <li><a href="https://www.androidtcpdump.com/">tcpdump</a> tool</li>
+  <li><a href="https://www.wireshark.org/download.html">Wireshark</a></li>
+</ol>
+
+<blockquote>
+  <p>補充說明: 如果沒有 root 的 Android Device，可以嘗試用 <a href="https://play.google.com/store/apps/details?id=jp.co.taosoftware.android.packetcapture&amp;hl=zh_TW&amp;gl=US">tPacketCapture</a> 來抓包，它的原理類似開一個類似 VPN 的 app，發送的封包此 app 會抓取，但我個人實測，有時候有些封包會好像沒發出去，影響實際情況，在此不推薦！</p>
+</blockquote>
+
+<h2 id="將-tcpdump-放入-android-裝置">將 tcpdump 放入 Android 裝置</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb push tcpdump /data/local/tcpdump
+</code></pre></div></div>
+
+<p class="notice--warning">如果出現 <code class="language-plaintext highlighter-rouge">can't execute: Permission denied</code>，請以 root 身份執行 push，結束後再退出 root 身份</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb root
+adb push tcpdump /data/local/tcpdump
+adb unroot
+</code></pre></div></div>
+
+<h2 id="執行-tcpdump">執行 tcpdump</h2>
+<p>先到 <code class="language-plaintext highlighter-rouge">/data/local</code> 目錄下</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb shell
+su
+<span class="nb">cd</span> /data/local
+</code></pre></div></div>
+<p>修改 tcpdump 權限為可執行</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod </span>a+x tcpdump
+</code></pre></div></div>
+<p>執行 tcpdump 開始抓封包</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./tcpdump <span class="nt">-i</span> any <span class="nt">-p</span> <span class="nt">-s</span> 0 <span class="nt">-w</span> /sdcard/capture.pcap
+</code></pre></div></div>
+<p>抓完封包後 <code class="language-plaintext highlighter-rouge">control + c</code> 結束抓包程序</p>
+
+<h2 id="導出-android-封包檔案到電腦上">導出 Android 封包檔案到電腦上</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb pull /sdcard/capture.pcap
+</code></pre></div></div>
+<p>在用 Wireshark 開啟即可
+<img src="/blog/assets/images/wireshark_test_1.png" alt="wireshark_test_1" /></p>
+
+<h2 id="總結">總結</h2>
+<p>抓封包是很重要的 debug 工具，很多時候使用第三方的 <code class="language-plaintext highlighter-rouge">frameworks/libraries</code> 較難查出是 <code class="language-plaintext highlighter-rouge">server</code> or <code class="language-plaintext highlighter-rouge">client</code> 的問題．</p>
+
+<p>也有可能是 <code class="language-plaintext highlighter-rouge">framework/library</code> 本身沒寫好，需要修改第三方的程式碼</p>
+
+<p>之前在做 iOS FFMpeg 在串 RTSP 時原始碼沒送<code class="language-plaintext highlighter-rouge">GET_PARAMETER</code> 的 keepalive 封包，導致 1 分鐘後就斷線，之後也是透過 Wireshark 抓包，改 FFMpeg 原始碼才解決</p>
+
+<p>透過觀察封包能夠快速釐清問題，不需要花大量時間去猜測問題，是網路開發中很重要的技巧之一！</p>
+
+<p class="notice--success"><strong>Note:</strong> 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#android" class="page__taxonomy-item" rel="tag">Android</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#network" class="page__taxonomy-item" rel="tag">Network</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#packet" class="page__taxonomy-item" rel="tag">Packet</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#wireshark" class="page__taxonomy-item" rel="tag">Wireshark</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#tools" class="page__taxonomy-item" rel="tag">Tools</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-11-06T15:30:00+00:00">November 6, 2022</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E5%A6%82%E4%BD%95%E6%8A%93%E5%8F%96+Android+%E7%9A%84%E7%B6%B2%E8%B7%AF%E5%B0%81%E5%8C%85%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Ftools%2Fhow-to-capture-network-packet-on-android-using-tcpdump%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Ftools%2Fhow-to-capture-network-packet-on-android-using-tcpdump%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Ftools%2Fhow-to-capture-network-packet-on-android-using-tcpdump%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/design%20pattern/design-pattern-6-abstract-factory-pattern/" class="pagination--pager" title="Design Pattern 系列 (6) - Abstract Factory Pattern
+">Previous</a>
+    
+    
+      <a href="/blog/tools/how-to-capture-network-packet-on-ios/" class="pagination--pager" title="如何抓取 iOS 的網路封包
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/jordan-harrison-40XgDxBfYXM-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/tools/how-to-capture-network-packet-on-ios/" rel="permalink">如何抓取 iOS 的網路封包
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-11-09T03:30:00+00:00">November 9, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">利用遠端虛擬介面工具(rvictl)抓包好輕鬆!
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-6-abstract-factory-pattern/" rel="permalink">Design Pattern 系列 (6) - Abstract Factory Pattern
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-02-21T17:00:00+00:00">February 21, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">透過將工廠抽象，使子類別能創建一系列的實體物件。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/carlos-aranda-QMjCzOGeglA-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-5-factory-method-pattern/" rel="permalink">Design Pattern 系列 (5) - Factory Method Pattern
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-02-19T09:20:00+00:00">February 19, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">提供一個介面用來創建物件，真正實體化的類別由子類別實作決定。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/vindemia-winery-wGk29doZtpQ-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-4-simple-factory-pattern/" rel="permalink">Design Pattern 系列 (4) - Simple Factory Pattern
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-02-13T15:45:00+00:00">February 13, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">將會變動的創建物件程式碼與不會變動的程式碼分開吧，增加程式碼可讀性及維護性
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2022 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/tools/how-to-capture-network-packet-on-android-using-tcpdump/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/tools/how-to-capture-network-packet-on-android-using-tcpdump"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>
