@@ -1,12 +1,12 @@
 ---
 layout: single
-title: "Design Pattern 系列 (1) - 掌握物件導向的核心概念 (Object-Oriented Concepts)"
-date: 2024-07-02 19:00:00 +0800
-excerpt: "深入物件導向編程的基礎，探索封裝、繼承、多態性和抽象的力量，為理解複雜設計模式奠定基礎。"
+title: "Design Pattern 系列 (2) - 設計原則深掘：打造靈活與可維護代碼的秘訣 (Design Principle)"
+date: 2024-07-03 19:00:00 +0800
+excerpt: "探索設計原則的精髓，學習如何透過這些時間考驗的原則來提升你的代碼質量。從單一職責到開放封閉原則，本文將引導你理解並實踐這些原則，以打造更靈活、更可維護的軟件系統。"
 header:
   overlay_image: /assets/images/sigmund-_dJCBtdUu74-unsplash.jpg
   teaser: /assets/images/sigmund-_dJCBtdUu74-unsplash.jpg
-tags: [Object-Oriented Concepts]
+tags: [Design Principle]
 categories: [Design Pattern]
 ---
 
