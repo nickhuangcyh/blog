@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Design Pattern 系列 (3) - 深入UML圖：設計模式的視覺化工具"
+title: "Design Pattern 系列 (4) - 深入UML圖：設計模式的視覺化工具"
 date: 2024-07-04 20:00:00 +0800
 excerpt: "本文將引導您深入了解UML（統一建模語言），一種強大的視覺化工具，用於表達和設計軟體架構。透過實例學習如何使用UML圖來清晰展現設計模式，從而提升您的軟體設計能力。"
 header:
