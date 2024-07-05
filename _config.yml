@@ -131,7 +131,7 @@ author:
       # url: "https://nickhuangcyh.github.io/blog"
     - label: "Facebook"
       icon: "fab fa-fw fa-facebook-square"
-      # url: "https://facebook.com/"
+      url: "https://www.facebook.com/nickhuangcyh"
 
 # Site Footer
 footer:
@@ -153,7 +153,7 @@ footer:
       url: "https://twitter.com/nickhuangcyh"
     - label: "Facebook"
       icon: "fab fa-fw fa-facebook-square"
-      # url:
+      url: "https://www.facebook.com/nickhuangcyh"
     - label: "GitLab"
       icon: "fab fa-fw fa-gitlab"
       # url:
