@@ -308,7 +308,7 @@ const httpClient = new GoogleAuth({
     }
 
     // 使用您要測試的 issuerId 調用 addSmartTapKey 函數
-    let issuerId = "3388000000022356830";
+    let issuerId = "Your issuer ID";
     await addSmartTapKey(issuerId);
 })();
 ```
@@ -331,7 +331,7 @@ const {
 } = require("google-auth-library");
 
 // TODO: Define issuer ID
-let issuerId = "3388000000022356830";
+let issuerId = "Your issuer ID";
 const keyFilePath =
     process.env.GOOGLE_APPLICATION_CREDENTIALS || "/path/to/key.json";
 
@@ -402,7 +402,255 @@ node get_collector_id.js
 
 為感應式刷卡機設定智慧感應功能後，票證開發人員就能讓更多票證類別在商家的感應式刷卡機兌換。如要新增票證類別的支援，您不需要進行額外的終端機設定。
 
-## 總結
+## Pass configuration (票證設定)
+
+### Pass class configuration (票證類別設定)
+
+您必須在票證類別上設定下列屬性：
+
+* `enableSmartTap` 設為 True
+* `redemptionIssuers` 設為將透過 Smart Tap 兌換與這個類別相關聯的票證物件
+
+```javascript
+const {
+    GoogleAuth
+} = require("google-auth-library");
+
+// TODO: Define issuer ID
+let issuerId = "Your issuer ID";
+let classSuffix = "Your classSuffix";
+const classId = `${issuerId}.${classSuffix}`;
+const keyFilePath =
+    process.env.GOOGLE_APPLICATION_CREDENTIALS || "/path/to/key.json";
+
+const baseUrl = "https://walletobjects.googleapis.com/walletobjects/v1";
+
+const credentials = require(keyFilePath);
+
+const httpClient = new GoogleAuth({
+    credentials: credentials,
+    scopes: "https://www.googleapis.com/auth/wallet_object.issuer",
+});
+
+// Create a Loyalty SmartTap pass class
+let loyaltyClass = {
+    id: `${classId}`,
+    issuerName: "Climax technology",
+    programName: "Climax Loyalty SmartTap 2 Program Test",
+    enableSmartTap: true, // Enable Smart Tap
+    redemptionIssuers: [
+        // Add any Redemption Issuer IDs
+        "Your Redemption issuer ID",
+    ],
+    reviewStatus: "underReview",
+    programLogo: {
+        sourceUri: {
+            uri: "https://www.sourcesecurity.com/img/companies/300/climax-logo_1560425415.jpg",
+        },
+        contentDescription: {
+            defaultValue: {
+                language: "en-US",
+                value: "Program Logo",
+            },
+        },
+    },
+    textModulesData: [{
+        header: "Welcome to Your Loyalty SmartTap 2 Program",
+        body: "Thank you for joining our loyalty SmartTap 2 program. Enjoy exclusive rewards and benefits.",
+        id: "welcome_message",
+    }, ],
+    linksModuleData: {
+        uris: [{
+            uri: "https://www.climax.com.tw/",
+            description: "Visit our loyalty SmartTap 2 program",
+            id: "website",
+        }, ],
+    },
+    imageModulesData: [{
+        mainImage: {
+            sourceUri: {
+                uri: "https://www.sourcesecurity.com/img/companies/300/climax-logo_1560425415.jpg",
+            },
+            contentDescription: {
+                defaultValue: {
+                    language: "en-US",
+                    value: "Loyalty SmartTap 2 Program Banner",
+                },
+            },
+        },
+        id: "loyalty_banner",
+    }, ],
+    messages: [{
+        header: "Welcome",
+        body: "Thanks for joining our loyalty SmartTap 2 program!",
+        id: "welcome_message",
+    }, ],
+};
+
+// Check if the class exists already
+httpClient
+    .request({
+        url: `${baseUrl}/loyaltyClass/${classId}`,
+        method: "GET",
+    })
+    .then((response) => {
+        console.log("Class already exists");
+        console.log(response);
+
+        console.log("Class ID");
+        console.log(response.data.id);
+    })
+    .catch((err) => {
+        if (err.response && err.response.status === 404) {
+            // Class does not exist
+            // Create it now
+            httpClient
+                .request({
+                    url: `${baseUrl}/loyaltyClass`,
+                    method: "POST",
+                    data: loyaltyClass,
+                })
+                .then((response) => {
+                    console.log("Class insert response");
+                    console.log(response);
+
+                    console.log("Class ID");
+                    console.log(response.data.id);
+                });
+        } else {
+            // Something else went wrong
+            console.log(err);
+        }
+    });
+```
+
+### Pass object configuration (票證物件設定)
+
+若是傳遞物件，則必須設定 `smartTapRedemptionValue` 。
+
+```javascript
+const {
+    GoogleAuth
+} = require("google-auth-library");
+const jwt = require("jsonwebtoken");
+
+// TODO: Define issuer ID
+let issuerId = "Your issuer ID";
+let classSuffix = "Your classSuffix"; // Use the loyalty class ID
+let objectSuffix = "Your objectSuffix";
+const objectId = `${issuerId}.${objectSuffix}`;
+const keyFilePath =
+    process.env.GOOGLE_APPLICATION_CREDENTIALS || "/path/to/key.json";
+
+const baseUrl = "https://walletobjects.googleapis.com/walletobjects/v1";
+
+const credentials = require(keyFilePath);
+
+const httpClient = new GoogleAuth({
+    credentials: credentials,
+    scopes: "https://www.googleapis.com/auth/wallet_object.issuer",
+});
+
+// Create a Loyalty SmartTap pass object with Smart Tap support
+let loyaltyObject = {
+    id: `${objectId}`,
+    classId: `${issuerId}.${classSuffix}`,
+    state: "active",
+    accountId: "123",
+    accountName: "Nick Huang",
+    textModulesData: [{
+        header: "Your Loyalty Points",
+        body: "You have 500 points.",
+        id: "loyalty_points",
+    }, ],
+    locations: [{
+        latitude: 37.422,
+        longitude: -122.084,
+    }, ],
+    smartTapRedemptionValue: "500",
+    infoModuleData: {
+        labelValueRows: [{
+            columns: [{
+                label: "Smart Tap ID",
+                value: "1234567890",
+            }, ],
+        }, ],
+    },
+};
+
+// Check if the object exists already
+httpClient
+    .request({
+        url: `${baseUrl}/loyaltyObject/${objectId}`,
+        method: "GET",
+    })
+    .then((response) => {
+        console.log("Object already exists");
+        console.log(response);
+
+        console.log("Object ID");
+        console.log(response.data.id);
+    })
+    .catch((err) => {
+        if (err.response && err.response.status === 404) {
+            // Object does not exist
+            // Create it now
+            httpClient
+                .request({
+                    url: `${baseUrl}/loyaltyObject`,
+                    method: "POST",
+                    data: loyaltyObject,
+                })
+                .then((response) => {
+                    console.log("Object insert response");
+                    console.log(response);
+
+                    console.log("Object ID");
+                    console.log(response.data.id);
+
+                    // Generate the "Add to Google Wallet" link
+                    generateAddToWalletLink(objectId);
+                });
+        } else {
+            // Something else went wrong
+            console.log(err);
+        }
+    });
+
+function generateAddToWalletLink(objectId) {
+    const payload = {
+        iss: credentials.client_email, // `client_email` in service account file.
+        aud: "google",
+        origins: ["http://localhost:3000"],
+        typ: "savetowallet",
+        payload: {
+            loyaltyObjects: [{
+                id: objectId,
+            }, ],
+        },
+    };
+
+    const token = jwt.sign(payload, credentials.private_key, {
+        algorithm: "RS256",
+    });
+    const addToWalletLink = `https://pay.google.com/gp/v/save/${token}`;
+
+    console.log("Add to Google Wallet link:");
+    console.log(addToWalletLink);
+}
+```
+
+執行完成會得到一組 JWT，在網頁上填入 https://pay.google.com/gp/v/save/{JWT} 即可將卡券加入你的 Google account 中
+
+## 展示
+
+下載 [Smart tap sample app](https://github.com/google-wallet/smart-tap-sample-app)，並將 sample code 中的 Collector ID 改為自己的 Collector ID 當成刷卡機．
+
+![google_wallet_smart_tap_result1]({{ site.baseurl }}/assets/images/google_wallet_smart_tap_result1.png)
+
+![google_wallet_smart_tap_result2]({{ site.baseurl }}/assets/images/google_wallet_smart_tap_result2.png)
+
+![google_wallet_smart_tap_result3]({{ site.baseurl }}/assets/images/google_wallet_smart_tap_result3.png)
 
 ## 參考
 
