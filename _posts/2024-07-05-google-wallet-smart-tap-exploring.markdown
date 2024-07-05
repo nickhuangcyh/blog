@@ -119,12 +119,13 @@ classSuffix 是由開發者定義此 pass class 獨有的值，透過此 pass cl
 - Issuer `1990` 是商家 fooPizza (Redemption Issuer)
 
 Redemption Issuer - fooPizza 想要為他們的票證啟用 Smart Tap 功能，Aggregator 及 Redemption Issuer 必須完成下面的步驟，才能為商家終端啟用 Smart Tap
-| 步驟 | 角色 | 說明 |
-|:----:|:------------:|:---------------------------------------------------------------------------------------------------------------------|
-| 1 | Aggregator | 創建票證類和對象（在圖中分別為 abc 和 123）。 |
-| 2 | Aggregator | 將 Redemption Issuer 的 ID 添加到票證類的 `redemptionIssuers` 屬性中。這會告知 Google 錢包，發卡機構 ID 1990 可以兌換引用此類的票證對象。 |
-| 3 | Redemption Issuer | 獲取 Collector ID（在圖中，12345678）。 |
-| 4 | Redemption Issuer | 在要使用的每個支持 Smart Tap 的終端上設置 Collector ID 12345678。任何類 ID 為 abc 且 Collector ID 為 12345678 的物件都將傳送給 Reader |
+
+| 步驟 |       角色        | 說明                                                                                                                                      |
+| :--: | :---------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
+|  1   |    Aggregator     | 創建票證類和對象（在圖中分別為 abc 和 123）。                                                                                             |
+|  2   |    Aggregator     | 將 Redemption Issuer 的 ID 添加到票證類的 `redemptionIssuers` 屬性中。這會告知 Google 錢包，發卡機構 ID 1990 可以兌換引用此類的票證對象。 |
+|  3   | Redemption Issuer | 獲取 Collector ID（在圖中，12345678）。                                                                                                   |
+|  4   | Redemption Issuer | 在要使用的每個支持 Smart Tap 的終端上設置 Collector ID 12345678。任何類 ID 為 abc 且 Collector ID 為 12345678 的物件都將傳送給 Reader     |
 
 ### 範例 2: 多個 Redemption Issuer
 
