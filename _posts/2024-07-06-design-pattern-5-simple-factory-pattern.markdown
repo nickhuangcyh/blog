@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Design Pattern 系列 (5) - 簡化你的程式碼：掌握簡單工廠模式 (Simple Factory Pattern)"
-date: 2024-07-09 00:00:00 +0800
+date: 2024-07-06 23:00:00 +0800
 excerpt: "深入探索如何通過簡單工廠模式提高程式碼的可讀性和維護性，並通過一個實際的飲料點餐系統案例，讓你的程式碼更加靈活和高效。"
 header:
   overlay_image: /assets/images/vindemia-winery-wGk29doZtpQ-unsplash.jpg

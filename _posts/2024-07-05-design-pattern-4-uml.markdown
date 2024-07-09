@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Design Pattern 系列 (4) - 深入UML圖：設計模式的視覺化工具"
-date: 2024-07-04 21:00:00 +0800
+date: 2024-07-05 23:00:00 +0800
 excerpt: "本文將引導您深入了解UML（統一建模語言），一種強大的視覺化工具，用於表達和設計軟體架構。透過實例學習如何使用UML圖來清晰展現設計模式，從而提升您的軟體設計能力。"
 header:
   overlay_image: /assets/images/christina-wocintechchat-com-tYVkjjMYFBo-unsplash.jpg
@@ -52,10 +52,10 @@ Interface 有兩種表示法
 
 | Sign | Modifiers |
 | ---- | --------- |
-| `+`  | Public    |
-| `#`  | Protected |
-| `~`  | Package   |
-| `-`  | Private   |
+| `+` | Public    |
+| `#` | Protected |
+| `~` | Package   |
+| `-` | Private   |
 
 ![design_pattern_4_uml_interface_2]({{ site.baseurl }}/assets/images/design_pattern_4_uml_attribute.png)
 
@@ -65,17 +65,17 @@ Object 之間的數量關係，預設為 1
 
 | Sign    | amount               |
 | ------- | -------------------- |
-| `1`     | 1 個                 |
-| `*`     | 無限多個             |
+| `1` | 1 個                 |
+| `*` | 無限多個             |
 | `n...m` | 至少 n 個，至多 m 個 |
 
 ## Dependency 依賴
 
-- 表示不同對象之間相互依賴關係
-- 通常用於方法的參數或回傳值
-- A uses a B
-- 箭頭指向要依賴的對象
-- 以 `虛線` + `箭頭` 表示
+* 表示不同對象之間相互依賴關係
+* 通常用於方法的參數或回傳值
+* A uses a B
+* 箭頭指向要依賴的對象
+* 以 `虛線` + `箭頭` 表示
 
 ![design_pattern_4_uml_dependency_sign]({{ site.baseurl }}/assets/images/design_pattern_4_uml_dependency_sign.png)
 
@@ -85,12 +85,12 @@ Object 之間的數量關係，預設為 1
 
 ## Association 關聯
 
-- 表示一個對象擁有另一個對象
-- 通常用於屬性、全域變數
-- A has a C
-- Aggregation、Composition 為子集
-- 箭頭指向要關聯的對象
-- 以 `實線` + `箭頭` 表示
+* 表示一個對象擁有另一個對象
+* 通常用於屬性、全域變數
+* A has a C
+* Aggregation、Composition 為子集
+* 箭頭指向要關聯的對象
+* 以 `實線` + `箭頭` 表示
 
 ![design_pattern_4_uml_association_sign]({{ site.baseurl }}/assets/images/design_pattern_4_uml_association_sign.png)
 
@@ -100,12 +100,12 @@ Object 之間的數量關係，預設為 1
 
 ## Aggregation 聚合
 
-- 表示一個對象擁有另一個對象
-- A owns a B
-- Association 為超集、Composition 為子集
-- 菱形指向要聚合的對象
-- 弱關聯，關聯及被關聯對象可互相獨立存在
-- 以 `實線` + `空心菱形` 表示
+* 表示一個對象擁有另一個對象
+* A owns a B
+* Association 為超集、Composition 為子集
+* 菱形指向要聚合的對象
+* 弱關聯，關聯及被關聯對象可互相獨立存在
+* 以 `實線` + `空心菱形` 表示
 
 ![design_pattern_4_uml_aggregation_sign]({{ site.baseurl }}/assets/images/design_pattern_4_uml_aggregation_sign.png)
 
@@ -115,12 +115,12 @@ Object 之間的數量關係，預設為 1
 
 ## Composition 組合
 
-- 表示一個對象擁有另一個對象
-- C is a part of A
-- Association、Aggregation 為超集
-- 菱形指向要組合的對象
-- 強關聯，被關聯對象不可獨立存在
-- 以 `實線` + `實心菱形` 表示
+* 表示一個對象擁有另一個對象
+* C is a part of A
+* Association、Aggregation 為超集
+* 菱形指向要組合的對象
+* 強關聯，被關聯對象不可獨立存在
+* 以 `實線` + `實心菱形` 表示
 
 ![design_pattern_4_uml_composition_sign]({{ site.baseurl }}/assets/images/design_pattern_4_uml_composition_sign.png)
 
@@ -141,10 +141,10 @@ Object 之間的數量關係，預設為 1
 
 ## Realization / Implementation 實現 / 實作
 
-- 表示一個對象實作另一個對象
-- B implements A
-- 箭頭指向 interface
-- 以 `虛線` + `空心箭頭` 表示
+* 表示一個對象實作另一個對象
+* B implements A
+* 箭頭指向 interface
+* 以 `虛線` + `空心箭頭` 表示
 
 ![design_pattern_4_uml_realization_implementation_sign]({{ site.baseurl }}/assets/images/design_pattern_4_uml_realization_implementation_sign.png)
 
@@ -154,10 +154,10 @@ Object 之間的數量關係，預設為 1
 
 ## Generalization / Inheritance 泛化 / 繼承
 
-- 表示一個對象繼承另一個對象
-- C is-a A
-- 箭頭指向 父類別
-- 以 `實線` + `空心箭頭` 表示
+* 表示一個對象繼承另一個對象
+* C is-a A
+* 箭頭指向 父類別
+* 以 `實線` + `空心箭頭` 表示
 
 ![design_pattern_4_uml_generalization_inheritance_sign]({{ site.baseurl }}/assets/images/design_pattern_4_uml_generalization_inheritance_sign.png)
 
@@ -171,11 +171,11 @@ Object 之間的數量關係，預設為 1
 
 ## 參考
 
-- [【UML】Class Diagram 類別圖 (上)：Introduction 簡介](https://spicyboyd.blogspot.com/2018/07/umlclass-diagram-introduction.html)
-- [【UML】Class Diagram 類別圖 (下)：Relationships 關係](https://spicyboyd.blogspot.com/2018/07/umlclass-diagram-relationships.html)
-- [UML Relationships Types: Association, Dependency, Generalization](https://www.guru99.com/uml-relationships-with-example.html#5)
-- [What is the difference between association, aggregation and composition?](https://stackoverflow.com/questions/885937/what-is-the-difference-between-association-aggregation-and-composition)
-- [UML Association vs Aggregation vs Composition](https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/)
+* [【UML】Class Diagram 類別圖 (上)：Introduction 簡介](https://spicyboyd.blogspot.com/2018/07/umlclass-diagram-introduction.html)
+* [【UML】Class Diagram 類別圖 (下)：Relationships 關係](https://spicyboyd.blogspot.com/2018/07/umlclass-diagram-relationships.html)
+* [UML Relationships Types: Association, Dependency, Generalization](https://www.guru99.com/uml-relationships-with-example.html#5)
+* [What is the difference between association, aggregation and composition?](https://stackoverflow.com/questions/885937/what-is-the-difference-between-association-aggregation-and-composition)
+* [UML Association vs Aggregation vs Composition](https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/)
 
 **Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長 🙂
 {: .notice--success}

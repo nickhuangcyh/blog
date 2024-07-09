@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Design Pattern 系列 (3) - 深入探索設計模式： (Design Pattern)"
-date: 2024-07-04 19:00:00 +0800
+date: 2024-07-04 23:00:00 +0800
 excerpt: "本文將深入探討 Design Pattern 是什麼? 如何按步驟套用 Design Pattern 有效率的解決軟體問題"
 header:
   overlay_image: /assets/images/sigmund-_dJCBtdUu74-unsplash.jpg
