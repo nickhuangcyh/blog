@@ -1,8 +1,8 @@
 ---
 layout: single
-title: "Design Pattern 系列 (2) - 設計原則深掘：打造靈活與可維護代碼的秘訣 (Design Principle)"
+title: "Design Pattern (2) - Design Principles (設計原則)"
 date: 2024-07-03 23:00:00 +0800
-excerpt: "探索設計原則的精髓，學習如何透過這些時間考驗的原則來提升你的代碼質量。從單一職責到開放封閉原則，本文將引導你理解並實踐這些原則，以打造更靈活、更可維護的軟件系統。"
+excerpt: "學習如何透過單一職責和開放封閉等設計原則提升代碼質量，打造靈活、可維護的軟體系統。"
 header:
   overlay_image: /assets/images/sigmund-_dJCBtdUu74-unsplash.jpg
   teaser: /assets/images/sigmund-_dJCBtdUu74-unsplash.jpg

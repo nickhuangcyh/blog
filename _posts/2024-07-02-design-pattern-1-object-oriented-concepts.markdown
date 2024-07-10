@@ -1,8 +1,8 @@
 ---
 layout: single
-title: "Design Pattern 系列 (1) - 掌握物件導向的核心概念 (Object-Oriented Concepts)"
+title: "Design Pattern (1) - Object-Oriented Concepts (物件導向概念)"
 date: 2024-07-02 23:00:00 +0800
-excerpt: "深入物件導向編程的基礎，探索封裝、繼承、多態性和抽象的力量，為理解複雜設計模式奠定基礎。"
+excerpt: "探索封裝、繼承、多態和抽象的力量，為理解複雜設計模式奠定基礎。"
 header:
   overlay_image: /assets/images/sigmund-_dJCBtdUu74-unsplash.jpg
   teaser: /assets/images/sigmund-_dJCBtdUu74-unsplash.jpg

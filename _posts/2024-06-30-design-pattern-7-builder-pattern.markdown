@@ -1,8 +1,8 @@
 ---
 layout: single
-title: "Design Pattern 系列 (7) - Builder Pattern"
+title: "Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)"
 date: 2024-06-30 10:55:00 +0800
-excerpt: "透過 Builder Pattern，我們可以針對那些擁有複雜初始化需求的類別，透過分步驟的方法來簡化其初始化過程。這不僅讓初始化過程更加靈活和可控，還有助於提升代碼的清晰度和易於維護性。"
+excerpt: "探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。"
 header:
   overlay_image: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
   teaser: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
@@ -16,11 +16,11 @@ categories: [Design Pattern]
 
 今天我們要設計一個能自動做出手搖飲的機器，但如果手搖飲店只賣紅茶、綠茶，肯定滿足不了廣大的客群需求，因此我們要能夠讓手搖飲加入各種配料，來吸引顧客。
 
-- 珍珠 (Pearls)
-- 椰果 (Coconut Jelly)
-- 紅豆 (Red Beans)
-- 仙草凍 (Grass Jelly)
-- 布丁 (Pudding)
+* 珍珠 (Pearls)
+* 椰果 (Coconut Jelly)
+* 紅豆 (Red Beans)
+* 仙草凍 (Grass Jelly)
+* 布丁 (Pudding)
 
 ## 物件導向分析 (OOA)
 
@@ -40,7 +40,7 @@ categories: [Design Pattern]
 
 > Telescoping constructor 是當一個類別有多個構造器，每個構造器參數數量不同，導致類別難以維護和使用的問題。
 
-## 套用 Builder Pattern (`Solution`) 得到新的 Context (`Resulting Context`)
+## 套用 Builder Pattern ( `Solution` ) 得到新的 Context ( `Resulting Context` )
 
 做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Builder Pattern 解決這個問題
 

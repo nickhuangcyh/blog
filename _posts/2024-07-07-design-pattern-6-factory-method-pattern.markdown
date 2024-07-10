@@ -1,8 +1,8 @@
 ---
 layout: single
-title: "Design Pattern 系列 (6) - 工廠方法模式解密：讓程式碼設計更靈活、更易維護 (Factory Method Pattern)"
+title: "Design Pattern (6) - Factory Method Pattern (工廠方法模式)"
 date: 2024-07-07 23:00:00 +0800
-excerpt: "深入探討工廠方法模式，一種讓程式碼結構更加靈活和可擴展的設計模式。通過實際案例，我們將展示如何有效地應用此模式來提升程式碼的可維護性和擴展性，讓你的軟體開發過程更加順暢。"
+excerpt: "深入探討工廠方法模式，通過實例展示其應用，提升程式碼的靈活性和可擴展性。"
 header:
   overlay_image: /assets/images/carlos-aranda-QMjCzOGeglA-unsplash.jpg
   teaser: /assets/images/carlos-aranda-QMjCzOGeglA-unsplash.jpg
