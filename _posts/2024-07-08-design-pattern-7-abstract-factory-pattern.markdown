@@ -1,8 +1,8 @@
 ---
 layout: single
-title: "Design Pattern 系列 (6) - Abstract Factory Pattern"
-date: 2022-02-22 01:00:00 +0800
-excerpt: "透過將工廠抽象，使子類別能創建一系列的實體物件。"
+title: "Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)"
+date: 2024-07-08 23:00:00 +0800
+excerpt: "探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。"
 header:
   overlay_image: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
   teaser: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
@@ -12,9 +12,17 @@ categories: [Design Pattern]
 
 > 您可於此 [design_pattern repo](https://github.com/nickhuangcyh/design_pattern) 下載 Design Pattern 系列程式碼。
 
-上一篇我們利用 [工廠方法模式](% post_url 2022-02-19-design-pattern-5-factory-method-pattern %}) 讓分店可以客製化飲品使用的原料，也遵守了 **開放封閉原則** 使我們可以很輕易地添加其他分店，而不改變已經存在的程式碼。
+## 引言：全球化的挑戰擴展
 
-試想一下假如飲料菜單新增的飲品越來越多，分店也越來越多，大家應該會發現到，各分店的工廠所要增加的品項判斷也會越來越多。
+想像一下，隨著你的飲料點餐系統在全球範圍內的擴展，你面臨著如何滿足不同地區顧客特定偏好的挑戰。
+
+## 需求：滿足全球化的味蕾
+
+隨著業務的全球化擴展，不同地區的顧客有著不同的偏好。且我們也不能只賣紅茶及綠茶，需要為我們的菜單增加新的飲品，一邊新增菜單一邊擴展店舖。
+
+## 物件導向分析(OOA)
+
+![design_pattern_factory_method_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_factory_method_pattern_uml_3.png)
 
 {% tabs data-struct %}
 
@@ -30,7 +38,17 @@ categories: [Design Pattern]
 
 如何處理多個產品在不同分店的組合，這時就需要用到 **Abstract Factory Pattern**
 
-## Abstract Factory Pattern
+## 察覺 Forces
+
+當我們每增加一種飲品到菜單中，我們必須要修改所有的 Factory 中的方法，違反了 **Open Closed Principle**
+
+## 套用 Solution
+
+看清楚整個 Context，察覺 Forces 後，就可以套用 Abstract Factory Pattern 來解決這個問題
+
+先來看一下 Abstract Factory Pattern 的 UML
+
+![design_pattern_abstract_factory_pattern_uml_1]({{ site.baseurl }}/assets/images/design_pattern_abstract_factory_pattern_uml_1.png)
 
 透過將工廠抽象，使子類別能創建一系列的實體物件。
 
@@ -46,7 +64,13 @@ categories: [Design Pattern]
 
 讓我們根據上面的茶家族修改一下 UML 及程式碼吧(這邊只是要表達二維關係的概念，僅先實作紅茶及綠茶的部分)
 
-![design_pattern_6_abstract_factory_pattern_uml_1]({{ site.baseurl }}/assets/images/design_pattern_6_abstract_factory_pattern_uml_1.png)
+![design_pattern_abstract_factory_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_abstract_factory_pattern_uml_2.png)
+
+如此我們就得到了一個全新的 Resulting Context
+
+## 物件導向程式設計 (OOP)
+
+再來我們就可以開始進行物件導向程式開發
 
 {% tabs data-struct %}
 
@@ -61,6 +85,8 @@ categories: [Design Pattern]
 {% endtabs %}
 
 使用抽象工廠後，分店不需要知道實際是什麼茶，只要知道跟自己地區的飲料工廠取得 紅/綠/奶茶，這邊也運用到了 Dependency Inversion Principle，工廠及產品兩者皆依賴於抽象。
+
+## 補充說明
 
 下面舉幾種二維關係可以使用 Abstract Factory Pattern 的例子
 
@@ -88,10 +114,6 @@ categories: [Design Pattern]
 | ZWave             | ZWDimmer | ZWHue | ZWThermostat |
 | Zigbee            | ZBDimmer | ZBHue | ZBThermostat |
 
-## UML
-
-![design_pattern_6_abstract_factory_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_6_abstract_factory_pattern_uml_2.png)
-
 ## Factory Method Pattern vs Abstract Factory Pattern
 
 ### Factory Method Pattern 工廠方法模式
@@ -104,23 +126,25 @@ categories: [Design Pattern]
 
 ## 總結
 
+在本文中，我們探討了工廠方法模式和抽象工廠模式的區別。工廠方法模式專注於單一產品的建立，提供高產品擴充性；而抽象工廠模式則針對一系列產品提供建立機制，提供工廠的高擴充性但產品擴充性較低。
+
 我們來看看工廠方法用到哪些 [Design Principle]({{ site.baseurl }}/design%20pattern/design-pattern-1-design-principle/)
 
-- Encapsulate What Varies
-- Loose Coupling
-- Program to Interfaces
-- Single Responsibility Principle
-- Open Closed Principle
-- Dependency Inversion Principle
+* Encapsulate What Varies
+* Loose Coupling
+* Program to Interfaces
+* Single Responsibility Principle
+* Open Closed Principle
+* Dependency Inversion Principle
 
 ## 參考
 
-- [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
-- [大話設計模式](https://www.tenlong.com.tw/products/9789866761799)
-- [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-- [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-- [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-- [refactoring](https://refactoring.guru/design-patterns/factory-method)
+* [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
+* [大話設計模式](https://www.tenlong.com.tw/products/9789866761799)
+* [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+* [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+* [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+* [refactoring](https://refactoring.guru/design-patterns/factory-method)
 
 **Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
 {: .notice--success}
