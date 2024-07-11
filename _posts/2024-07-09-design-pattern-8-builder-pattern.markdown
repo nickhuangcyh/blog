@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)"
+title: "Design Pattern (8) - Abstract Factory Pattern (抽象工廠模式)"
 date: 2024-07-09 23:00:00 +0800
 excerpt: "探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。"
 header:
