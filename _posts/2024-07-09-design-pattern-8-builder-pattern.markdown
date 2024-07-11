@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)"
-date: 2024-06-30 10:55:00 +0800
+date: 2024-07-09 23:00:00 +0800
 excerpt: "探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。"
 header:
   overlay_image: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
@@ -26,13 +26,13 @@ categories: [Design Pattern]
 
 理解需求後，讓我們來快速實作物件導向分析吧!
 
-![design_pattern_7_builder_pattern_uml_1]({{ site.baseurl }}/assets/images/design_pattern_7_builder_pattern_uml_1.png)
+![design_pattern_builder_pattern_uml_1]({{ site.baseurl }}/assets/images/design_pattern_builder_pattern_uml_1.png)
 
 但這麼做會有一個問題，假如我們今天只要加入紅豆以及布丁，就必須在其他用不到的參數傳入 false or null，參數越多越難以維護且可讀性也不高。
 
 因此聰明的你可能想到了，可以利用寫多個不同的 constructor 來解決，如此就不需傳入不需要的參數。
 
-![design_pattern_7_builder_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_7_builder_pattern_uml_2.png)
+![design_pattern_builder_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_builder_pattern_uml_2.png)
 
 ## 察覺 Forces
 
@@ -46,7 +46,7 @@ categories: [Design Pattern]
 
 先來看一下 Builder Pattern 的 UML
 
-![design_pattern_7_builder_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_7_builder_pattern_uml_3.png)
+![design_pattern_builder_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_builder_pattern_uml_3.png)
 
 建構者模式主要包含以下四個角色：
 
@@ -58,7 +58,7 @@ categories: [Design Pattern]
 
 我們來將製作手搖飲套用 Builder Pattern
 
-![design_pattern_7_builder_pattern_uml_4]({{ site.baseurl }}/assets/images/design_pattern_7_builder_pattern_uml_4.png)
+![design_pattern_builder_pattern_uml_4]({{ site.baseurl }}/assets/images/design_pattern_builder_pattern_uml_4.png)
 
 如此我們就得到了一個全新的 `Resulting Context`
 
