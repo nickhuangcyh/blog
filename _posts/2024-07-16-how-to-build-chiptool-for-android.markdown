@@ -173,3 +173,4 @@ Build 完後可以在下面路徑找到 apk
 * [CHIP Issue #28317](https://github.com/project-chip/connectedhomeip/issues/28317)
 * [CHIP Issue #21093](https://github.com/project-chip/connectedhomeip/issues/21093)
 * [CHIP Issue #32794](https://github.com/project-chip/connectedhomeip/issues/32795)
+* [project-chip/chip-build-android/All versions](https://github.com/project-chip/connectedhomeip/pkgs/container/chip-build-android/versions?filters%5Bversion_type%5D=tagged)
