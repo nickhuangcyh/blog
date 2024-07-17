@@ -117,11 +117,13 @@ root@f39e36c15675:/connectedhomeip# echo $ANDROID_NDK_HOME
 ## Preparing for build
 
 1. 切換到 Matter repositoy 
-```bash 
-cd /connectedhomeip
 
+```bash
+cd /connectedhomeip
 ```
+
 2. Run bootstrap (only required first time) 此步驟也需要一段時間
+
 ```bash
 source scripts/bootstrap.sh
 ```
