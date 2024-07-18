@@ -4,8 +4,8 @@ title: "How to build CHIPTool for Android"
 date: 2024-07-16 19:50:00 +0800
 excerpt: "本篇文章我將介紹如何按照步驟 Build 出 CHIPTool apk"
 header:
-  overlay_image: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
-  teaser: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
+  overlay_image: /assets/images/matter.jpg
+  teaser: /assets/images/matter.jpg
 tags: [Android, CHIP, Matter]
 categories: [Tools]
 ---

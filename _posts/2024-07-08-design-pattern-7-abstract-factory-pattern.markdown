@@ -4,8 +4,8 @@ title: "Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)"
 date: 2024-07-08 23:00:00 +0800
 excerpt: "探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。"
 header:
-  overlay_image: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
-  teaser: /assets/images/lenny-kuhne-jHZ70nRk7Ns-unsplash.jpg
+  overlay_image: /assets/images/design_patterns.jpg
+  teaser: /assets/images/design_patterns.jpg
 tags: [Abstract Factory Pattern]
 categories: [Design Pattern]
 ---
