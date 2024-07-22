@@ -1,12 +1,12 @@
 ---
 layout: single
 title: "Design Pattern (9) - Prototype Pattern (原型模式)"
-date: 2024-07-19 23:00:00 +0800
+date: 2024-07-21 23:00:00 +0800
 excerpt: "深入原型模式：探索如何透過物件複製技術，有效提升軟體開發中的資源管理與設計模式的靈活性。"
 header:
   overlay_image: /assets/images/design_patterns.jpg
   teaser: /assets/images/design_patterns.jpg
-tags: [Builder Factory Pattern]
+tags: [Prototype Factory Pattern]
 categories: [Design Pattern]
 ---
 
@@ -39,6 +39,92 @@ categories: [Design Pattern]
 
 ## 察覺 Forces
 
-## 套用 Builder Pattern ( Solution ) 得到新的 Context ( Resulting Context )
+來看看上面這樣的設計會有哪些問題
+1. 如果我們的 constructor 很複雜，參數非常多，那麼重新 new 一個實體會需要知道很多細節。
+2. 如果 constructor 創建實體的過程，是很耗時複雜的計算，重新 new 一個實體會讓創建過程效率變差。
+
+## 套用 Prototype Pattern ( Solution ) 得到新的 Context ( Resulting Context )
+
+做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Prototype Pattern 解決這個問題
+
+先來看一下 Prototype Pattern 的 UML
+
+![design_pattern_prototype_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_prototype_pattern_uml_2.png)
+
+原型模式主要包含以下兩個角色：
+
+1. **Prototype（原型）**：這是一個抽象介面，定義了複製自身的方法。在實體實現中，這個介面可以是一個抽象類或者實體類，主要目的是提供一個複製自己的方法。這使得在不需要知道物件實體類別的情況下也能創建物件的副本。
+
+2. **Concrete Prototype（實體原型）**：實現或繼承自原型介面的類。這個類實現了在原型介面中定義的複製（clone）方法，用於創建自身的一個精確副本。在實體實現時，這個類需要提供一個方法來複製自身的屬性，確保新創建的物件與原有物件在狀態上是相同的，但在記憶體中是獨立的。
+
+我們來將 LightShow App 套用 Prototype Pattern
+
+![design_pattern_prototype_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_prototype_pattern_uml_3.png)
+
+如此我們就得到了一個全新的 `Resulting Context`
 
 ## 物件導向程式設計 (OOP)
+
+再來我們就可以開始進行物件導向程式開發
+
+[LightShowDataPrototype]
+
+```kotlin
+interface LightShowDataPrototype {
+    val startIndex: Int
+    val lightDataList: List<Int>
+    fun clone(): LightShowDataPrototype
+}
+```
+
+[LightShowData]
+
+```kotlin
+package prototypepattern.source
+
+class LightShowData: LightShowDataPrototype {
+
+    override val startIndex: Int
+    override val lightDataList: List<Int>
+
+    constructor(originalDataList: List<Int>) {
+        startIndex = originalDataList[0]
+        lightDataList = originalDataList.subList(1, originalDataList.size).map { it * 2 }
+    }
+
+    constructor(startIndex: Int, lightDataList: List<Int>) {
+        this.startIndex = startIndex
+        this.lightDataList = lightDataList
+    }
+
+    override fun clone(): LightShowDataPrototype {
+        return LightShowData(startIndex, lightDataList.toList())
+    }
+}
+```
+
+[main]
+
+```kotlin
+fun main() {
+    val originalData = listOf(1, 2, 3, 4, 5)
+
+    // Before using prototype pattern
+    val originalLightShowData: LightShowDataPrototype = LightShowData(originalData)
+    val newLightShowData: LightShowDataPrototype = LightShowData(originalData)
+
+    println(originalLightShowData)
+    println(newLightShowData)
+
+    // After using prototype pattern
+    val clonedLightShowData: LightShowDataPrototype = LightShowData(originalData)
+
+    println(originalLightShowData)
+    println(clonedLightShowData)
+}
+```
+
+我們可以發現，透過 clone() 方法複製，就可以不重複執行下面的程式碼，提升程式碼效能了
+```kotlin 
+originalDataList.subList(1, originalDataList.size).map { it * 2 }
+```
