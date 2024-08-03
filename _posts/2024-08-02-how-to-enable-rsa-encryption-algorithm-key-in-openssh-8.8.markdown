@@ -197,7 +197,7 @@ Host old-host
 開啟 ~/.ssh/config 檔案並加上如下 config
 
 ```bash
-Host old-host
+Host x.x.x.x
   HostkeyAlgorithms +ssh-rsa
   PubkeyAcceptedAlgorithms +ssh-rsa
 ```
