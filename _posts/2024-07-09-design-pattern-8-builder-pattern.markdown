@@ -6,7 +6,7 @@ excerpt: "探索建造者模式，學習如何分步構建複雜對象，使代�
 header:
   overlay_image: /assets/images/design_patterns.jpg
   teaser: /assets/images/design_patterns.jpg
-tags: [Builder Factory Pattern]
+tags: [Builder Pattern]
 categories: [Design Pattern]
 ---
 
@@ -16,11 +16,11 @@ categories: [Design Pattern]
 
 今天我們要設計一個能自動做出手搖飲的機器，但如果手搖飲店只賣紅茶、綠茶，肯定滿足不了廣大的客群需求，因此我們要能夠讓手搖飲加入各種配料，來吸引顧客。
 
-* 珍珠 (Pearls)
-* 椰果 (Coconut Jelly)
-* 紅豆 (Red Beans)
-* 仙草凍 (Grass Jelly)
-* 布丁 (Pudding)
+- 珍珠 (Pearls)
+- 椰果 (Coconut Jelly)
+- 紅豆 (Red Beans)
+- 仙草凍 (Grass Jelly)
+- 布丁 (Pudding)
 
 ## 物件導向分析 (OOA)
 

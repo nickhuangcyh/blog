@@ -6,7 +6,7 @@ excerpt: "深入原型模式：探索如何透過物件複製技術，有效提�
 header:
   overlay_image: /assets/images/design_patterns.jpg
   teaser: /assets/images/design_patterns.jpg
-tags: [Prototype Factory Pattern]
+tags: [Prototype Pattern]
 categories: [Design Pattern]
 ---
 
@@ -14,10 +14,11 @@ categories: [Design Pattern]
 
 ## 前言
 
-這次的Pattern讓我想到以前做過的一個App，但當時還沒有學習到Pattern，所以沒有用 Pattern 來處理，現在發現這個功能很適合套用 prototype pattern
+這次的 Pattern 讓我想到以前做過的一個 App，但當時還沒有學習到 Pattern，所以沒有用 Pattern 來處理，現在發現這個功能很適合套用 prototype pattern
 
-這是一個用來編輯音樂燈光秀的App，有興趣的讀者可以下載玩玩看🙂
-* [Asante TapTap 3](https://apps.apple.com/tw/app/asante-taptap-3/id1581054107?platform=iphone)
+這是一個用來編輯音樂燈光秀的 App，有興趣的讀者可以下載玩玩看 🙂
+
+- [Asante TapTap 3](https://apps.apple.com/tw/app/asante-taptap-3/id1581054107?platform=iphone)
 
 ![taptap_app_edit]({{ site.baseurl }}/assets/images/taptap_app_edit.png)
 
@@ -40,6 +41,7 @@ categories: [Design Pattern]
 ## 察覺 Forces
 
 來看看上面這樣的設計會有哪些問題
+
 1. 如果我們的 constructor 很複雜，參數非常多，那麼重新 new 一個實體會需要知道很多細節。
 2. 如果 constructor 創建實體的過程，是很耗時複雜的計算，重新 new 一個實體會讓創建過程效率變差。
 
@@ -125,6 +127,7 @@ fun main() {
 ```
 
 我們可以發現，透過 clone() 方法複製，就可以不重複執行下面的程式碼，提升程式碼效能了
-```kotlin 
+
+```kotlin
 originalDataList.subList(1, originalDataList.size).map { it * 2 }
 ```
