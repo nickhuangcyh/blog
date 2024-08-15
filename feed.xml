@@ -1,0 +1,1491 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://nickhuangcyh.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nickhuangcyh.github.io/blog/" rel="alternate" type="text/html" /><updated>2024-08-15T10:58:53+00:00</updated><id>https://nickhuangcyh.github.io/blog/feed.xml</id><title type="html">Nick’s Blog</title><subtitle>An amazing website.</subtitle><author><name>Nick Huang</name></author><entry><title type="html">Jenkins (2) - 如何架設 Jenkins 伺服器</title><link href="https://nickhuangcyh.github.io/blog/devops/jenkins-2-how-to-setup-jenkins-server/" rel="alternate" type="text/html" title="Jenkins (2) - 如何架設 Jenkins 伺服器" /><published>2024-08-15T09:00:00+00:00</published><updated>2024-08-15T09:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/devops/jenkins-2-how-to-setup-jenkins-server</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/devops/jenkins-2-how-to-setup-jenkins-server/">&lt;h2 id=&quot;如何架設-jenkins-伺服器&quot;&gt;如何架設 Jenkins 伺服器&lt;/h2&gt;
+
+&lt;p&gt;在這篇文章中，我們將介紹如何使用 Docker 映像檔來架設 Jenkins 伺服器。這種方法不僅簡單快捷，還能確保環境的一致性。&lt;/p&gt;
+
+&lt;h3 id=&quot;步驟一拉取-docker-映像檔&quot;&gt;步驟一：拉取 Docker 映像檔&lt;/h3&gt;
+
+&lt;p&gt;首先，我們需要從 GitHub Container Registry 拉取 Jenkins 的 Docker 映像檔。打開終端機並執行以下指令：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull jenkins/jenkins:lts-jdk17 &lt;span class=&quot;c&quot;&gt;# 單純 jenkins 環境&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull ghcr.io/nickhuangcyh/docker-jenkins-and-android-env:v1.0.0-jdk17 &lt;span class=&quot;c&quot;&gt;# jenkins 環境 + Android 建構環境&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;步驟二運行-jenkins-容器&quot;&gt;步驟二：運行 Jenkins 容器&lt;/h3&gt;
+
+&lt;p&gt;接下來，我們將運行 Jenkins 容器。請確保替換 ${volume path} 為你希望 Jenkins 資料儲存的本地路徑。執行以下指令：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;volume&lt;/span&gt;&lt;span class=&quot;p&quot;&gt; path&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;:/var/jenkins_home &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 8080:8080 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 50000:50000 jenkins/jenkins:lts-jdk17 &lt;span class=&quot;c&quot;&gt;# 單純 jenkins 環境&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;volume&lt;/span&gt;&lt;span class=&quot;p&quot;&gt; path&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;:/var/jenkins_home &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 8080:8080 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 50000:50000 ghcr.io/nickhuangcyh/docker-jenkins-and-android-env:v1.0.0-jdk17 &lt;span class=&quot;c&quot;&gt;# jenkins 環境 + Android 建構環境&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;這個指令會在背景運行 Jenkins 容器，並將 Jenkins 的資料儲存在你指定的路徑中。同時，容器會綁定本地的 8080 端口和 50000 端口，分別用於 Jenkins 的 Web 介面和代理通訊。&lt;/p&gt;
+
+&lt;h3 id=&quot;步驟三訪問-jenkins&quot;&gt;步驟三：訪問 Jenkins&lt;/h3&gt;
+
+&lt;p&gt;容器啟動後，你可以在瀏覽器中打開 http://localhost:8080 來訪問 Jenkins 的 Web 介面。首次訪問時，系統會要求你輸入初始管理員密碼。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/jenkins_setup_initialAdminPassword.png&quot; alt=&quot;jenkins_setup_initialAdminPassword&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;還記得我們剛剛在run container時有輸入 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;${volume path}&lt;/code&gt; 嗎? 根據底下路徑 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/var/jenkins_home/secrets/initialAdminPassword&lt;/code&gt; 去找到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;initialAdminPassword&lt;/code&gt; 並貼上&lt;/p&gt;
+
+&lt;p&gt;按照指示安裝 Plugin 完成初始配置，就成功架起來拉～🎉。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/jenkins_setup_main_page.png&quot; alt=&quot;jenkins_setup_main_page&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
+
+&lt;p&gt;通過以上步驟，我們成功地使用 Docker 映像檔架設了一個 Jenkins 伺服器。這種方法不僅簡單快捷，還能確保環境的一致性，對於開發團隊來說是一個非常實用的工具。如果你還沒有使用 Jenkins，現在就是開始的好時機！&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;想了解更多關於 Jenkins 的資訊，請參考 &lt;a href=&quot;https://jenkins.io/doc/&quot;&gt;Jenkins 官方文件&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Nick Huang</name></author><category term="DevOps" /><category term="Jenkins" /><category term="CI/CD" /><category term="DevOps" /><category term="Docker" /><summary type="html">學習如何使用 Docker 映像檔來架設 Jenkins 伺服器，提升開發團隊的自動化能力。</summary></entry><entry><title type="html">Jenkins (1) - 什麼是 Jenkins</title><link href="https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins/" rel="alternate" type="text/html" title="Jenkins (1) - 什麼是 Jenkins" /><published>2024-08-15T07:00:00+00:00</published><updated>2024-08-15T07:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins/">&lt;h2 id=&quot;什麼是-jenkins&quot;&gt;什麼是 Jenkins&lt;/h2&gt;
+
+&lt;p&gt;Jenkins 是一個開源的自動化伺服器，主要用於實現持續整合（CI）和持續交付（CD）。它能夠自動化各種任務，包括建置、測試和部署軟體，從而幫助開發團隊提升效率和品質。&lt;/p&gt;
+
+&lt;h2 id=&quot;為什麼選擇-jenkins&quot;&gt;為什麼選擇 Jenkins&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;開源且免費&lt;/strong&gt;：Jenkins 是一個開源專案，任何人都可以免費使用和修改。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;豐富的插件生態系統&lt;/strong&gt;：Jenkins 擁有超過 1,500 個插件，能夠擴展其功能以滿足不同的需求。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;社群支持&lt;/strong&gt;：Jenkins 擁有一個活躍的社群，提供豐富的資源和支援。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;易於整合&lt;/strong&gt;：Jenkins 可以與多種工具和平台整合，如 Git、Docker、Kubernetes 等。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;jenkins-的核心概念&quot;&gt;Jenkins 的核心概念&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Pipeline&lt;/strong&gt;：Jenkins Pipeline 是一套插件，支持實現和集成持續交付流水線。Pipeline 用程式碼來定義整個建置過程，包括建置、測試和部署。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Node&lt;/strong&gt;：Node 是 Jenkins 執行工作的機器，可以是 Jenkins 主伺服器或其他代理伺服器。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Job&lt;/strong&gt;：Job 是 Jenkins 中的基本建置單位，定義了具體的建置、測試和部署任務。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Executor&lt;/strong&gt;：Executor 是 Jenkins 用來執行 Job 的工作單元，每個 Node 可以有多個 Executor。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
+
+&lt;p&gt;Jenkins 是一個功能強大且靈活的自動化伺服器，能夠幫助開發團隊實現持續整合和持續交付。通過使用 Jenkins，團隊可以顯著提高開發效率和軟體品質。如果你還沒有使用 Jenkins，現在就是開始的好時機！&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;想了解更多關於 Jenkins 的資訊，請參考 &lt;a href=&quot;https://jenkins.io/doc/&quot;&gt;Jenkins 官方文件&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Nick Huang</name></author><category term="DevOps" /><category term="Jenkins" /><category term="CI/CD" /><category term="DevOps" /><summary type="html">了解Jenkins這個強大的自動化伺服器，如何幫助開發團隊實現持續整合與持續交付，提升軟體開發效率。</summary></entry><entry><title type="html">Design Pattern (10) - Singleton Pattern (單例模式)</title><link href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-10-singleton-pattern/" rel="alternate" type="text/html" title="Design Pattern (10) - Singleton Pattern (單例模式)" /><published>2024-08-10T07:00:00+00:00</published><updated>2024-08-10T07:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-10-singleton-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-10-singleton-pattern/">&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;design_pattern repo&lt;/a&gt; 下載 Design Pattern 系列程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;需求&quot;&gt;需求&lt;/h2&gt;
+
+&lt;p&gt;我們收到了一個需求：開發一個應用程式，該應用程式需要與資料庫進行頻繁的交互。為了確保資料庫連接的效率和資源的合理使用，我們需要設計一個系統來管理資料庫連接。&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向分析-ooa&quot;&gt;物件導向分析 (OOA)&lt;/h2&gt;
+
+&lt;p&gt;理解需求後，讓我們來快速實作物件導向分析吧!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_singleton_pattern_uml_1.png&quot; alt=&quot;design_pattern_singleton_pattern_uml_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我們有 CRUD 四個 function 以及 constructor 用來建立 DatabaseClient&lt;/p&gt;
+
+&lt;h2 id=&quot;察覺-forces&quot;&gt;察覺 Forces&lt;/h2&gt;
+
+&lt;p&gt;來看看上面這樣的設計會有哪些問題&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;資源管理：多個資料庫連接會消耗大量資源，導致性能下降。&lt;/li&gt;
+  &lt;li&gt;一致性：需要確保所有資料庫操作使用相同的連接，以避免數據不一致。&lt;/li&gt;
+  &lt;li&gt;效率：頻繁創建和銷毀資料庫連接會降低系統效率。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;套用-singleton-pattern--solution--得到新的-context--resulting-context-&quot;&gt;套用 Singleton Pattern ( Solution ) 得到新的 Context ( Resulting Context )&lt;/h2&gt;
+
+&lt;p&gt;做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Singleton Pattern 解決這個問題&lt;/p&gt;
+
+&lt;p&gt;先來看一下 Singleton Pattern 的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_singleton_pattern_uml_2.png&quot; alt=&quot;design_pattern_singleton_pattern_uml_2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我們可以發現，單例模式其實就是透過 getInstance() 方法去取得實體，而每次取的時都會去判斷內部 property instance 是否為 null，如果是 null 就創建一個新的，如果不是就回傳 instance property 的值，如此就能保證此 class 的實體只會有一個。&lt;/p&gt;
+
+&lt;p&gt;我們來將 DatabaseClient 套用 Singleton Pattern&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_singleton_pattern_uml_3.png&quot; alt=&quot;design_pattern_singleton_pattern_uml_3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如此我們就得到了一個全新的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Resulting Context&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向程式設計-oop&quot;&gt;物件導向程式設計 (OOP)&lt;/h2&gt;
+
+&lt;p&gt;再來我們就可以開始進行物件導向程式開發&lt;/p&gt;
+
+&lt;p&gt;[DatabaseClient]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;companion&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;mInstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mInstance&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;mInstance&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!!&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[Client]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;db&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;123&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;這樣就完成了，這邊稍微提一下，其實 kotlin 語言有提供 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;object&lt;/code&gt; 來讓我們輕鬆實作 Singleton Pattern，如下&lt;/p&gt;
+
+&lt;p&gt;[DatabaseClient]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[Client]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;db&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;123&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如此就能更簡單的操作 Singleton 的單例類別了!&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="Design Pattern" /><category term="Singleton Pattern" /><summary type="html">深入單例模式：如何確保一個類別只有一個實體，提供一個全域</summary></entry><entry><title type="html">How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8</title><link href="https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8/" rel="alternate" type="text/html" title="How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8" /><published>2024-08-02T11:50:00+00:00</published><updated>2024-08-02T11:50:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8/">&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;最近在修改公司的 jenkins CI/CD 架構，Dockerize 我們的 Android Building Environment。
+在我啟動 Debian 12 container 來建構我的環境時，配置 RSA Key 到公司的 GitLab server，卻無法抓取 source code，故有了這篇文章希望未來有遇到可以拿出來快速解決問題，也希望幫助到遇到一樣問題的人。&lt;/p&gt;
+
+&lt;p&gt;經過分析後才發現，原來 Debian 12 預設使用 OpenSSH 8.8，而 OpenSSH 8.8 預設將 RSA 加密算法關閉，因為安全是以及過時的問題
+但公司 GitLab server 較舊，目前只支援較舊的 ssh Key 演算法 RSA，因此需要找方法使其支援。&lt;/p&gt;
+
+&lt;h2 id=&quot;準備作業&quot;&gt;準備作業&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如果你已經有環境，可以跳過此段落&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;首先我先用 Docker 啟一台 Debian 12 的 container 如下&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; docker pull debian:bookworm
+bookworm: Pulling from library/debian
+9c5ed83eaf5c: Pull &lt;span class=&quot;nb&quot;&gt;complete
+&lt;/span&gt;Digest: sha256:45f2e735295654f13e3be10da2a6892c708f71a71be845818f6058982761a6d3
+Status: Downloaded newer image &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;debian:bookworm
+docker.io/library/debian:bookworm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; docker run &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; debian-bookworm-for-test-openssh debian:bookworm
+root@b5336f2395fd:/#
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;更新-apt&quot;&gt;更新 apt&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; apt update
+Get:1 http://deb.debian.org/debian bookworm InRelease &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;48.0 kB]
+Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;8688 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;13.7 kB]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;166 kB]
+Fetched 9122 kB &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;2s &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4556 kB/s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+All packages are up to date.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;安裝-git&quot;&gt;安裝 Git&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;確定-openssh-版本&quot;&gt;確定 openSSH 版本&lt;/h3&gt;
+
+&lt;p&gt;可以查看 openSSH 版本是否 &amp;gt; 8.8&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; ssh &lt;span class=&quot;nt&quot;&gt;-V&lt;/span&gt;
+OpenSSH_9.2p1 Debian-2+deb12u3, OpenSSL 3.0.13 30 Jan 2024
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;建立-ssh-rsa-key&quot;&gt;建立 SSH RSA Key&lt;/h3&gt;
+
+&lt;p&gt;建立 Key&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh-keygen &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; rsa &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; 4096 &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;your_email@example.com&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;將 ssh key 加入 ssh-agent&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;ssh-agent &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+Agent pid 3160
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; ssh-add ~/.ssh/id_rsa
+Identity added: /root/.ssh/id_rsa &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;your_email@example.com&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;將-public-key-上傳到-git-server&quot;&gt;將 Public Key 上傳到 Git server&lt;/h3&gt;
+
+&lt;p&gt;先 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cat&lt;/code&gt; 出 public key&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; ~/.ssh/id_rsa.pub
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上傳到你的 Git Server&lt;/p&gt;
+
+&lt;h2 id=&quot;測試-ssh-連線&quot;&gt;測試 SSH 連線&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x.x.x.x&lt;/code&gt; 請換成你的 git server IP or Domain&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh &lt;span class=&quot;nt&quot;&gt;-T&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; git@x.x.x.x
+OpenSSH_9.2p1 Debian-2+deb12u3, OpenSSL 3.0.13 30 Jan 2024
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 19: include /etc/ssh/ssh_config.d/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.conf matched no files
+debug1: /etc/ssh/ssh_config line 21: Applying options &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
+debug1: Connecting to x.x.x.x &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x.x.x.x] port 22.
+debug1: Connection established.
+debug1: identity file /root/.ssh/id_rsa &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;0
+debug1: identity file /root/.ssh/id_rsa-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ecdsa &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ecdsa-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ecdsa_sk &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ecdsa_sk-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ed25519 &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ed25519-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ed25519_sk &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ed25519_sk-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_xmss &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_xmss-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_dsa &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_dsa-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: Local version string SSH-2.0-OpenSSH_9.2p1 Debian-2+deb12u3
+debug1: Remote protocol version 2.0, remote software version OpenSSH_6.0p1 Debian-4+deb7u4
+debug1: compat_banner: match: OpenSSH_6.0p1 Debian-4+deb7u4 pat OpenSSH&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; compat 0x04000000
+debug1: Authenticating to x.x.x.x:22 as &lt;span class=&quot;s1&quot;&gt;&apos;git&apos;&lt;/span&gt;
+debug1: load_hostkeys: fopen /root/.ssh/known_hosts2: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug1: SSH2_MSG_KEXINIT sent
+debug1: SSH2_MSG_KEXINIT received
+debug1: kex: algorithm: ecdh-sha2-nistp256
+debug1: kex: host key algorithm: ecdsa-sha2-nistp256
+debug1: kex: server-&amp;gt;client cipher: aes128-ctr MAC: umac-64@openssh.com compression: none
+debug1: kex: client-&amp;gt;server cipher: aes128-ctr MAC: umac-64@openssh.com compression: none
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+debug1: SSH2_MSG_KEX_ECDH_REPLY received
+debug1: Server host key: ecdsa-sha2-nistp256 SHA256:PTKJPZC0PPuujGp7jIZvu/PyNzUg4aj4pNF0Nlgi290
+debug1: load_hostkeys: fopen /root/.ssh/known_hosts2: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug1: Host &lt;span class=&quot;s1&quot;&gt;&apos;x.x.x.x&apos;&lt;/span&gt; is known and matches the ECDSA host key.
+debug1: Found key &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; /root/.ssh/known_hosts:1
+debug1: rekey out after 4294967296 blocks
+debug1: SSH2_MSG_NEWKEYS sent
+debug1: expecting SSH2_MSG_NEWKEYS
+debug1: SSH2_MSG_NEWKEYS received
+debug1: rekey &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;after 4294967296 blocks
+debug1: get_agent_identities: bound agent to hostkey
+debug1: get_agent_identities: ssh_fetch_identitylist: agent contains no identities
+debug1: Will attempt key: /root/.ssh/id_rsa RSA SHA256:IPjmgGepFVyKiqZF74LyLzcywh2Qx4AcWerAw2tXqfU
+debug1: Will attempt key: /root/.ssh/id_ecdsa
+debug1: Will attempt key: /root/.ssh/id_ecdsa_sk
+debug1: Will attempt key: /root/.ssh/id_ed25519
+debug1: Will attempt key: /root/.ssh/id_ed25519_sk
+debug1: Will attempt key: /root/.ssh/id_xmss
+debug1: Will attempt key: /root/.ssh/id_dsa
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug1: Authentications that can &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;: publickey,password
+debug1: Next authentication method: publickey
+debug1: Offering public key: /root/.ssh/id_rsa RSA SHA256:IPjmgGepFVyKiqZF74LyLzcywh2Qx4AcWerAw2tXqfU
+debug1: send_pubkey_test: no mutual signature algorithm
+debug1: Trying private key: /root/.ssh/id_ecdsa
+debug1: Trying private key: /root/.ssh/id_ecdsa_sk
+debug1: Trying private key: /root/.ssh/id_ed25519
+debug1: Trying private key: /root/.ssh/id_ed25519_sk
+debug1: Trying private key: /root/.ssh/id_xmss
+debug1: Trying private key: /root/.ssh/id_dsa
+debug1: Next authentication method: password
+git@x.x.x.x&lt;span class=&quot;s1&quot;&gt;&apos;s password:
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;debug1: send_pubkey_test: no mutual signature algorithm&lt;/code&gt;
+發現原因是 ssh client 和 server 之間沒有共同的簽名算法引起的，導致公鑰驗證失敗&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;解決方法&quot;&gt;解決方法&lt;/h2&gt;
+
+&lt;p&gt;打開 &lt;a href=&quot;https://www.openssh.com/txt/release-8.8&quot;&gt;openSSH 8.8 release document&lt;/a&gt; 會發現提到這一段&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Incompatibility is more likely when connecting to older SSH
+implementations that have not been upgraded or have not closely tracked
+improvements in the SSH protocol. For these cases, it may be necessary
+to selectively re-enable RSA/SHA1 to allow connection and/or user
+authentication via the HostkeyAlgorithms and PubkeyAcceptedAlgorithms
+options. For example, the following stanza in ~/.ssh/config will enable
+RSA/SHA1 for host and user authentication for a single destination host:&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Host old-host
+  HostkeyAlgorithms +ssh-rsa
+  PubkeyAcceptedAlgorithms +ssh-rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;開啟 ~/.ssh/config 檔案並加上如下 config&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Host x.x.x.x
+  HostkeyAlgorithms +ssh-rsa
+  PubkeyAcceptedAlgorithms +ssh-rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;再跑一次 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ssh -T -v git@x.x.x.x&lt;/code&gt; 就會發現成功了 🎉&lt;/p&gt;
+
+&lt;h2 id=&quot;參考&quot;&gt;參考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.openssh.com/txt/release-8.8&quot;&gt;openSSH 8.8 release document&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Nick Huang</name></author><category term="Cryptography" /><category term="OpenSSH" /><category term="Security" /><category term="RSA Encryption" /><category term="OpenSSH 8.8" /><category term="Encryption Support" /><summary type="html">如何在 OpenSSH 8.8 中重新啟用 RSA 加密支援，確保可以繼續使用 RSA 金鑰。</summary></entry><entry><title type="html">Getting Started with GitHub Container Registry</title><link href="https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry/" rel="alternate" type="text/html" title="Getting Started with GitHub Container Registry" /><published>2024-07-23T10:00:00+00:00</published><updated>2024-07-23T10:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry/">&lt;h2 id=&quot;為什麼會寫這篇文章&quot;&gt;為什麼會寫這篇文章&lt;/h2&gt;
+
+&lt;p&gt;隨著公司專案數量增加，每個專案的環境需求也變得更加多樣化。我們決定將原本使用Docker建置的Android Jenkins Server轉型為更靈活的架構：一個主要的Jenkins Server（Master）搭配多個Android Build Environment（Slave），後者透過Docker創建乾淨的環境。這篇文章旨在記錄此過程，不僅作為個人學習的回顧，也希望能對其他開發者提供幫助。&lt;/p&gt;
+
+&lt;h2 id=&quot;文章簡介&quot;&gt;文章簡介&lt;/h2&gt;
+
+&lt;p&gt;本文將引導初學者及希望深入了解如何將GitHub的新工具融入CI/CD流程的開發者，透過簡明的指南和實用的技巧，學習如何將容器映像推送至GitHub Container Registry。我將一步步展示如何設定GitHub Actions，自動化構建與部署過程，讓你的開發工作變得更加高效。&lt;/p&gt;
+
+&lt;h2 id=&quot;開始之前&quot;&gt;開始之前&lt;/h2&gt;
+
+&lt;p&gt;在深入主題之前，讓我們先透過 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;express&lt;/code&gt; 框架，快速搭建一個運行於Node.js上的簡易應用。&lt;/p&gt;
+
+&lt;h3 id=&quot;create-a-node_sample-folder&quot;&gt;Create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;node_sample&lt;/code&gt; folder&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;node_sample
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;node_sample
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;install-node-package-express&quot;&gt;Install node package &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;express&lt;/code&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm init &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt;
+npm &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;express
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;create-an-appjs-file&quot;&gt;Create an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.js&lt;/code&gt; file&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vim app.js
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;Hello, World!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`Example app listening at http://localhost:&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;create-a-gitignore-file&quot;&gt;Create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; file&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;請至 &lt;a href=&quot;https://gitignore.io/&quot;&gt;gitignore.io&lt;/a&gt; 產生&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;run-appjs&quot;&gt;Run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.js&lt;/code&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;node app.js
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在 chrome 上打開網址 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost:3000&lt;/code&gt; 就會看到如下&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_sample_website.png&quot; alt=&quot;github_container_registry_sample_website&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-dockerfile&quot;&gt;Create a Dockerfile&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vim Dockerfile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-dockerfile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; node:latest&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;WORKDIR&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; /usr/src/app&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COPY&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; package*.json app.js ./&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;npm &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;EXPOSE&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; 3000&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CMD&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; [&quot;node&quot;, &quot;app.js&quot;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;上傳-docker-image-到-github-container-registry&quot;&gt;上傳 Docker Image 到 Github Container Registry&lt;/h2&gt;
+
+&lt;p&gt;寫完 Dockerfile 後有兩種方式可以將 image 上傳到 Github Container Registry 上&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;用 Command line 方式手動上傳&lt;/li&gt;
+  &lt;li&gt;用 Github Action 方式，當 repository 有 Commit 時，自動執行 Github Action 上傳&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;用-command-line-方式手動上傳&quot;&gt;用 Command line 方式手動上傳&lt;/h2&gt;
+
+&lt;h3 id=&quot;利用-dockerfile-產生-image&quot;&gt;利用 Dockerfile 產生 image&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; node_sample &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_docker_build_image.png&quot; alt=&quot;github_container_registry_docker_build_image&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;查看-docker-images&quot;&gt;查看 Docker images&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker images
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_docker_images.png&quot; alt=&quot;github_container_registry_docker_images&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;創建-image-tag&quot;&gt;創建 image tag&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker tag node_sample:latest ghcr.io/&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;NAMESPACE&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/node_sample:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;記得將 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NAMESPACE&lt;/code&gt; 取代成你的 Github account name&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;generate-personal-access-tokens-classic&quot;&gt;Generate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Personal access tokens (classic)&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;準備好 image 後，在我們推上 &lt;strong&gt;Github Container Registry&lt;/strong&gt; 前，我們需要取得 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GITHUB_TOKEN&lt;/code&gt; 用來登入 &lt;strong&gt;Github Container Registry&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;打開 Github 網頁 -&amp;gt; 右上角 Profile -&amp;gt; Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens -&amp;gt; Tokens (classic) -&amp;gt; Generate new token&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;勾選 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;write:packages&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;read:packages&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;delete:packages&lt;/code&gt; scopes，如下圖&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_generate_github_token.png&quot; alt=&quot;github_container_registry_generate_github_token&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;點擊 &lt;strong&gt;Generate token&lt;/strong&gt;，將 token 複製起來&lt;/p&gt;
+
+&lt;h3 id=&quot;登入-github-container-registry&quot;&gt;登入 &lt;strong&gt;Github Container Registry&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;將剛剛複製的 token 存到環境變數&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CR_PAT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;YOUR_TOKEN
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;登入 Container registry service at ghcr.io&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CR_PAT&lt;/span&gt; | docker login ghcr.io &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; USERNAME &lt;span class=&quot;nt&quot;&gt;--password-stdin&lt;/span&gt;
+Login Succeeded
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;上傳-images&quot;&gt;上傳 Images&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker push ghcr.io/&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;NAMESPACE&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/node_sample:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;回到 Github 網頁上點擊 Packages，就能看到上傳成功了&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_github_package.png&quot; alt=&quot;github_container_registry_github_package&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;用-github-action-方式&quot;&gt;用 Github Action 方式&lt;/h2&gt;
+
+&lt;p&gt;使用 Github Action 的方式更簡單，在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;node_sample&lt;/code&gt; 目錄下&lt;/p&gt;
+
+&lt;h3 id=&quot;create-a-deploy-imageyml&quot;&gt;Create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;deploy-image.yml&lt;/code&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; .github
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; .github
+&lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;workflows
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;workflows
+vim deploy-image.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Create and publish a Docker image&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Configures this workflow to run every time a change is pushed to the branch called `release`.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;branches&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;release&quot;&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;REGISTRY&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ghcr.io&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;IMAGE_NAME&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# There is a single job in this workflow. It&apos;s configured to run on the latest available version of Ubuntu.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;jobs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;build-and-push-image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ubuntu-latest&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;permissions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;read&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;packages&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;write&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;attestations&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;write&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;id-token&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;write&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Checkout repository&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/checkout@v4&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Log in to the Container registry&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# This step uses [docker/metadata-action](https://github.com/docker/metadata-action#about) to extract tags and labels that will be applied to the specified image. The `id` &quot;meta&quot; allows the output of this step to be referenced in a subsequent step. The `images` value provides the base name for the tags and labels.&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Extract metadata (tags, labels) for Docker&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;meta&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;images&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$/$&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# This step uses the `docker/build-push-action` action to build the image, based on your repository&apos;s `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# It uses the `context` parameter to define the build&apos;s context as the set of files located in the specified path. For more information, see &quot;[Usage](https://github.com/docker/build-push-action#usage)&quot; in the README of the `docker/build-push-action` repository.&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# It uses the `tags` and `labels` parameters to tag and label the image with the output from the &quot;meta&quot; step.&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Build and push Docker image&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;push&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+
+      &lt;span class=&quot;c1&quot;&gt;# This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see &quot;[AUTOTITLE](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds).&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Generate artifact attestation&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/attest-build-provenance@v1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;subject-name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$/$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;subject-digest&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;push-to-registry&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;pushing-node_sample-repository&quot;&gt;Pushing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;node_sample&lt;/code&gt; repository&lt;/h3&gt;
+
+&lt;p&gt;將 node_sample 的 source code 推到你的 Github 上，如此每次只要 release branch 有 commit 就會觸發 Github Action 去自動 build image 並上傳到 &lt;strong&gt;Github Container Registry&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_github_package.png&quot; alt=&quot;github_container_registry_github_package&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;下載-image&quot;&gt;下載 image&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Install from the command line&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull ghcr.io/nickhuangcyh/node_sample:TAG
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Use as base image in Dockerfile:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-dockerfile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; ghcr.io/nickhuangcyh/node_sample:TAG&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_download_image.png&quot; alt=&quot;github_container_registry_download_image&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;node_sample&lt;/a&gt; 下載 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;node_sample&lt;/code&gt; 的程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Nick Huang</name></author><category term="DevOps" /><category term="Docker" /><category term="Container Registry" /><category term="GitHub Actions" /><category term="CI/CD" /><category term="DevOps Tools" /><summary type="html">A Guide to Using and Managing Container Images</summary></entry><entry><title type="html">Design Pattern (9) - Prototype Pattern (原型模式)</title><link href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-9-prototype-pattern/" rel="alternate" type="text/html" title="Design Pattern (9) - Prototype Pattern (原型模式)" /><published>2024-07-21T15:00:00+00:00</published><updated>2024-07-21T15:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-9-prototype-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-9-prototype-pattern/">&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;design_pattern repo&lt;/a&gt; 下載 Design Pattern 系列程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;這次的 Pattern 讓我想到以前做過的一個 App，但當時還沒有學習到 Pattern，所以沒有用 Pattern 來處理，現在發現這個功能很適合套用 prototype pattern&lt;/p&gt;
+
+&lt;p&gt;這是一個用來編輯音樂燈光秀的 App，有興趣的讀者可以下載玩玩看 🙂&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://apps.apple.com/tw/app/asante-taptap-3/id1581054107?platform=iphone&quot;&gt;Asante TapTap 3&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/taptap_app_edit.png&quot; alt=&quot;taptap_app_edit&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;需求&quot;&gt;需求&lt;/h2&gt;
+
+&lt;p&gt;今天收到了客人的需求，客人反應編輯完一條燈光還要編輯另外六條好浪費時間，能不能新增 Copy &amp;amp; Paste 的功能，加快編輯以節省時間，如下圖&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/taptap_app_copy.png&quot; alt=&quot;taptap_app_copy&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/taptap_app_paste.png&quot; alt=&quot;taptap_app_paste&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向分析-ooa&quot;&gt;物件導向分析 (OOA)&lt;/h2&gt;
+
+&lt;p&gt;理解需求後，讓我們來快速實作物件導向分析吧!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_prototype_pattern_uml_1.png&quot; alt=&quot;design_pattern_prototype_pattern_uml_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;當我們需要複製 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LightShowData&lt;/code&gt; 時，只需要同樣的 jsonObject 資料重新 new 一個 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LightShowData&lt;/code&gt; 即可複製一份&lt;/p&gt;
+
+&lt;h2 id=&quot;察覺-forces&quot;&gt;察覺 Forces&lt;/h2&gt;
+
+&lt;p&gt;來看看上面這樣的設計會有哪些問題&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;如果我們的 constructor 很複雜，參數非常多，那麼重新 new 一個實體會需要知道很多細節。&lt;/li&gt;
+  &lt;li&gt;如果 constructor 創建實體的過程，是很耗時複雜的計算，重新 new 一個實體會讓創建過程效率變差。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;套用-prototype-pattern--solution--得到新的-context--resulting-context-&quot;&gt;套用 Prototype Pattern ( Solution ) 得到新的 Context ( Resulting Context )&lt;/h2&gt;
+
+&lt;p&gt;做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Prototype Pattern 解決這個問題&lt;/p&gt;
+
+&lt;p&gt;先來看一下 Prototype Pattern 的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_prototype_pattern_uml_2.png&quot; alt=&quot;design_pattern_prototype_pattern_uml_2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;原型模式主要包含以下兩個角色：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Prototype（原型）&lt;/strong&gt;：這是一個抽象介面，定義了複製自身的方法。在實體實現中，這個介面可以是一個抽象類或者實體類，主要目的是提供一個複製自己的方法。這使得在不需要知道物件實體類別的情況下也能創建物件的副本。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Concrete Prototype（實體原型）&lt;/strong&gt;：實現或繼承自原型介面的類。這個類實現了在原型介面中定義的複製（clone）方法，用於創建自身的一個精確副本。在實體實現時，這個類需要提供一個方法來複製自身的屬性，確保新創建的物件與原有物件在狀態上是相同的，但在記憶體中是獨立的。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;我們來將 LightShow App 套用 Prototype Pattern&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_prototype_pattern_uml_3.png&quot; alt=&quot;design_pattern_prototype_pattern_uml_3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如此我們就得到了一個全新的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Resulting Context&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向程式設計-oop&quot;&gt;物件導向程式設計 (OOP)&lt;/h2&gt;
+
+&lt;p&gt;再來我們就可以開始進行物件導向程式開發&lt;/p&gt;
+
+&lt;p&gt;[LightShowDataPrototype]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowDataPrototype&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;startIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;lightDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;clone&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowDataPrototype&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[LightShowData]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;prototypepattern.source&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowDataPrototype&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;startIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;lightDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;constructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originalDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;startIndex&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;originalDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;lightDataList&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;originalDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;subList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;originalDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;constructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;startIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lightDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;startIndex&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startIndex&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lightDataList&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lightDataList&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;clone&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowDataPrototype&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;startIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lightDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;toList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[main]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;originalData&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;listOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// Before using prototype pattern&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;originalLightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowDataPrototype&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originalData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;newLightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowDataPrototype&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originalData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originalLightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newLightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// After using prototype pattern&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;clonedLightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowDataPrototype&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originalData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originalLightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clonedLightShowData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我們可以發現，透過 clone() 方法複製，就可以不重複執行下面的程式碼，提升程式碼效能了&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;originalDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;subList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;originalDataList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Nick Huang</name></author><category term="Design Pattern" /><category term="Prototype Pattern" /><summary type="html">深入原型模式：探索如何透過物件複製技術，有效提升軟體開發中的資源管理與設計模式的靈活性。</summary></entry><entry><title type="html">How to build CHIPTool for Android</title><link href="https://nickhuangcyh.github.io/blog/tools/how-to-build-chiptool-for-android/" rel="alternate" type="text/html" title="How to build CHIPTool for Android" /><published>2024-07-16T11:50:00+00:00</published><updated>2024-07-16T11:50:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/tools/how-to-build-chiptool-for-android</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/tools/how-to-build-chiptool-for-android/">&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;最近因工作之需，研究了一下如何 Build CHIPTool 的 apk，因為按照官方文件步驟實作會有錯誤，自己一步一步解決最後終於成功，因此想寫一篇文章紀錄，幫助我自己進行複習，也希望能對其他開發者提供幫助。🙂&lt;/p&gt;
+
+&lt;h2 id=&quot;簡介&quot;&gt;簡介&lt;/h2&gt;
+
+&lt;p&gt;Matter（前稱為Project CHIP，即Connected Home over IP）是一個統一的開源連接標準，旨在增強智能家居設備之間的互操作性和兼容性。這個標準由連接標準聯盟（CSA）開發，成員包括亞馬遜、蘋果、谷歌和Zigbee聯盟等主要行業參與者。&lt;/p&gt;
+
+&lt;p&gt;Matter的目標是簡化製造商的開發過程，確保智能家居產品的安全性、可靠性和易用性。它利用互聯網協議（IP）來實現各種設備、移動應用和雲服務之間的通信，支持Thread和Wi-Fi網絡傳輸。&lt;/p&gt;
+
+&lt;p&gt;Matter的目標是創建一個無縫且互操作的智能家居生態系統，使不同製造商的設備能夠順利協同工作。&lt;/p&gt;
+
+&lt;h2 id=&quot;事前準備&quot;&gt;事前準備&lt;/h2&gt;
+
+&lt;p&gt;因為在個人開發環境 Build 容易破壞環境，會需要修改 ANDROID_HOME &amp;amp; ANDROID_NDK_HOME 等等…，因為 CHIP 有提供 build 環境的 image，所以這邊我選擇用 docker 使用 CHIP 的 image 啟 container 來 build．&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Docker&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;pull-docker-image&quot;&gt;Pull Docker Image&lt;/h2&gt;
+
+&lt;p&gt;這個步驟會需要一點時間，可以去喝杯咖啡&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull ghcr.io/project-chip/chip-build-android:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;run-container&quot;&gt;Run container&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; ~/workspace/connectedhomeip:/connectedhomeip ghcr.io/project-chip/chip-build-android:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上面簡單的兩個步驟，我們就將乾淨可 Build CHIPTool 的環境建構好了．&lt;/p&gt;
+
+&lt;h2 id=&quot;將目錄標示為安全方便git操作&quot;&gt;將目錄標示為安全，方便git操作&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--add&lt;/span&gt; safe.directory /connectedhomeip
+git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--add&lt;/span&gt; safe.directory /connectedhomeip/third_party/pigweed/repo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;download-source-code--sync-submodule&quot;&gt;Download source code &amp;amp; sync submodule&lt;/h2&gt;
+
+&lt;p&gt;這個步驟會超級久，因為資料量非常大，可以先去做其他事或睡一覺😂&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/project-chip/connectedhomeip.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git submodule &lt;span class=&quot;nb&quot;&gt;sync&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; git submodule update &lt;span class=&quot;nt&quot;&gt;--init&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;同意-android-sdk-的-licenses&quot;&gt;同意 Android sdk 的 licenses&lt;/h2&gt;
+
+&lt;p&gt;我們需要先同意 Android sdk licenses，不然等等 build 的時候會出現錯誤(如下)，因為我們沒有同意 licenses&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FAILURE: Build failed with an exception.
+2024-07-16 09:31:40 WARNING 
+2024-07-16 09:31:40 WARNING &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; What went wrong:
+2024-07-16 09:31:40 WARNING Could not determine the dependencies of task &lt;span class=&quot;s1&quot;&gt;&apos;:app:compileDebugJavaWithJavac&apos;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+2024-07-16 09:31:40 WARNING &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; Failed to &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;the following Android SDK packages as some licences have not been accepted.
+2024-07-16 09:31:40 WARNING      build-tools&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;30.0.2 Android SDK Build-Tools 30.0.2
+2024-07-16 09:31:40 WARNING      platforms&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;android-31 Android SDK Platform 31
+2024-07-16 09:31:40 WARNING   To build this project, accept the SDK license agreements and &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;the missing components using the Android Studio SDK Manager.
+2024-07-16 09:31:40 WARNING   Alternatively, to transfer the license agreements from one workstation to another, see http://d.android.com/r/studio-ui/export-licenses.html
+2024-07-16 09:31:40 WARNING   
+2024-07-16 09:31:40 WARNING   Using Android SDK: /opt/android/sdk
+2024-07-16 09:31:40 WARNING 
+2024-07-16 09:31:40 WARNING &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Try:
+2024-07-16 09:31:40 WARNING Run with &lt;span class=&quot;nt&quot;&gt;--stacktrace&lt;/span&gt; option to get the stack trace. Run with &lt;span class=&quot;nt&quot;&gt;--info&lt;/span&gt; or &lt;span class=&quot;nt&quot;&gt;--debug&lt;/span&gt; option to get more log output. Run with &lt;span class=&quot;nt&quot;&gt;--scan&lt;/span&gt; to get full insights.
+2024-07-16 09:31:40 WARNING 
+2024-07-16 09:31:40 WARNING &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Get more &lt;span class=&quot;nb&quot;&gt;help &lt;/span&gt;at https://help.gradle.org
+2024-07-16 09:31:40 WARNING 
+2024-07-16 09:31:40 WARNING BUILD FAILED &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;1m 50s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;為了方便我們先將PATH export，使其能在任何目錄下呼叫&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;:/opt/android/sdk/tools/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;同意所有 licenses&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sdkmanager &lt;span class=&quot;nt&quot;&gt;--licenses&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;全部輸入 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;y&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;yes&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;檢查環境變數&quot;&gt;檢查環境變數&lt;/h2&gt;
+
+&lt;p&gt;用 docker 使用 CHIP 提供的 image 環境好處之一就是我們不用再去下載指定的 sdk 及 ndk 版本，也不需要重新指向環境變數&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@f39e36c15675:/connectedhomeip# &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ANDROID_HOME&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /opt/android/sdk
+
+root@f39e36c15675:/connectedhomeip# &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ANDROID_NDK_HOME&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /opt/android/android-ndk-r23c
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;preparing-for-build&quot;&gt;Preparing for build&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;切換到 Matter repositoy&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /connectedhomeip
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Run bootstrap (only required first time) 此步驟也需要一段時間&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;scripts/bootstrap.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;android-chiptool-from-scripts&quot;&gt;Android CHIPTool from scripts&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;執行 script&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./scripts/build/build_examples.py &lt;span class=&quot;nt&quot;&gt;--target&lt;/span&gt; android-arm64-chip-tool build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;但這個步驟跑到最後會出現錯誤說找不到 build.ninja&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ninja: error: loading &lt;span class=&quot;s1&quot;&gt;&apos;build.ninja&apos;&lt;/span&gt;: No such file or directory
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我猜這邊是 CHIP 官方文件沒有寫完整，會無法進行下去，這邊我的解決方式是到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/out/android-arm64-chip-tool&lt;/code&gt; 目錄下去建立 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build.ninja&lt;/code&gt; ，很簡單如下&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /connectedhomeip/out/android-arm64-chip-tool
+gn gen &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;這樣就會產生 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build.ninja&lt;/code&gt; 檔案了&lt;/p&gt;
+
+&lt;p&gt;接下來回到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/connectedhomeip&lt;/code&gt; 目錄下&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ../..
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;再執行一次就大功告成了! (Build 的過程會花比較久時間)&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./scripts/build/build_examples.py &lt;span class=&quot;nt&quot;&gt;--target&lt;/span&gt; android-arm64-chip-tool build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Build 完後可以在下面路徑找到 apk&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;out/android-$TARGET_CPU-chip-tool/outputs/apk/debug/app-debug.apk&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;參考&quot;&gt;參考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/android_building.md&quot;&gt;CHIP Android Building&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/project-chip/connectedhomeip/issues/28317&quot;&gt;CHIP Issue #28317&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/project-chip/connectedhomeip/issues/21093&quot;&gt;CHIP Issue #21093&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/project-chip/connectedhomeip/issues/32795&quot;&gt;CHIP Issue #32794&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/project-chip/connectedhomeip/pkgs/container/chip-build-android/versions?filters%5Bversion_type%5D=tagged&quot;&gt;project-chip/chip-build-android/All versions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Nick Huang</name></author><category term="Tools" /><category term="Android" /><category term="CHIP" /><category term="Matter" /><summary type="html">本篇文章我將介紹如何按照步驟 Build 出 CHIPTool apk</summary></entry><entry><title type="html">Design Pattern (8) - Builder Pattern (建造者模式)</title><link href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-8-builder-pattern/" rel="alternate" type="text/html" title="Design Pattern (8) - Builder Pattern (建造者模式)" /><published>2024-07-09T15:00:00+00:00</published><updated>2024-07-09T15:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-8-builder-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-8-builder-pattern/">&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;design_pattern repo&lt;/a&gt; 下載 Design Pattern 系列程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;需求&quot;&gt;需求&lt;/h2&gt;
+
+&lt;p&gt;今天我們要設計一個能自動做出手搖飲的機器，但如果手搖飲店只賣紅茶、綠茶，肯定滿足不了廣大的客群需求，因此我們要能夠讓手搖飲加入各種配料，來吸引顧客。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;珍珠 (Pearls)&lt;/li&gt;
+  &lt;li&gt;椰果 (Coconut Jelly)&lt;/li&gt;
+  &lt;li&gt;紅豆 (Red Beans)&lt;/li&gt;
+  &lt;li&gt;仙草凍 (Grass Jelly)&lt;/li&gt;
+  &lt;li&gt;布丁 (Pudding)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;物件導向分析-ooa&quot;&gt;物件導向分析 (OOA)&lt;/h2&gt;
+
+&lt;p&gt;理解需求後，讓我們來快速實作物件導向分析吧!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_builder_pattern_uml_1.png&quot; alt=&quot;design_pattern_builder_pattern_uml_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;但這麼做會有一個問題，假如我們今天只要加入紅豆以及布丁，就必須在其他用不到的參數傳入 false or null，參數越多越難以維護且可讀性也不高。&lt;/p&gt;
+
+&lt;p&gt;因此聰明的你可能想到了，可以利用寫多個不同的 constructor 來解決，如此就不需傳入不需要的參數。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_builder_pattern_uml_2.png&quot; alt=&quot;design_pattern_builder_pattern_uml_2&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;察覺-forces&quot;&gt;察覺 Forces&lt;/h2&gt;
+
+&lt;p&gt;這邊我們會發現當參數越多, 所需寫的 constructor 就越多，這樣既不好維護，也使得類別的實例化過程錯綜複雜，這個現象可以稱為 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;telescoping constructor&lt;/code&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Telescoping constructor 是當一個類別有多個構造器，每個構造器參數數量不同，導致類別難以維護和使用的問題。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;套用-builder-pattern--solution--得到新的-context--resulting-context-&quot;&gt;套用 Builder Pattern ( &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Solution&lt;/code&gt; ) 得到新的 Context ( &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Resulting Context&lt;/code&gt; )&lt;/h2&gt;
+
+&lt;p&gt;做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Builder Pattern 解決這個問題&lt;/p&gt;
+
+&lt;p&gt;先來看一下 Builder Pattern 的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_builder_pattern_uml_3.png&quot; alt=&quot;design_pattern_builder_pattern_uml_3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;建構者模式主要包含以下四個角色：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Product（產品）&lt;/strong&gt;：Product 是 Builder Pattern 負責構建的複雜對象。它可能包含多個組件或部分，其結構根據實現的不同而變化。Product 通常是一個類，其屬性代表 Builder 構建的不同部分。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Builder（建造者）&lt;/strong&gt;：Builder 是一個介面或抽象類，宣告了構建複雜對象的步驟。它通常包括用於構建產品各個部分的方法。通過定義一個介面，Builder 允許創建不同的具體建造者，這些建造者可以生產產品的不同變體 1。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;ConcreteBuilder（具體建造者）&lt;/strong&gt;：ConcreteBuilder 類實現了 Builder 介面，提供了構建產品每個部分的具體實現。每個 ConcreteBuilder 都是為創建產品的特定變體而量身定制的。它跟踪正在構建的產品，並提供設置或構建每個部分的方法 1。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Director（指導者）&lt;/strong&gt;：Director 負責管理複雜對象的構建過程。它與 Builder 合作，但不知道對象的每個部分是如何構建的。它提供了一個高級介面，用於構建產品和管理創建複雜對象所需的步驟 1。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Client（客戶端）&lt;/strong&gt;：Client 是啟動複雜對象構建過程的代碼。它創建一個 Builder 對象並將其傳遞給 Director 以啟動構建過程。在構建完成後，Client 可能會從 Builder 那裡檢索最終產品 1。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;我們來將製作手搖飲套用 Builder Pattern&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_builder_pattern_uml_4.png&quot; alt=&quot;design_pattern_builder_pattern_uml_4&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如此我們就得到了一個全新的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Resulting Context&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向程式設計-oop&quot;&gt;物件導向程式設計 (OOP)&lt;/h2&gt;
+
+&lt;p&gt;再來我們就可以開始進行物件導向程式開發&lt;/p&gt;
+
+&lt;p&gt;[Beverage]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Beverage&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasPearls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasCoconutJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasRedBeans&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasGrassJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasPudding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[BubbleTea]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;data class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BubbleTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasPearls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasCoconutJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasRedBeans&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasGrassJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasPudding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Beverage&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[GrassJellyPuddingTea]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;data class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GrassJellyPuddingTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasPearls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasCoconutJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasRedBeans&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasGrassJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;hasPudding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Beverage&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[Builder]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addPearls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addPudding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addGrassJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Beverage&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[BubbleTeaBuilder]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BubbleTeaBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;bubbleTea&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BubbleTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addPearls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BubbleTeaBuilder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;bubbleTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hasPearls&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addPudding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addGrassJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BubbleTea&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bubbleTea&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[GrassJellyPuddingTeaBuilder]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GrassJellyPuddingTeaBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;grassJellyPuddingTea&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GrassJellyPuddingTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;hasCoconutJelly&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;hasRedBeans&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;hasGrassJelly&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;hasPudding&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addPearls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addGrassJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GrassJellyPuddingTeaBuilder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;grassJellyPuddingTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hasGrassJelly&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addPudding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GrassJellyPuddingTeaBuilder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;grassJellyPuddingTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hasPudding&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GrassJellyPuddingTea&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grassJellyPuddingTea&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[BeverageMaker]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeverageMaker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;makeBubbleTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Beverage&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;addPearls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;makeGrassJellyPuddingTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Beverage&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;addGrassJelly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;addPudding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[BuilderPattern.kt]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;bubbleTeaBuilder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BubbleTeaBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;bubbleTeaBeverageMaker&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeverageMaker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bubbleTeaBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;bubbleTea&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bubbleTeaBeverageMaker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;makeBubbleTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bubbleTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;grassJellyPuddingTeaBuilder&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GrassJellyPuddingTeaBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;grassJellyPuddingTeaBeverageMaker&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeverageMaker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grassJellyPuddingTeaBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;grassJellyPuddingTea&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grassJellyPuddingTeaBeverageMaker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;makeGrassJellyPuddingTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grassJellyPuddingTea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如此就能很清楚的分步驟製作手搖飲了 🙌&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="Design Pattern" /><category term="Builder Pattern" /><summary type="html">探索建造者模式，學習如何分步構建複雜對象，使代碼更加靈活和易於維護。通過實例展示如何使用建造者模式簡化對象創建過程，提升代碼的可讀性和可擴展性。</summary></entry><entry><title type="html">Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)</title><link href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-7-abstract-factory-pattern/" rel="alternate" type="text/html" title="Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)" /><published>2024-07-08T15:00:00+00:00</published><updated>2024-07-08T15:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-7-abstract-factory-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-7-abstract-factory-pattern/">&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;design_pattern repo&lt;/a&gt; 下載 Design Pattern 系列程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;引言全球化的挑戰擴展&quot;&gt;引言：全球化的挑戰擴展&lt;/h2&gt;
+
+&lt;p&gt;想像一下，隨著你的飲料點餐系統在全球範圍內的擴展，你面臨著如何滿足不同地區顧客特定偏好的挑戰。&lt;/p&gt;
+
+&lt;h2 id=&quot;需求滿足全球化的味蕾&quot;&gt;需求：滿足全球化的味蕾&lt;/h2&gt;
+
+&lt;p&gt;隨著業務的全球化擴展，不同地區的顧客有著不同的偏好。且我們也不能只賣紅茶及綠茶，需要為我們的菜單增加新的飲品，一邊新增菜單一邊擴展店舖。&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向分析ooa&quot;&gt;物件導向分析(OOA)&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_factory_method_pattern_uml_3.png&quot; alt=&quot;design_pattern_factory_method_pattern_uml_3&quot; /&gt;&lt;/p&gt;
+
+&lt;ul class=&quot;tab&quot; data-tab=&quot;118e957b-d346-4d7c-a89a-f83c3b087f0f&quot; data-name=&quot;data-struct&quot;&gt;
+  
+      &lt;li class=&quot;active&quot;&gt;
+          &lt;a href=&quot;#&quot;&gt;Swift &lt;/a&gt;
+      &lt;/li&gt;
+  
+      &lt;li&gt;
+          &lt;a href=&quot;#&quot;&gt;Kotlin &lt;/a&gt;
+      &lt;/li&gt;
+  
+&lt;/ul&gt;
+&lt;ul class=&quot;tab-content&quot; id=&quot;118e957b-d346-4d7c-a89a-f83c3b087f0f&quot; data-name=&quot;data-struct&quot;&gt;
+  
+      &lt;li class=&quot;active&quot;&gt;
+&lt;script src=&quot;https://gist.github.com/4efb9daca505d9a30c28c8c058d75f8b.js&quot;&gt; &lt;/script&gt;
+
+&lt;/li&gt;
+  
+      &lt;li&gt;
+&lt;script src=&quot;https://gist.github.com/b04fdc28c516d947869c8e9d789cc1ca.js&quot;&gt; &lt;/script&gt;
+
+&lt;/li&gt;
+  
+&lt;/ul&gt;
+
+&lt;p&gt;如何處理多個產品在不同分店的組合，這時就需要用到 &lt;strong&gt;Abstract Factory Pattern&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;察覺-forces&quot;&gt;察覺 Forces&lt;/h2&gt;
+
+&lt;p&gt;當我們每增加一種飲品到菜單中，我們必須要修改所有的 Factory 中的方法，違反了 &lt;strong&gt;Open Closed Principle&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;套用-solution&quot;&gt;套用 Solution&lt;/h2&gt;
+
+&lt;p&gt;看清楚整個 Context，察覺 Forces 後，就可以套用 Abstract Factory Pattern 來解決這個問題&lt;/p&gt;
+
+&lt;p&gt;先來看一下 Abstract Factory Pattern 的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_abstract_factory_pattern_uml_1.png&quot; alt=&quot;design_pattern_abstract_factory_pattern_uml_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;透過將工廠抽象，使子類別能創建一系列的實體物件。&lt;/p&gt;
+
+&lt;p&gt;抽象工廠有個重要的判斷方式，當你所要創建的產品是一整個系列產品，且不同需求要創建不同系列，這個關係能夠畫成二維關係，這時就非常適合使用抽象工廠來建立產品&lt;/p&gt;
+
+&lt;p&gt;如下圖&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Country / Tea&lt;/th&gt;
+      &lt;th&gt;BlackTea&lt;/th&gt;
+      &lt;th&gt;GreenTea&lt;/th&gt;
+      &lt;th&gt;MilkTea&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;US Flavor&lt;/td&gt;
+      &lt;td&gt;Ceylon(錫蘭)&lt;/td&gt;
+      &lt;td&gt;Gyokuro(玉露)&lt;/td&gt;
+      &lt;td&gt;Thai (泰奶)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;EU Flavor&lt;/td&gt;
+      &lt;td&gt;EarlGrey(伯爵)&lt;/td&gt;
+      &lt;td&gt;Sencha(煎茶)&lt;/td&gt;
+      &lt;td&gt;Masala Chai (印度馬薩拉))&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;JP Flavor&lt;/td&gt;
+      &lt;td&gt;Assam(阿薩姆)&lt;/td&gt;
+      &lt;td&gt;Matcha(抹茶)&lt;/td&gt;
+      &lt;td&gt;Hokkaido(北海道奶茶)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;讓我們根據上面的茶家族修改一下 UML 及程式碼吧(這邊只是要表達二維關係的概念，僅先實作紅茶及綠茶的部分)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_abstract_factory_pattern_uml_2.png&quot; alt=&quot;design_pattern_abstract_factory_pattern_uml_2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如此我們就得到了一個全新的 Resulting Context&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向程式設計-oop&quot;&gt;物件導向程式設計 (OOP)&lt;/h2&gt;
+
+&lt;p&gt;再來我們就可以開始進行物件導向程式開發&lt;/p&gt;
+
+&lt;ul class=&quot;tab&quot; data-tab=&quot;19a53e28-d06d-41f7-af80-b7610845bd1b&quot; data-name=&quot;data-struct&quot;&gt;
+  
+      &lt;li class=&quot;active&quot;&gt;
+          &lt;a href=&quot;#&quot;&gt;Swift &lt;/a&gt;
+      &lt;/li&gt;
+  
+      &lt;li&gt;
+          &lt;a href=&quot;#&quot;&gt;Kotlin &lt;/a&gt;
+      &lt;/li&gt;
+  
+&lt;/ul&gt;
+&lt;ul class=&quot;tab-content&quot; id=&quot;19a53e28-d06d-41f7-af80-b7610845bd1b&quot; data-name=&quot;data-struct&quot;&gt;
+  
+      &lt;li class=&quot;active&quot;&gt;
+&lt;script src=&quot;https://gist.github.com/49cf3ff30b5ea2766cd540a1146316ae.js&quot;&gt; &lt;/script&gt;
+
+&lt;/li&gt;
+  
+      &lt;li&gt;
+&lt;script src=&quot;https://gist.github.com/2b53e517b1132044ebec95f4057a1a54.js&quot;&gt; &lt;/script&gt;
+
+&lt;/li&gt;
+  
+&lt;/ul&gt;
+
+&lt;p&gt;使用抽象工廠後，分店不需要知道實際是什麼茶，只要知道跟自己地區的飲料工廠取得 紅/綠/奶茶，這邊也運用到了 Dependency Inversion Principle，工廠及產品兩者皆依賴於抽象。&lt;/p&gt;
+
+&lt;h2 id=&quot;補充說明&quot;&gt;補充說明&lt;/h2&gt;
+
+&lt;p&gt;下面舉幾種二維關係可以使用 Abstract Factory Pattern 的例子&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;做跨平台應用時，會遇到不同平台與各種 UI 元件的組合&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;OS / UI Components&lt;/th&gt;
+      &lt;th&gt;Button&lt;/th&gt;
+      &lt;th&gt;Checkbox&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Linux&lt;/td&gt;
+      &lt;td&gt;LinuxButton&lt;/td&gt;
+      &lt;td&gt;LinuxCheckbox&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;MacOS&lt;/td&gt;
+      &lt;td&gt;MacButton&lt;/td&gt;
+      &lt;td&gt;MacCheckbox&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Windows&lt;/td&gt;
+      &lt;td&gt;WinButton&lt;/td&gt;
+      &lt;td&gt;WinCheckbox&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;做 App 時，會遇到需要支持 Light/Dark Mode 與各種 UI 元件的組合&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Theme / UI Components&lt;/th&gt;
+      &lt;th&gt;Button&lt;/th&gt;
+      &lt;th&gt;Checkbox&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Light Mode&lt;/td&gt;
+      &lt;td&gt;LightModeButton&lt;/td&gt;
+      &lt;td&gt;LightModeCheckbox&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Dark Mode&lt;/td&gt;
+      &lt;td&gt;DarkModeButton&lt;/td&gt;
+      &lt;td&gt;DarkModeCheckbox&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;做 IoT 系統時，會遇到 ZWave/Zigbeee 傳輸協議與各種 Iot 裝置的組合&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Protocol / Device&lt;/th&gt;
+      &lt;th&gt;Dimmer&lt;/th&gt;
+      &lt;th&gt;Hue&lt;/th&gt;
+      &lt;th&gt;Thermostat&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ZWave&lt;/td&gt;
+      &lt;td&gt;ZWDimmer&lt;/td&gt;
+      &lt;td&gt;ZWHue&lt;/td&gt;
+      &lt;td&gt;ZWThermostat&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Zigbee&lt;/td&gt;
+      &lt;td&gt;ZBDimmer&lt;/td&gt;
+      &lt;td&gt;ZBHue&lt;/td&gt;
+      &lt;td&gt;ZBThermostat&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;factory-method-pattern-vs-abstract-factory-pattern&quot;&gt;Factory Method Pattern vs Abstract Factory Pattern&lt;/h2&gt;
+
+&lt;h3 id=&quot;factory-method-pattern-工廠方法模式&quot;&gt;Factory Method Pattern 工廠方法模式&lt;/h3&gt;
+
+&lt;p&gt;對每一種產品提供相應的工廠去建立產品，產品擴充性高。&lt;/p&gt;
+
+&lt;h3 id=&quot;abstract-factory-pattern-抽象工廠模式&quot;&gt;Abstract Factory Pattern 抽象工廠模式&lt;/h3&gt;
+
+&lt;p&gt;對一整個系列的產品進行抽象建立，工廠擴充性高，如加入新的系列產品，但產品擴充性低，所有的工廠都必須加入新產品。&lt;/p&gt;
+
+&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
+
+&lt;p&gt;在本文中，我們探討了工廠方法模式和抽象工廠模式的區別。工廠方法模式專注於單一產品的建立，提供高產品擴充性；而抽象工廠模式則針對一系列產品提供建立機制，提供工廠的高擴充性但產品擴充性較低。&lt;/p&gt;
+
+&lt;p&gt;我們來看看工廠方法用到哪些 &lt;a href=&quot;/blog/design%20pattern/design-pattern-1-design-principle/&quot;&gt;Design Principle&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Encapsulate What Varies&lt;/li&gt;
+  &lt;li&gt;Loose Coupling&lt;/li&gt;
+  &lt;li&gt;Program to Interfaces&lt;/li&gt;
+  &lt;li&gt;Single Responsibility Principle&lt;/li&gt;
+  &lt;li&gt;Open Closed Principle&lt;/li&gt;
+  &lt;li&gt;Dependency Inversion Principle&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;參考&quot;&gt;參考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.tenlong.com.tw/products/9789867794529&quot;&gt;Head First Design Patterns&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.tenlong.com.tw/products/9789866761799&quot;&gt;大話設計模式&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&amp;amp;autoSkip=false&amp;amp;autoplay=true&amp;amp;resume=true&quot;&gt;Advanced Design Patterns: Design Principles&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&amp;amp;autoSkip=false&amp;amp;autoplay=true&amp;amp;resume=true&quot;&gt;Programming Foundations: Design Patterns&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&amp;amp;autoSkip=false&amp;amp;autoplay=true&amp;amp;resume=true&quot;&gt;Design Patterns: Creational&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://refactoring.guru/design-patterns/factory-method&quot;&gt;refactoring&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p class=&quot;notice--success&quot;&gt;&lt;strong&gt;Note:&lt;/strong&gt; 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="Design Pattern" /><category term="Abstract Factory Pattern" /><summary type="html">探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。</summary></entry><entry><title type="html">Design Pattern (6) - Factory Method Pattern (工廠方法模式)</title><link href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-6-factory-method-pattern/" rel="alternate" type="text/html" title="Design Pattern (6) - Factory Method Pattern (工廠方法模式)" /><published>2024-07-07T15:00:00+00:00</published><updated>2024-07-07T15:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-6-factory-method-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-6-factory-method-pattern/">&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;design_pattern repo&lt;/a&gt; 下載 Design Pattern 系列程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;引言一個全球化的挑戰&quot;&gt;引言：一個全球化的挑戰&lt;/h2&gt;
+
+&lt;p&gt;想像一下，你的飲料點餐系統在全球範圍內大受歡迎。隨著業務的擴展，你面臨著一個挑戰：如何滿足不同地區顧客的特定偏好？&lt;/p&gt;
+
+&lt;p&gt;上一篇我們利用&lt;a href=&quot;% post_url 2022-02-13-design-pattern-4-simple-factory-pattern %}&quot;&gt;簡單工廠模式&lt;/a&gt;模式成功地將&lt;strong&gt;需要變動&lt;/strong&gt; 以及 &lt;strong&gt;不需變動&lt;/strong&gt; 的程式碼分離。今天，我們將探討如何進一步提升我們系統的靈活性和擴展性。&lt;/p&gt;
+
+&lt;h2 id=&quot;需求滿足全球化的味蕾&quot;&gt;需求：滿足全球化的味蕾&lt;/h2&gt;
+
+&lt;p&gt;飲料點餐系統受到客戶的喜愛，業績非常好，於是客戶在世界各地迅速擴店。但很快的問題出現了——不同地區的顧客有著不同的偏好。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;案例分析&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;美國喜歡錫蘭紅茶&lt;/li&gt;
+      &lt;li&gt;歐洲喜歡伯爵紅茶&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我們的目標是，不增加過多成本的同時，滿足這些多樣化的需求。
+(成本考量我們不將所有紅茶種類都加入菜單，只用最符合當地口味的茶葉製作紅茶)&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向分析ooa&quot;&gt;物件導向分析(OOA)&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_factory_method_pattern_uml_1.png&quot; alt=&quot;design_pattern_factory_method_pattern_uml_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;於是我們修改簡單工廠的程式碼，新增 USBeverageFactory 及 EUBeverageFactory 來製作符合美國及歐洲當地口味的飲品&lt;/p&gt;
+
+&lt;ul class=&quot;tab&quot; data-tab=&quot;2c29312a-45ab-4312-9294-cd4cab9ee5bc&quot; data-name=&quot;data-struct&quot;&gt;
+  
+      &lt;li class=&quot;active&quot;&gt;
+          &lt;a href=&quot;#&quot;&gt;Swift &lt;/a&gt;
+      &lt;/li&gt;
+  
+      &lt;li&gt;
+          &lt;a href=&quot;#&quot;&gt;Kotlin &lt;/a&gt;
+      &lt;/li&gt;
+  
+&lt;/ul&gt;
+&lt;ul class=&quot;tab-content&quot; id=&quot;2c29312a-45ab-4312-9294-cd4cab9ee5bc&quot; data-name=&quot;data-struct&quot;&gt;
+  
+      &lt;li class=&quot;active&quot;&gt;
+&lt;script src=&quot;https://gist.github.com/5c03101f45a1144fffbd5173d906d286.js&quot;&gt; &lt;/script&gt;
+
+&lt;/li&gt;
+  
+      &lt;li&gt;
+&lt;script src=&quot;https://gist.github.com/47bcb79696354e083cdc99a8d53c22cb.js&quot;&gt; &lt;/script&gt;
+
+&lt;/li&gt;
+  
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;察覺-forces&quot;&gt;察覺 Forces&lt;/h2&gt;
+
+&lt;p&gt;這樣做雖然可以滿足分店從不同工廠取得該地區的飲品，但每當有新的分店加入，就必須動到 BeverageShop 的程式碼來添加新的分店工廠，違反了 &lt;strong&gt;Open Closed Principle&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;套用-solution&quot;&gt;套用 Solution&lt;/h2&gt;
+
+&lt;p&gt;看清楚整個 Context，察覺 Forces 後，就可以套用 Factory Method Pattern 來解決這個問題&lt;/p&gt;
+
+&lt;p&gt;先來看一下 Factory Method Pattern 的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_factory_method_pattern_uml_2.png&quot; alt=&quot;design_pattern_factory_method_pattern_uml_2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;提供一個介面用來創建物件，真正實體化的類別由子類別實作決定。
+讓我們修改一下上面的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_factory_method_pattern_uml_3.png&quot; alt=&quot;design_pattern_factory_method_pattern_uml_3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如此我們就得到了一個全新的 Resulting Context&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向程式設計-oop&quot;&gt;物件導向程式設計 (OOP)&lt;/h2&gt;
+
+&lt;p&gt;再來我們就可以開始進行物件導向程式開發&lt;/p&gt;
+
+&lt;ul class=&quot;tab&quot; data-tab=&quot;62b4049c-2b2a-48db-927c-8c172b7d7d44&quot; data-name=&quot;data-struct&quot;&gt;
+  
+      &lt;li class=&quot;active&quot;&gt;
+          &lt;a href=&quot;#&quot;&gt;Swift &lt;/a&gt;
+      &lt;/li&gt;
+  
+      &lt;li&gt;
+          &lt;a href=&quot;#&quot;&gt;Kotlin &lt;/a&gt;
+      &lt;/li&gt;
+  
+&lt;/ul&gt;
+&lt;ul class=&quot;tab-content&quot; id=&quot;62b4049c-2b2a-48db-927c-8c172b7d7d44&quot; data-name=&quot;data-struct&quot;&gt;
+  
+      &lt;li class=&quot;active&quot;&gt;
+&lt;script src=&quot;https://gist.github.com/2504aa439c085480b77a709e1304b141.js&quot;&gt; &lt;/script&gt;
+
+&lt;/li&gt;
+  
+      &lt;li&gt;
+&lt;script src=&quot;https://gist.github.com/f9d13d1e1bbb7d1736c031e5e3cd2e26.js&quot;&gt; &lt;/script&gt;
+
+&lt;/li&gt;
+  
+&lt;/ul&gt;
+
+&lt;p&gt;透過工廠方法模式，我們透過將工廠抽象化，達到可擴充性，之後如果要拓展其他分店像是日本分店，只需新增一個 JPBeverageFactory ，就能創建能做出符合日本人口味的飲料工廠，而不需修改到其他不需變動的程式碼。&lt;/p&gt;
+
+&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
+
+&lt;p&gt;通過工廠方法模式，我們可以在不犧牲系統整體架構的前提下，靈活地擴展我們的產品線，滿足全球化市場的需求。這不僅提升了我們系統的可維護性和擴展性，也為我們的業務帶來了更大的機會。&lt;/p&gt;
+
+&lt;p&gt;我們來看看工廠方法用到哪些 &lt;a href=&quot;/blog/design%20pattern/design-pattern-1-design-principle/&quot;&gt;Design Principle&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Encapsulate What Varies&lt;/li&gt;
+  &lt;li&gt;Loose Coupling&lt;/li&gt;
+  &lt;li&gt;Program to Interfaces&lt;/li&gt;
+  &lt;li&gt;Single Responsibility Principle&lt;/li&gt;
+  &lt;li&gt;Open Closed Principle&lt;/li&gt;
+  &lt;li&gt;Dependency Inversion Principle&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下一篇要介紹最後一個工廠模式 Abstract Factory Pattern 抽象工廠模式&lt;/p&gt;
+
+&lt;h2 id=&quot;參考&quot;&gt;參考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.tenlong.com.tw/products/9789867794529&quot;&gt;Head First Design Patterns&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.tenlong.com.tw/products/9789866761799&quot;&gt;大話設計模式&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&amp;amp;autoSkip=false&amp;amp;autoplay=true&amp;amp;resume=true&quot;&gt;Advanced Design Patterns: Design Principles&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&amp;amp;autoSkip=false&amp;amp;autoplay=true&amp;amp;resume=true&quot;&gt;Programming Foundations: Design Patterns&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&amp;amp;autoSkip=false&amp;amp;autoplay=true&amp;amp;resume=true&quot;&gt;Design Patterns: Creational&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://refactoring.guru/design-patterns/factory-method&quot;&gt;refactoring&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=yOe-uywb2qs&amp;amp;list=PLicQRHHL75d7EXEI9nWfUYJyrPdI79M70&amp;amp;pp=iAQB&quot;&gt;水球潘 - Design Pattern 之路&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p class=&quot;notice--success&quot;&gt;&lt;strong&gt;Note:&lt;/strong&gt; 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="Design Pattern" /><category term="Factory Method Pattern" /><summary type="html">深入探討工廠方法模式，通過實例展示其應用，提升程式碼的靈活性和可擴展性。</summary></entry></feed>
