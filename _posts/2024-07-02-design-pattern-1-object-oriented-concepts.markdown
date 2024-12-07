@@ -42,7 +42,7 @@ categories: [Design Pattern]
 
 ## 總結
 
-理解了物件導向的核心概念後，我們將進一步探討這些概念如何引導我們進入設計原則的世界。物件導向概念為我們提供了創建模塊化、可重用和易於維護代碼的基礎，而設計原則則教我們如何有效地應用這些概念來解決更複雜的設計問題。接下來，我們將探討這些原則，並了解它們如何幫助我們實現高質量的軟體設計。
+理解了物件導向的核心概念後，我們將進一步探討這些概念如何引導我們進入設計原則的世界。物件導向概念為我們提供了創建模塊化、可重用和易於維護程式碼的基礎，而設計原則則教我們如何有效地應用這些概念來解決更複雜的設計問題。接下來，我們將探討這些原則，並了解它們如何幫助我們實現高質量的軟體設計。
 
 ![design_pattern_design_principle_architecture]({{ site.baseurl }}/assets/images/design_pattern_design_principle_architecture.png)
 
@@ -50,12 +50,12 @@ categories: [Design Pattern]
 
 ## 參考
 
-* [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
-* [大話設計模式](https://www.tenlong.com.tw/products/9789866761799)
-* [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-* [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-* [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-* [水球潘 - Design Pattern 之路](https://www.youtube.com/watch?v=yOe-uywb2qs&list=PLicQRHHL75d7EXEI9nWfUYJyrPdI79M70&pp=iAQB)
+- [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
+- [大話設計模式](https://www.tenlong.com.tw/products/9789866761799)
+- [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+- [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+- [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+- [水球潘 - Design Pattern 之路](https://www.youtube.com/watch?v=yOe-uywb2qs&list=PLicQRHHL75d7EXEI9nWfUYJyrPdI79M70&pp=iAQB)
 
-**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂
+**Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長 🙂
 {: .notice--success}

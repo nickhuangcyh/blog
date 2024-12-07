@@ -2,7 +2,7 @@
 layout: single
 title: "Design Pattern (2) - Design Principles (設計原則)"
 date: 2024-07-03 23:00:00 +0800
-excerpt: "學習如何透過單一職責和開放封閉等設計原則提升代碼質量，打造靈活、可維護的軟體系統。"
+excerpt: "學習如何透過單一職責和開放封閉等設計原則提升程式碼質量，打造靈活、可維護的軟體系統。"
 header:
   overlay_image: /assets/images/design_patterns.jpg
   teaser: /assets/images/design_patterns.jpg
@@ -108,8 +108,8 @@ e.g. 我們需要計算正方形及長方形的面積
 
 上面的例子我們將正方形繼承長方形，但正方形的 getArea() 卻不符合長方形的結果，這就打破了 LSP。
 
-* 增加程式碼的健全度，在使用不同的子類別的時候，可以大幅度的保證彼此之間的相容性。只要父類別可以使用，基本上子類別也可以使用
-* 子類別如果要新增功能，獨立在父類別的功能之外，才不會在搬移到其他子類別的時候發生奇怪的問題，也可以將功能切分乾淨，區分職責
+- 增加程式碼的健全度，在使用不同的子類別的時候，可以大幅度的保證彼此之間的相容性。只要父類別可以使用，基本上子類別也可以使用
+- 子類別如果要新增功能，獨立在父類別的功能之外，才不會在搬移到其他子類別的時候發生奇怪的問題，也可以將功能切分乾淨，區分職責
 
 ### Interface Segregation Principle (ISP) 介面隔離原則
 
@@ -182,9 +182,9 @@ e.g. 設計一個能不同房間加入不同 IoT 設備的系統，可以新增�
 
 抽象 - interface, protocol, abstract class
 
-* 依賴於抽象可以使我們的程式碼更加有彈性, 也更好抽換依賴物件
-* 養成多寫一層抽象成能使代碼更好維護、測試
-* 抽象層能使我們非常容易的製作假物件快速測試程式邏輯
+- 依賴於抽象可以使我們的程式碼更加有彈性, 也更好抽換依賴物件
+- 養成多寫一層抽象成能使程式碼更好維護、測試
+- 抽象層能使我們非常容易的製作假物件快速測試程式邏輯
 
 ## Encapsulate What Varies 封裝變化
 
@@ -291,7 +291,7 @@ HAS-A (composition) can be better than IS-A (inheritance)
 
 ## 總結
 
-在本篇文章中，我們深入探討了設計原則的重要性，並透過實際的例子，如何在不同環境下靈活切換數據庫實例，展示了這些原則在實際開發中的應用。通過引入 AbstractDB 介面，我們看到了如何將具體的數據庫實現（如 CommercialDB 和 TestDB）與系統的其他部分解耦，從而提高了代碼的靈活性和可維護性。
+在本篇文章中，我們深入探討了設計原則的重要性，並透過實際的例子，如何在不同環境下靈活切換數據庫實例，展示了這些原則在實際開發中的應用。通過引入 AbstractDB 介面，我們看到了如何將具體的數據庫實現（如 CommercialDB 和 TestDB）與系統的其他部分解耦，從而提高了程式碼的靈活性和可維護性。
 
 這一過程不僅鞏固了我們對物件導向概念的理解，也為我們進一步探索設計模式鋪平了道路。設計原則是構建健壯、可擴展和靈活系統的基石，而設計模式則提供了一套解決特定設計問題的模板和最佳實踐。
 
@@ -303,12 +303,12 @@ HAS-A (composition) can be better than IS-A (inheritance)
 
 ## 參考
 
-* [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
-* [大話設計模式](https://www.tenlong.com.tw/products/9789866761799)
-* [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-* [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-* [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
-* [水球潘 - Design Pattern 之路](https://www.youtube.com/watch?v=yOe-uywb2qs&list=PLicQRHHL75d7EXEI9nWfUYJyrPdI79M70&pp=iAQB)
+- [Head First Design Patterns](https://www.tenlong.com.tw/products/9789867794529)
+- [大話設計模式](https://www.tenlong.com.tw/products/9789866761799)
+- [Advanced Design Patterns: Design Principles](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+- [Programming Foundations: Design Patterns](https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+- [Design Patterns: Creational](https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&autoSkip=false&autoplay=true&resume=true)
+- [水球潘 - Design Pattern 之路](https://www.youtube.com/watch?v=yOe-uywb2qs&list=PLicQRHHL75d7EXEI9nWfUYJyrPdI79M70&pp=iAQB)
 
 **Note:** 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長 🙂
 {: .notice--success}

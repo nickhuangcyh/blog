@@ -51,7 +51,7 @@ Google AdSense 是一個廣告推送平台，讓網站擁有者可以在自己�
 ### 4. **將 AdSense 廣告程式碼加入網站並提交**
 
 1. 點擊"開始使用"，將你的網站連結到 AdSense
-2. 將提供的程式碼插入 <head></head> 代碼之間
+2. 將提供的程式碼插入 <head></head> 程式碼之間
 3. 提交申請後，Google 會審核您的網站是否符合條件，通常需要幾天時間。
 
 ![google_adsense_code]({{ site.baseurl }}/assets/images/google_adsense_code.png)

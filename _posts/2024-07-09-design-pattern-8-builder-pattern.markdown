@@ -2,7 +2,7 @@
 layout: single
 title: "Design Pattern (8) - Builder Pattern (建造者模式)"
 date: 2024-07-09 23:00:00 +0800
-excerpt: "探索建造者模式，學習如何分步構建複雜對象，使代碼更加靈活和易於維護。通過實例展示如何使用建造者模式簡化對象創建過程，提升代碼的可讀性和可擴展性。"
+excerpt: "探索建造者模式，學習如何分步構建複雜對象，使程式碼更加靈活和易於維護。通過實例展示如何使用建造者模式簡化對象創建過程，提升程式碼的可讀性和可擴展性。"
 header:
   overlay_image: /assets/images/design_patterns.jpg
   teaser: /assets/images/design_patterns.jpg
@@ -54,7 +54,7 @@ categories: [Design Pattern]
 2. **Builder（建造者）**：Builder 是一個介面或抽象類，宣告了構建複雜對象的步驟。它通常包括用於構建產品各個部分的方法。通過定義一個介面，Builder 允許創建不同的具體建造者，這些建造者可以生產產品的不同變體 1。
 3. **ConcreteBuilder（具體建造者）**：ConcreteBuilder 類實現了 Builder 介面，提供了構建產品每個部分的具體實現。每個 ConcreteBuilder 都是為創建產品的特定變體而量身定制的。它跟踪正在構建的產品，並提供設置或構建每個部分的方法 1。
 4. **Director（指導者）**：Director 負責管理複雜對象的構建過程。它與 Builder 合作，但不知道對象的每個部分是如何構建的。它提供了一個高級介面，用於構建產品和管理創建複雜對象所需的步驟 1。
-5. **Client（客戶端）**：Client 是啟動複雜對象構建過程的代碼。它創建一個 Builder 對象並將其傳遞給 Director 以啟動構建過程。在構建完成後，Client 可能會從 Builder 那裡檢索最終產品 1。
+5. **Client（客戶端）**：Client 是啟動複雜對象構建過程的程式碼。它創建一個 Builder 對象並將其傳遞給 Director 以啟動構建過程。在構建完成後，Client 可能會從 Builder 那裡檢索最終產品 1。
 
 我們來將製作手搖飲套用 Builder Pattern
 
