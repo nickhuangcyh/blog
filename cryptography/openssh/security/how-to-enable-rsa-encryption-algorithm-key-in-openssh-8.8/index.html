@@ -1,0 +1,1009 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8 - Nick’s Blog</title>
+<meta name="description" content="如何在 OpenSSH 8.8 中重新啟用 RSA 加密支援，確保可以繼續使用 RSA 金鑰。">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8/">
+
+
+  <meta property="og:description" content="如何在 OpenSSH 8.8 中重新啟用 RSA 加密支援，確保可以繼續使用 RSA 金鑰。">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/rsa-algorithm.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2024-08-02T11:50:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/rsa-algorithm.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8
+
+        
+      </h1>
+      
+        <p class="page__lead">如何在 OpenSSH 8.8 中重新啟用 RSA 加密支援，確保可以繼續使用 RSA 金鑰。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-08-02T11:50:00+00:00">August 2, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8">
+    <meta itemprop="description" content="如何在 OpenSSH 8.8 中重新啟用 RSA 加密支援，確保可以繼續使用 RSA 金鑰。">
+    <meta itemprop="datePublished" content="2024-08-02T11:50:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#前言">前言</a></li><li><a href="#準備作業">準備作業</a><ul><li><a href="#更新-apt">更新 apt</a></li><li><a href="#安裝-git">安裝 Git</a></li><li><a href="#確定-openssh-版本">確定 openSSH 版本</a></li><li><a href="#建立-ssh-rsa-key">建立 SSH RSA Key</a></li><li><a href="#將-public-key-上傳到-git-server">將 Public Key 上傳到 Git server</a></li></ul></li><li><a href="#測試-ssh-連線">測試 SSH 連線</a></li><li><a href="#解決方法">解決方法</a></li><li><a href="#參考">參考</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="前言">前言</h2>
+
+<p>最近在修改公司的 jenkins CI/CD 架構，Dockerize 我們的 Android Building Environment。
+在我啟動 Debian 12 container 來建構我的環境時，配置 RSA Key 到公司的 GitLab server，卻無法抓取 source code，故有了這篇文章希望未來有遇到可以拿出來快速解決問題，也希望幫助到遇到一樣問題的人。</p>
+
+<p>經過分析後才發現，原來 Debian 12 預設使用 OpenSSH 8.8，而 OpenSSH 8.8 預設將 RSA 加密算法關閉，因為安全是以及過時的問題
+但公司 GitLab server 較舊，目前只支援較舊的 ssh Key 演算法 RSA，因此需要找方法使其支援。</p>
+
+<h2 id="準備作業">準備作業</h2>
+
+<blockquote>
+  <p>如果你已經有環境，可以跳過此段落</p>
+</blockquote>
+
+<p>首先我先用 Docker 啟一台 Debian 12 的 container 如下</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> docker pull debian:bookworm
+bookworm: Pulling from library/debian
+9c5ed83eaf5c: Pull <span class="nb">complete
+</span>Digest: sha256:45f2e735295654f13e3be10da2a6892c708f71a71be845818f6058982761a6d3
+Status: Downloaded newer image <span class="k">for </span>debian:bookworm
+docker.io/library/debian:bookworm
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> docker run <span class="nt">-it</span> <span class="nt">--name</span> debian-bookworm-for-test-openssh debian:bookworm
+root@b5336f2395fd:/#
+</code></pre></div></div>
+
+<h3 id="更新-apt">更新 apt</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> apt update
+Get:1 http://deb.debian.org/debian bookworm InRelease <span class="o">[</span>151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease <span class="o">[</span>55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease <span class="o">[</span>48.0 kB]
+Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages <span class="o">[</span>8688 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages <span class="o">[</span>13.7 kB]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages <span class="o">[</span>166 kB]
+Fetched 9122 kB <span class="k">in </span>2s <span class="o">(</span>4556 kB/s<span class="o">)</span>
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+All packages are up to date.
+</code></pre></div></div>
+
+<h3 id="安裝-git">安裝 Git</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> apt <span class="nb">install </span>git
+</code></pre></div></div>
+
+<h3 id="確定-openssh-版本">確定 openSSH 版本</h3>
+
+<p>可以查看 openSSH 版本是否 &gt; 8.8</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> ssh <span class="nt">-V</span>
+OpenSSH_9.2p1 Debian-2+deb12u3, OpenSSL 3.0.13 30 Jan 2024
+</code></pre></div></div>
+
+<h3 id="建立-ssh-rsa-key">建立 SSH RSA Key</h3>
+
+<p>建立 Key</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-keygen <span class="nt">-t</span> rsa <span class="nt">-b</span> 4096 <span class="nt">-C</span> <span class="s2">"your_email@example.com"</span>
+</code></pre></div></div>
+
+<p>將 ssh key 加入 ssh-agent</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="nb">eval</span> <span class="s2">"</span><span class="si">$(</span>ssh-agent <span class="nt">-s</span><span class="si">)</span><span class="s2">"</span>
+Agent pid 3160
+<span class="o">&gt;</span> ssh-add ~/.ssh/id_rsa
+Identity added: /root/.ssh/id_rsa <span class="o">(</span>your_email@example.com<span class="o">)</span>
+</code></pre></div></div>
+
+<h3 id="將-public-key-上傳到-git-server">將 Public Key 上傳到 Git server</h3>
+
+<p>先 <code class="language-plaintext highlighter-rouge">cat</code> 出 public key</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="nb">cat</span> ~/.ssh/id_rsa.pub
+</code></pre></div></div>
+
+<p>上傳到你的 Git Server</p>
+
+<h2 id="測試-ssh-連線">測試 SSH 連線</h2>
+
+<p><code class="language-plaintext highlighter-rouge">x.x.x.x</code> 請換成你的 git server IP or Domain</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-T</span> <span class="nt">-v</span> git@x.x.x.x
+OpenSSH_9.2p1 Debian-2+deb12u3, OpenSSL 3.0.13 30 Jan 2024
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 19: include /etc/ssh/ssh_config.d/<span class="k">*</span>.conf matched no files
+debug1: /etc/ssh/ssh_config line 21: Applying options <span class="k">for</span> <span class="k">*</span>
+debug1: Connecting to x.x.x.x <span class="o">[</span>x.x.x.x] port 22.
+debug1: Connection established.
+debug1: identity file /root/.ssh/id_rsa <span class="nb">type </span>0
+debug1: identity file /root/.ssh/id_rsa-cert <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_ecdsa <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_ecdsa-cert <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_ecdsa_sk <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_ecdsa_sk-cert <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_ed25519 <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_ed25519-cert <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_ed25519_sk <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_ed25519_sk-cert <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_xmss <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_xmss-cert <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_dsa <span class="nb">type</span> <span class="nt">-1</span>
+debug1: identity file /root/.ssh/id_dsa-cert <span class="nb">type</span> <span class="nt">-1</span>
+debug1: Local version string SSH-2.0-OpenSSH_9.2p1 Debian-2+deb12u3
+debug1: Remote protocol version 2.0, remote software version OpenSSH_6.0p1 Debian-4+deb7u4
+debug1: compat_banner: match: OpenSSH_6.0p1 Debian-4+deb7u4 pat OpenSSH<span class="k">*</span> compat 0x04000000
+debug1: Authenticating to x.x.x.x:22 as <span class="s1">'git'</span>
+debug1: load_hostkeys: fopen /root/.ssh/known_hosts2: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug1: SSH2_MSG_KEXINIT sent
+debug1: SSH2_MSG_KEXINIT received
+debug1: kex: algorithm: ecdh-sha2-nistp256
+debug1: kex: host key algorithm: ecdsa-sha2-nistp256
+debug1: kex: server-&gt;client cipher: aes128-ctr MAC: umac-64@openssh.com compression: none
+debug1: kex: client-&gt;server cipher: aes128-ctr MAC: umac-64@openssh.com compression: none
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+debug1: SSH2_MSG_KEX_ECDH_REPLY received
+debug1: Server host key: ecdsa-sha2-nistp256 SHA256:PTKJPZC0PPuujGp7jIZvu/PyNzUg4aj4pNF0Nlgi290
+debug1: load_hostkeys: fopen /root/.ssh/known_hosts2: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug1: Host <span class="s1">'x.x.x.x'</span> is known and matches the ECDSA host key.
+debug1: Found key <span class="k">in</span> /root/.ssh/known_hosts:1
+debug1: rekey out after 4294967296 blocks
+debug1: SSH2_MSG_NEWKEYS sent
+debug1: expecting SSH2_MSG_NEWKEYS
+debug1: SSH2_MSG_NEWKEYS received
+debug1: rekey <span class="k">in </span>after 4294967296 blocks
+debug1: get_agent_identities: bound agent to hostkey
+debug1: get_agent_identities: ssh_fetch_identitylist: agent contains no identities
+debug1: Will attempt key: /root/.ssh/id_rsa RSA SHA256:IPjmgGepFVyKiqZF74LyLzcywh2Qx4AcWerAw2tXqfU
+debug1: Will attempt key: /root/.ssh/id_ecdsa
+debug1: Will attempt key: /root/.ssh/id_ecdsa_sk
+debug1: Will attempt key: /root/.ssh/id_ed25519
+debug1: Will attempt key: /root/.ssh/id_ed25519_sk
+debug1: Will attempt key: /root/.ssh/id_xmss
+debug1: Will attempt key: /root/.ssh/id_dsa
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug1: Authentications that can <span class="k">continue</span>: publickey,password
+debug1: Next authentication method: publickey
+debug1: Offering public key: /root/.ssh/id_rsa RSA SHA256:IPjmgGepFVyKiqZF74LyLzcywh2Qx4AcWerAw2tXqfU
+debug1: send_pubkey_test: no mutual signature algorithm
+debug1: Trying private key: /root/.ssh/id_ecdsa
+debug1: Trying private key: /root/.ssh/id_ecdsa_sk
+debug1: Trying private key: /root/.ssh/id_ed25519
+debug1: Trying private key: /root/.ssh/id_ed25519_sk
+debug1: Trying private key: /root/.ssh/id_xmss
+debug1: Trying private key: /root/.ssh/id_dsa
+debug1: Next authentication method: password
+git@x.x.x.x<span class="s1">'s password:
+</span></code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">debug1: send_pubkey_test: no mutual signature algorithm</code>
+發現原因是 ssh client 和 server 之間沒有共同的簽名算法引起的，導致公鑰驗證失敗</p>
+</blockquote>
+
+<h2 id="解決方法">解決方法</h2>
+
+<p>打開 <a href="https://www.openssh.com/txt/release-8.8">openSSH 8.8 release document</a> 會發現提到這一段</p>
+
+<blockquote>
+  <p>Incompatibility is more likely when connecting to older SSH
+implementations that have not been upgraded or have not closely tracked
+improvements in the SSH protocol. For these cases, it may be necessary
+to selectively re-enable RSA/SHA1 to allow connection and/or user
+authentication via the HostkeyAlgorithms and PubkeyAcceptedAlgorithms
+options. For example, the following stanza in ~/.ssh/config will enable
+RSA/SHA1 for host and user authentication for a single destination host:</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host old-host
+  HostkeyAlgorithms +ssh-rsa
+  PubkeyAcceptedAlgorithms +ssh-rsa
+</code></pre></div></div>
+
+<p>開啟 ~/.ssh/config 檔案並加上如下 config</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host x.x.x.x
+  HostkeyAlgorithms +ssh-rsa
+  PubkeyAcceptedAlgorithms +ssh-rsa
+</code></pre></div></div>
+
+<p>再跑一次 <code class="language-plaintext highlighter-rouge">ssh -T -v git@x.x.x.x</code> 就會發現成功了 🎉</p>
+
+<h2 id="參考">參考</h2>
+
+<ul>
+  <li><a href="https://www.openssh.com/txt/release-8.8">openSSH 8.8 release document</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#encryption-support" class="page__taxonomy-item" rel="tag">Encryption Support</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#openssh-8-8" class="page__taxonomy-item" rel="tag">OpenSSH 8.8</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#rsa-encryption" class="page__taxonomy-item" rel="tag">RSA Encryption</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#cryptography" class="page__taxonomy-item" rel="tag">Cryptography</a><span class="sep">, </span>
+    
+      <a href="/blog/categories/#openssh" class="page__taxonomy-item" rel="tag">OpenSSH</a><span class="sep">, </span>
+    
+      <a href="/blog/categories/#security" class="page__taxonomy-item" rel="tag">Security</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2024-08-02T11:50:00+00:00">August 2, 2024</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=How+to+Enable+RSA+Encryption+Algorithm+Key+in+OpenSSH+8.8%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fcryptography%2Fopenssh%2Fsecurity%2Fhow-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fcryptography%2Fopenssh%2Fsecurity%2Fhow-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fcryptography%2Fopenssh%2Fsecurity%2Fhow-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/devops/getting-started-with-github-container-registry/" class="pagination--pager" title="Getting Started with GitHub Container Registry
+">Previous</a>
+    
+    
+      <a href="/blog/design%20pattern/design-pattern-10-singleton-pattern/" class="pagination--pager" title="Design Pattern (10) - Singleton Pattern (單例模式)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-11-adapter-pattern/" rel="permalink">Design Pattern (11) - Adapter Pattern (轉接器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-07T15:00:00+00:00">December 7, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">了解如何使用轉接器模式來解決介面不兼容問題，讓不同類別無縫合作，增強程式設計靈活性。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/google_adsense.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/google/google-adsense/" rel="permalink">Google AdSense
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-01T07:00:00+00:00">December 1, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">如何透過 Google AdSense 爲我們的網站加入廣告賺取收益
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/jenkins.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/devops/jenkins-2-how-to-setup-jenkins-server/" rel="permalink">Jenkins (2) - 如何架設 Jenkins 伺服器
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-08-15T09:00:00+00:00">August 15, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">學習如何使用 Docker 映像檔來架設 Jenkins 伺服器，提升開發團隊的自動化能力。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/jenkins.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/devops/jenkins-1-what-is-jenkins/" rel="permalink">Jenkins (1) - 什麼是 Jenkins
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-08-15T07:00:00+00:00">August 15, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">了解Jenkins這個強大的自動化伺服器，如何幫助開發團隊實現持續整合與持續交付，提升軟體開發效率。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>
