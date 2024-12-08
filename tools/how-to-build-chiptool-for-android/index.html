@@ -1,0 +1,969 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>How to build CHIPTool for Android - Nick’s Blog</title>
+<meta name="description" content="本篇文章我將介紹如何按照步驟 Build 出 CHIPTool apk">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="How to build CHIPTool for Android">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/tools/how-to-build-chiptool-for-android/">
+
+
+  <meta property="og:description" content="本篇文章我將介紹如何按照步驟 Build 出 CHIPTool apk">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/matter.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2024-07-16T11:50:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/tools/how-to-build-chiptool-for-android/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/matter.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          How to build CHIPTool for Android
+
+        
+      </h1>
+      
+        <p class="page__lead">本篇文章我將介紹如何按照步驟 Build 出 CHIPTool apk
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-07-16T11:50:00+00:00">July 16, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to build CHIPTool for Android">
+    <meta itemprop="description" content="本篇文章我將介紹如何按照步驟 Build 出 CHIPTool apk">
+    <meta itemprop="datePublished" content="2024-07-16T11:50:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#前言">前言</a></li><li><a href="#簡介">簡介</a></li><li><a href="#事前準備">事前準備</a></li><li><a href="#pull-docker-image">Pull Docker Image</a></li><li><a href="#run-container">Run container</a></li><li><a href="#將目錄標示為安全方便git操作">將目錄標示為安全，方便git操作</a></li><li><a href="#download-source-code--sync-submodule">Download source code &amp; sync submodule</a></li><li><a href="#同意-android-sdk-的-licenses">同意 Android sdk 的 licenses</a></li><li><a href="#檢查環境變數">檢查環境變數</a></li><li><a href="#preparing-for-build">Preparing for build</a></li><li><a href="#android-chiptool-from-scripts">Android CHIPTool from scripts</a></li><li><a href="#參考">參考</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="前言">前言</h2>
+
+<p>最近因工作之需，研究了一下如何 Build CHIPTool 的 apk，因為按照官方文件步驟實作會有錯誤，自己一步一步解決最後終於成功，因此想寫一篇文章紀錄，幫助我自己進行複習，也希望能對其他開發者提供幫助。🙂</p>
+
+<h2 id="簡介">簡介</h2>
+
+<p>Matter（前稱為Project CHIP，即Connected Home over IP）是一個統一的開源連接標準，旨在增強智能家居設備之間的互操作性和兼容性。這個標準由連接標準聯盟（CSA）開發，成員包括亞馬遜、蘋果、谷歌和Zigbee聯盟等主要行業參與者。</p>
+
+<p>Matter的目標是簡化製造商的開發過程，確保智能家居產品的安全性、可靠性和易用性。它利用互聯網協議（IP）來實現各種設備、移動應用和雲服務之間的通信，支持Thread和Wi-Fi網絡傳輸。</p>
+
+<p>Matter的目標是創建一個無縫且互操作的智能家居生態系統，使不同製造商的設備能夠順利協同工作。</p>
+
+<h2 id="事前準備">事前準備</h2>
+
+<p>因為在個人開發環境 Build 容易破壞環境，會需要修改 ANDROID_HOME &amp; ANDROID_NDK_HOME 等等…，因為 CHIP 有提供 build 環境的 image，所以這邊我選擇用 docker 使用 CHIP 的 image 啟 container 來 build．</p>
+
+<ul>
+  <li>Docker</li>
+</ul>
+
+<h2 id="pull-docker-image">Pull Docker Image</h2>
+
+<p>這個步驟會需要一點時間，可以去喝杯咖啡</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull ghcr.io/project-chip/chip-build-android:latest
+</code></pre></div></div>
+
+<h2 id="run-container">Run container</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-it</span> <span class="nt">-v</span> ~/workspace/connectedhomeip:/connectedhomeip ghcr.io/project-chip/chip-build-android:latest
+</code></pre></div></div>
+
+<p>上面簡單的兩個步驟，我們就將乾淨可 Build CHIPTool 的環境建構好了．</p>
+
+<h2 id="將目錄標示為安全方便git操作">將目錄標示為安全，方便git操作</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> <span class="nt">--add</span> safe.directory /connectedhomeip
+git config <span class="nt">--global</span> <span class="nt">--add</span> safe.directory /connectedhomeip/third_party/pigweed/repo
+</code></pre></div></div>
+
+<h2 id="download-source-code--sync-submodule">Download source code &amp; sync submodule</h2>
+
+<p>這個步驟會超級久，因為資料量非常大，可以先去做其他事或睡一覺😂</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/project-chip/connectedhomeip.git
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git submodule <span class="nb">sync</span> <span class="o">&amp;&amp;</span> git submodule update <span class="nt">--init</span>
+</code></pre></div></div>
+
+<h2 id="同意-android-sdk-的-licenses">同意 Android sdk 的 licenses</h2>
+
+<p>我們需要先同意 Android sdk licenses，不然等等 build 的時候會出現錯誤(如下)，因為我們沒有同意 licenses</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FAILURE: Build failed with an exception.
+2024-07-16 09:31:40 WARNING 
+2024-07-16 09:31:40 WARNING <span class="k">*</span> What went wrong:
+2024-07-16 09:31:40 WARNING Could not determine the dependencies of task <span class="s1">':app:compileDebugJavaWithJavac'</span><span class="nb">.</span>
+2024-07-16 09:31:40 WARNING <span class="o">&gt;</span> Failed to <span class="nb">install </span>the following Android SDK packages as some licences have not been accepted.
+2024-07-16 09:31:40 WARNING      build-tools<span class="p">;</span>30.0.2 Android SDK Build-Tools 30.0.2
+2024-07-16 09:31:40 WARNING      platforms<span class="p">;</span>android-31 Android SDK Platform 31
+2024-07-16 09:31:40 WARNING   To build this project, accept the SDK license agreements and <span class="nb">install </span>the missing components using the Android Studio SDK Manager.
+2024-07-16 09:31:40 WARNING   Alternatively, to transfer the license agreements from one workstation to another, see http://d.android.com/r/studio-ui/export-licenses.html
+2024-07-16 09:31:40 WARNING   
+2024-07-16 09:31:40 WARNING   Using Android SDK: /opt/android/sdk
+2024-07-16 09:31:40 WARNING 
+2024-07-16 09:31:40 WARNING <span class="k">*</span> Try:
+2024-07-16 09:31:40 WARNING Run with <span class="nt">--stacktrace</span> option to get the stack trace. Run with <span class="nt">--info</span> or <span class="nt">--debug</span> option to get more log output. Run with <span class="nt">--scan</span> to get full insights.
+2024-07-16 09:31:40 WARNING 
+2024-07-16 09:31:40 WARNING <span class="k">*</span> Get more <span class="nb">help </span>at https://help.gradle.org
+2024-07-16 09:31:40 WARNING 
+2024-07-16 09:31:40 WARNING BUILD FAILED <span class="k">in </span>1m 50s
+</code></pre></div></div>
+
+<p>為了方便我們先將PATH export，使其能在任何目錄下呼叫</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/android/sdk/tools/bin
+</code></pre></div></div>
+
+<p>同意所有 licenses</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sdkmanager <span class="nt">--licenses</span>
+</code></pre></div></div>
+
+<p>全部輸入 <code class="language-plaintext highlighter-rouge">y</code> or <code class="language-plaintext highlighter-rouge">yes</code></p>
+
+<h2 id="檢查環境變數">檢查環境變數</h2>
+
+<p>用 docker 使用 CHIP 提供的 image 環境好處之一就是我們不用再去下載指定的 sdk 及 ndk 版本，也不需要重新指向環境變數</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@f39e36c15675:/connectedhomeip# <span class="nb">echo</span> <span class="nv">$ANDROID_HOME</span>
+<span class="o">&gt;</span> /opt/android/sdk
+
+root@f39e36c15675:/connectedhomeip# <span class="nb">echo</span> <span class="nv">$ANDROID_NDK_HOME</span>
+<span class="o">&gt;</span> /opt/android/android-ndk-r23c
+</code></pre></div></div>
+
+<h2 id="preparing-for-build">Preparing for build</h2>
+
+<ol>
+  <li>切換到 Matter repositoy</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /connectedhomeip
+</code></pre></div></div>
+
+<ol>
+  <li>Run bootstrap (only required first time) 此步驟也需要一段時間</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source </span>scripts/bootstrap.sh
+</code></pre></div></div>
+
+<h2 id="android-chiptool-from-scripts">Android CHIPTool from scripts</h2>
+
+<ol>
+  <li>執行 script</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./scripts/build/build_examples.py <span class="nt">--target</span> android-arm64-chip-tool build
+</code></pre></div></div>
+
+<p>但這個步驟跑到最後會出現錯誤說找不到 build.ninja</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ninja: error: loading <span class="s1">'build.ninja'</span>: No such file or directory
+</code></pre></div></div>
+
+<p>我猜這邊是 CHIP 官方文件沒有寫完整，會無法進行下去，這邊我的解決方式是到 <code class="language-plaintext highlighter-rouge">/out/android-arm64-chip-tool</code> 目錄下去建立 <code class="language-plaintext highlighter-rouge">build.ninja</code> ，很簡單如下</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /connectedhomeip/out/android-arm64-chip-tool
+gn gen <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>這樣就會產生 <code class="language-plaintext highlighter-rouge">build.ninja</code> 檔案了</p>
+
+<p>接下來回到 <code class="language-plaintext highlighter-rouge">/connectedhomeip</code> 目錄下</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ../..
+</code></pre></div></div>
+
+<p>再執行一次就大功告成了! (Build 的過程會花比較久時間)</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./scripts/build/build_examples.py <span class="nt">--target</span> android-arm64-chip-tool build
+</code></pre></div></div>
+
+<p>Build 完後可以在下面路徑找到 apk</p>
+
+<p><code class="language-plaintext highlighter-rouge">out/android-$TARGET_CPU-chip-tool/outputs/apk/debug/app-debug.apk</code></p>
+
+<h2 id="參考">參考</h2>
+
+<ul>
+  <li><a href="https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/android_building.md">CHIP Android Building</a></li>
+  <li><a href="https://github.com/project-chip/connectedhomeip/issues/28317">CHIP Issue #28317</a></li>
+  <li><a href="https://github.com/project-chip/connectedhomeip/issues/21093">CHIP Issue #21093</a></li>
+  <li><a href="https://github.com/project-chip/connectedhomeip/issues/32795">CHIP Issue #32794</a></li>
+  <li><a href="https://github.com/project-chip/connectedhomeip/pkgs/container/chip-build-android/versions?filters%5Bversion_type%5D=tagged">project-chip/chip-build-android/All versions</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#android" class="page__taxonomy-item" rel="tag">Android</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#chip" class="page__taxonomy-item" rel="tag">CHIP</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#matter" class="page__taxonomy-item" rel="tag">Matter</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#tools" class="page__taxonomy-item" rel="tag">Tools</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2024-07-16T11:50:00+00:00">July 16, 2024</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=How+to+build+CHIPTool+for+Android%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Ftools%2Fhow-to-build-chiptool-for-android%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Ftools%2Fhow-to-build-chiptool-for-android%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Ftools%2Fhow-to-build-chiptool-for-android%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/design%20pattern/design-pattern-8-builder-pattern/" class="pagination--pager" title="Design Pattern (8) - Builder Pattern (建造者模式)
+">Previous</a>
+    
+    
+      <a href="/blog/design%20pattern/design-pattern-9-prototype-pattern/" class="pagination--pager" title="Design Pattern (9) - Prototype Pattern (原型模式)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-12-bridge-pattern/" rel="permalink">Design Pattern (12) - Bridge Pattern (橋接模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-08T12:00:00+00:00">December 8, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">深入了解橋接模式如何解耦抽象與實現，打造更靈活且易於擴展的系統設計，滿足複雜需求的同時降低維護成本。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-11-adapter-pattern/" rel="permalink">Design Pattern (11) - Adapter Pattern (轉接器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-07T15:00:00+00:00">December 7, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">了解如何使用轉接器模式來解決介面不兼容問題，讓不同類別無縫合作，增強程式設計靈活性。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/google_adsense.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/google/google-adsense/" rel="permalink">Google AdSense
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-01T07:00:00+00:00">December 1, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">如何透過 Google AdSense 爲我們的網站加入廣告賺取收益
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/jenkins.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/devops/jenkins-2-how-to-setup-jenkins-server/" rel="permalink">Jenkins (2) - 如何架設 Jenkins 伺服器
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-08-15T09:00:00+00:00">August 15, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">學習如何使用 Docker 映像檔來架設 Jenkins 伺服器，提升開發團隊的自動化能力。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/tools/how-to-build-chiptool-for-android/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/tools/how-to-build-chiptool-for-android"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

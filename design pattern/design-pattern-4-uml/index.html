@@ -1,0 +1,1038 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>Design Pattern (4) - UML (統一建模語言) - Nick’s Blog</title>
+<meta name="description" content="深入了解UML，學習如何用UML圖清晰展現設計模式，提升軟體設計能力。">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="Design Pattern (4) - UML (統一建模語言)">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-4-uml/">
+
+
+  <meta property="og:description" content="深入了解UML，學習如何用UML圖清晰展現設計模式，提升軟體設計能力。">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/design_patterns.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2024-07-05T15:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-4-uml/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/design_patterns.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Design Pattern (4) - UML (統一建模語言)
+
+        
+      </h1>
+      
+        <p class="page__lead">深入了解UML，學習如何用UML圖清晰展現設計模式，提升軟體設計能力。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-07-05T15:00:00+00:00">July 5, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Design Pattern (4) - UML (統一建模語言)">
+    <meta itemprop="description" content="深入了解UML，學習如何用UML圖清晰展現設計模式，提升軟體設計能力。">
+    <meta itemprop="datePublished" content="2024-07-05T15:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#uml-unified-modeling-language">UML (Unified Modeling Language)</a></li><li><a href="#class-類別">Class 類別</a></li><li><a href="#interface-介面">Interface 介面</a><ul><li><a href="#一般表示法">一般表示法</a></li><li><a href="#棒棒糖表示法">棒棒糖表示法</a></li></ul></li><li><a href="#attribute-屬性">Attribute 屬性</a><ul><li><a href="#visibility-可視範圍">Visibility 可視範圍</a></li></ul></li><li><a href="#multiplicity-關聯多重性">Multiplicity 關聯多重性</a></li><li><a href="#dependency-依賴">Dependency 依賴</a></li><li><a href="#association-關聯">Association 關聯</a></li><li><a href="#aggregation-聚合">Aggregation 聚合</a></li><li><a href="#composition-組合">Composition 組合</a></li><li><a href="#associationaggregation-及-composition-三者關係">Association、Aggregation 及 Composition 三者關係</a></li><li><a href="#realization--implementation-實現--實作">Realization / Implementation 實現 / 實作</a></li><li><a href="#generalization--inheritance-泛化--繼承">Generalization / Inheritance 泛化 / 繼承</a></li><li><a href="#總結">總結</a></li><li><a href="#參考">參考</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>您可於此 <a href="https://github.com/nickhuangcyh/design_pattern">design_pattern repo</a> 下載 Design Pattern 系列程式碼。</p>
+</blockquote>
+
+<h2 id="uml-unified-modeling-language">UML (Unified Modeling Language)</h2>
+
+<p>UML 是一種用視覺圖形化來規劃建構軟體的方法。</p>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml.png" alt="design_pattern_4_uml" /></p>
+
+<blockquote>
+  <p>不要急著寫程式，尤其是遇到較複雜的功能，先思考如何設計架構畫出 UML 圖，程式才會具有可讀性、維護性及擴展性。</p>
+</blockquote>
+
+<h2 id="class-類別">Class 類別</h2>
+
+<p>如圖分為三列依序是</p>
+
+<ol>
+  <li>Class 名稱</li>
+  <li>Attribute 屬性</li>
+  <li>Operations 方法</li>
+</ol>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_class.png" alt="design_pattern_4_uml_class" /></p>
+
+<h2 id="interface-介面">Interface 介面</h2>
+
+<p>Interface 有兩種表示法</p>
+
+<h3 id="一般表示法">一般表示法</h3>
+
+<p>一般型式與 Class 並無太大區別，只要在 Class Name 上方標註 <code class="language-plaintext highlighter-rouge">&lt;&lt;interface&gt;&gt;</code> 即可</p>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_interface_1.png" alt="design_pattern_4_uml_interface_1" /></p>
+
+<h3 id="棒棒糖表示法">棒棒糖表示法</h3>
+
+<p>用球狀來表示介面</p>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_interface_2.png" alt="design_pattern_4_uml_interface_2" /></p>
+
+<h2 id="attribute-屬性">Attribute 屬性</h2>
+
+<h3 id="visibility-可視範圍">Visibility 可視範圍</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sign</th>
+      <th>Modifiers</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">+</code></td>
+      <td>Public</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">#</code></td>
+      <td>Protected</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">~</code></td>
+      <td>Package</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-</code></td>
+      <td>Private</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_attribute.png" alt="design_pattern_4_uml_interface_2" /></p>
+
+<h2 id="multiplicity-關聯多重性">Multiplicity 關聯多重性</h2>
+
+<p>Object 之間的數量關係，預設為 1</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sign</th>
+      <th>amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">1</code></td>
+      <td>1 個</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">*</code></td>
+      <td>無限多個</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">n...m</code></td>
+      <td>至少 n 個，至多 m 個</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="dependency-依賴">Dependency 依賴</h2>
+
+<ul>
+  <li>表示不同對象之間相互依賴關係</li>
+  <li>通常用於方法的參數或回傳值</li>
+  <li>A uses a B</li>
+  <li>箭頭指向要依賴的對象</li>
+  <li>以 <code class="language-plaintext highlighter-rouge">虛線</code> + <code class="language-plaintext highlighter-rouge">箭頭</code> 表示</li>
+</ul>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_dependency_sign.png" alt="design_pattern_4_uml_dependency_sign" /></p>
+
+<p>動物使用(依賴)氧氣呼吸生存</p>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_dependency.png" alt="design_pattern_4_uml_dependency" /></p>
+
+<h2 id="association-關聯">Association 關聯</h2>
+
+<ul>
+  <li>表示一個對象擁有另一個對象</li>
+  <li>通常用於屬性、全域變數</li>
+  <li>A has a C</li>
+  <li>Aggregation、Composition 為子集</li>
+  <li>箭頭指向要關聯的對象</li>
+  <li>以 <code class="language-plaintext highlighter-rouge">實線</code> + <code class="language-plaintext highlighter-rouge">箭頭</code> 表示</li>
+</ul>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_association_sign.png" alt="design_pattern_4_uml_association_sign" /></p>
+
+<p>每個人有(關聯)一個地址</p>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_association.png" alt="design_pattern_4_uml_association" /></p>
+
+<h2 id="aggregation-聚合">Aggregation 聚合</h2>
+
+<ul>
+  <li>表示一個對象擁有另一個對象</li>
+  <li>A owns a B</li>
+  <li>Association 為超集、Composition 為子集</li>
+  <li>菱形指向要聚合的對象</li>
+  <li>弱關聯，關聯及被關聯對象可互相獨立存在</li>
+  <li>以 <code class="language-plaintext highlighter-rouge">實線</code> + <code class="language-plaintext highlighter-rouge">空心菱形</code> 表示</li>
+</ul>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_aggregation_sign.png" alt="design_pattern_4_uml_aggregation_sign" /></p>
+
+<p>人擁有(聚合)衣服，人和衣服可以單獨存在</p>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_aggregation.png" alt="design_pattern_4_uml_aggregation" /></p>
+
+<h2 id="composition-組合">Composition 組合</h2>
+
+<ul>
+  <li>表示一個對象擁有另一個對象</li>
+  <li>C is a part of A</li>
+  <li>Association、Aggregation 為超集</li>
+  <li>菱形指向要組合的對象</li>
+  <li>強關聯，被關聯對象不可獨立存在</li>
+  <li>以 <code class="language-plaintext highlighter-rouge">實線</code> + <code class="language-plaintext highlighter-rouge">實心菱形</code> 表示</li>
+</ul>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_composition_sign.png" alt="design_pattern_4_uml_composition_sign" /></p>
+
+<p>人類有器官，人死了器官就無作用不存在了</p>
+
+<blockquote>
+  <p>(這邊先不討論器官可移植到別人身上的情況 😂 )</p>
+</blockquote>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_composition.png" alt="design_pattern_4_uml_composition" /></p>
+
+<h2 id="associationaggregation-及-composition-三者關係">Association、Aggregation 及 Composition 三者關係</h2>
+
+<blockquote>
+  <p>Aggregation and Composition are subsets of association meaning they are specific cases of association. In both aggregation and composition object of one class “owns” object of another class. But there is a subtle difference:</p>
+
+  <ul>
+    <li>Aggregation implies a relationship where the child can exist independently of the parent. Example: Class (parent) and Student (child). Delete the Class and the Students still exist.</li>
+    <li>Composition implies a relationship where the child cannot exist independent of the parent. Example: House (parent) and Room (child). Rooms don’t exist separate to a House.</li>
+  </ul>
+</blockquote>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_compare_association_aggregation_composition.png" alt="design_pattern_4_uml_compare_association_aggregation_composition" /></p>
+
+<h2 id="realization--implementation-實現--實作">Realization / Implementation 實現 / 實作</h2>
+
+<ul>
+  <li>表示一個對象實作另一個對象</li>
+  <li>B implements A</li>
+  <li>箭頭指向 interface</li>
+  <li>以 <code class="language-plaintext highlighter-rouge">虛線</code> + <code class="language-plaintext highlighter-rouge">空心箭頭</code> 表示</li>
+</ul>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_realization_implementation_sign.png" alt="design_pattern_4_uml_realization_implementation_sign" /></p>
+
+<p>心、肝、胃、腸要實作器官</p>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_realization_implementation.png" alt="design_pattern_4_uml_realization_implementation" /></p>
+
+<h2 id="generalization--inheritance-泛化--繼承">Generalization / Inheritance 泛化 / 繼承</h2>
+
+<ul>
+  <li>表示一個對象繼承另一個對象</li>
+  <li>C is-a A</li>
+  <li>箭頭指向 父類別</li>
+  <li>以 <code class="language-plaintext highlighter-rouge">實線</code> + <code class="language-plaintext highlighter-rouge">空心箭頭</code> 表示</li>
+</ul>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_generalization_inheritance_sign.png" alt="design_pattern_4_uml_generalization_inheritance_sign" /></p>
+
+<p>人是一種動物</p>
+
+<p><img src="/blog/assets/images/design_pattern_4_uml_generalization_inheritance.png" alt="design_pattern_4_uml_generalization_inheritance" /></p>
+
+<h2 id="總結">總結</h2>
+
+<p>之後的 Design Pattern 系列文章會大量使用到 UML 圖，搞懂這些圖及箭頭的含義在軟體設計上是非常有幫助的，下一篇終於要進入第一個 Design Pattern。</p>
+
+<h2 id="參考">參考</h2>
+
+<ul>
+  <li><a href="https://spicyboyd.blogspot.com/2018/07/umlclass-diagram-introduction.html">【UML】Class Diagram 類別圖 (上)：Introduction 簡介</a></li>
+  <li><a href="https://spicyboyd.blogspot.com/2018/07/umlclass-diagram-relationships.html">【UML】Class Diagram 類別圖 (下)：Relationships 關係</a></li>
+  <li><a href="https://www.guru99.com/uml-relationships-with-example.html#5">UML Relationships Types: Association, Dependency, Generalization</a></li>
+  <li><a href="https://stackoverflow.com/questions/885937/what-is-the-difference-between-association-aggregation-and-composition">What is the difference between association, aggregation and composition?</a></li>
+  <li><a href="https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/">UML Association vs Aggregation vs Composition</a></li>
+</ul>
+
+<p class="notice--success"><strong>Note:</strong> 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長 🙂</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#uml" class="page__taxonomy-item" rel="tag">UML</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#design-pattern" class="page__taxonomy-item" rel="tag">Design Pattern</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2024-07-05T15:00:00+00:00">July 5, 2024</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Design+Pattern+%284%29+-+UML+%28%E7%B5%B1%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AA%9E%E8%A8%80%29%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-4-uml%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-4-uml%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-4-uml%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/pay/technology/google-wallet-smart-tap-exploring/" class="pagination--pager" title="深入解析 Google Wallet Smart Tap：未來的支付方式
+">Previous</a>
+    
+    
+      <a href="/blog/design%20pattern/design-pattern-5-simple-factory-pattern/" class="pagination--pager" title="Design Pattern (5) - Simple Factory Pattern (簡單工廠模式)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-12-bridge-pattern/" rel="permalink">Design Pattern (12) - Bridge Pattern (橋接模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-08T12:00:00+00:00">December 8, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">深入了解橋接模式如何解耦抽象與實現，打造更靈活且易於擴展的系統設計，滿足複雜需求的同時降低維護成本。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-11-adapter-pattern/" rel="permalink">Design Pattern (11) - Adapter Pattern (轉接器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-07T15:00:00+00:00">December 7, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">了解如何使用轉接器模式來解決介面不兼容問題，讓不同類別無縫合作，增強程式設計靈活性。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/google_adsense.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/google/google-adsense/" rel="permalink">Google AdSense
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-01T07:00:00+00:00">December 1, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">如何透過 Google AdSense 爲我們的網站加入廣告賺取收益
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/jenkins.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/devops/jenkins-2-how-to-setup-jenkins-server/" rel="permalink">Jenkins (2) - 如何架設 Jenkins 伺服器
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-08-15T09:00:00+00:00">August 15, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">學習如何使用 Docker 映像檔來架設 Jenkins 伺服器，提升開發團隊的自動化能力。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-4-uml/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/design%20pattern/design-pattern-4-uml"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>
