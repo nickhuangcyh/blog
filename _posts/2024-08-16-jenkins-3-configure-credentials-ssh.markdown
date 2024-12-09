@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Jenkins (3) - 如何配置 Credentials 以透過 SSH 從 git 上拉取程式碼"
-date: 2024-08-16 17:00:00 +0800
+date: 2024-12-09 20:00:00 +0800
 excerpt: "學習如何在 Jenkins 中配置憑證（Credentials），以便透過 SSH 安全地拉取程式碼。"
 header:
   overlay_image: /assets/images/jenkins.jpg
@@ -39,12 +39,14 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 3. 創建新的 Domain：點擊「Domains」旁邊的「Add domain」，並填寫 Domain 名稱（例如 GitHub 或 GitLab），然後點擊「OK」。
 4. 新增憑證：選擇剛剛創建的 Domain，然後點擊「Add Credentials」。
 5. 填寫憑證資訊：
-* Kind：選擇「SSH Username with private key」。
-* Scope：選擇「Global」。
-* ID：為這個憑證設定一個唯一的 ID（可選）。
-* Description：為這個憑證添加描述，方便日後管理。
-* Username：填寫你的 SSH 使用者名稱（通常是 git）。
-* Private Key：選擇「Enter directly」，並將生成的私鑰內容貼上。
+
+- Kind：選擇「SSH Username with private key」。
+- Scope：選擇「Global」。
+- ID：為這個憑證設定一個唯一的 ID（可選）。
+- Description：為這個憑證添加描述，方便日後管理。
+- Username：填寫你的 SSH 使用者名稱（通常是 git）。
+- Private Key：選擇「Enter directly」，並將生成的私鑰內容貼上。
+
 6. 保存憑證：點擊「OK」保存憑證。
 
 ### 步驟四：配置 Jenkins Job 使用憑證
