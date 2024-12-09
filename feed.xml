@@ -1,0 +1,1052 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://nickhuangcyh.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nickhuangcyh.github.io/blog/" rel="alternate" type="text/html" /><updated>2024-12-09T13:55:06+00:00</updated><id>https://nickhuangcyh.github.io/blog/feed.xml</id><title type="html">Nick’s Blog</title><subtitle>An amazing website.</subtitle><author><name>Nick Huang</name></author><entry><title type="html">Jenkins (3) - 如何配置 Credentials 以透過 SSH 從 git 上拉取程式碼</title><link href="https://nickhuangcyh.github.io/blog/devops/jenkins-3-configure-credentials-ssh/" rel="alternate" type="text/html" title="Jenkins (3) - 如何配置 Credentials 以透過 SSH 從 git 上拉取程式碼" /><published>2024-12-09T12:00:00+00:00</published><updated>2024-12-09T12:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/devops/jenkins-3-configure-credentials-ssh</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/devops/jenkins-3-configure-credentials-ssh/">&lt;h2 id=&quot;如何配置-credentials-以透過-ssh-從-git-上拉取程式碼&quot;&gt;如何配置 Credentials 以透過 SSH 從 git 上拉取程式碼&lt;/h2&gt;
+
+&lt;p&gt;在這篇文章中，我們將介紹如何在 Jenkins 中配置憑證（Credentials），以便 Jenkins 能夠透過 SSH 安全地從版本控制系統（如 GitHub 或 GitLab）拉取程式碼。&lt;/p&gt;
+
+&lt;h3 id=&quot;步驟一生成-ssh-金鑰&quot;&gt;步驟一：生成 SSH 金鑰&lt;/h3&gt;
+
+&lt;p&gt;首先，我們需要生成一對 SSH 金鑰。打開終端機並執行以下指令：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh-keygen &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; rsa &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; 4096 &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;your_email@example.com&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;按照提示完成金鑰生成過程，並記下生成的公鑰和私鑰的路徑。&lt;/p&gt;
+
+&lt;h3 id=&quot;步驟二將公鑰添加到版本控制系統&quot;&gt;步驟二：將公鑰添加到版本控制系統&lt;/h3&gt;
+
+&lt;p&gt;將生成的公鑰內容複製並添加到你的版本控制系統中。例如，在 GitHub 中，你可以按照以下步驟操作：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;登入 GitHub，進入「Settings」。&lt;/li&gt;
+  &lt;li&gt;在左側菜單中選擇「SSH and GPG keys」。&lt;/li&gt;
+  &lt;li&gt;點擊「New SSH key」，並將公鑰內容貼上，然後點擊「Add SSH key」。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;步驟三在-jenkins-中添加憑證&quot;&gt;步驟三：在 Jenkins 中添加憑證&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;打開 Jenkins 管理介面：在瀏覽器中打開 http://localhost:8080，並使用管理員帳戶登入。&lt;/li&gt;
+  &lt;li&gt;進入憑證管理：點擊左側菜單中的「Credentials」，然後選擇「System」。&lt;/li&gt;
+  &lt;li&gt;創建新的 Domain：點擊「Domains」旁邊的「Add domain」，並填寫 Domain 名稱（例如 GitHub 或 GitLab），然後點擊「OK」。&lt;/li&gt;
+  &lt;li&gt;新增憑證：選擇剛剛創建的 Domain，然後點擊「Add Credentials」。&lt;/li&gt;
+  &lt;li&gt;填寫憑證資訊：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Kind：選擇「SSH Username with private key」。&lt;/li&gt;
+  &lt;li&gt;Scope：選擇「Global」。&lt;/li&gt;
+  &lt;li&gt;ID：為這個憑證設定一個唯一的 ID（可選）。&lt;/li&gt;
+  &lt;li&gt;Description：為這個憑證添加描述，方便日後管理。&lt;/li&gt;
+  &lt;li&gt;Username：填寫你的 SSH 使用者名稱（通常是 git）。&lt;/li&gt;
+  &lt;li&gt;Private Key：選擇「Enter directly」，並將生成的私鑰內容貼上。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;保存憑證：點擊「OK」保存憑證。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;步驟四配置-jenkins-job-使用憑證&quot;&gt;步驟四：配置 Jenkins Job 使用憑證&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;創建或編輯 Jenkins Job：進入 Jenkins 主頁，創建一個新的 Job 或編輯現有的 Job。&lt;/li&gt;
+  &lt;li&gt;配置版本控制系統：在「Source Code Management」部分，選擇「Git」。&lt;/li&gt;
+  &lt;li&gt;填寫 Repository URL：填寫你的 Git Repository 的 SSH URL，例如 git@github.com:username/repository.git。&lt;/li&gt;
+  &lt;li&gt;選擇憑證：在「Credentials」下拉選單中，選擇剛剛添加的 SSH 憑證。&lt;/li&gt;
+  &lt;li&gt;保存配置：點擊「Save」保存 Job 配置。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
+
+&lt;p&gt;通過以上步驟，我們成功地在 Jenkins 中配置了憑證，使其能夠透過 SSH 安全地拉取程式碼。這樣可以確保你的程式碼在傳輸過程中的安全性，並且簡化了 Jenkins 的自動化流程。如果你還沒有使用 Jenkins，現在就是開始的好時機！&lt;/p&gt;
+
+&lt;p&gt;想了解更多關於 Jenkins 的資訊，請參考 &lt;a href=&quot;https://jenkins.io/doc/&quot;&gt;Jenkins 官方文件&lt;/a&gt;。&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="DevOps" /><category term="Jenkins" /><category term="CI/CD" /><category term="DevOps" /><category term="Credentials" /><category term="SSH" /><summary type="html">學習如何在 Jenkins 中配置憑證（Credentials），以便透過 SSH 安全地拉取程式碼。</summary></entry><entry><title type="html">Design Pattern 13 Composite Pattern</title><link href="https://nickhuangcyh.github.io/blog/design-pattern-13-composite-pattern/" rel="alternate" type="text/html" title="Design Pattern 13 Composite Pattern" /><published>2024-12-09T00:00:00+00:00</published><updated>2024-12-09T00:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design-pattern-13-composite-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design-pattern-13-composite-pattern/"></content><author><name>Nick Huang</name></author><summary type="html"></summary></entry><entry><title type="html">Design Pattern (12) - Bridge Pattern (橋接模式)</title><link href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-12-bridge-pattern/" rel="alternate" type="text/html" title="Design Pattern (12) - Bridge Pattern (橋接模式)" /><published>2024-12-08T12:00:00+00:00</published><updated>2024-12-08T12:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-12-bridge-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-12-bridge-pattern/">&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;design_pattern repo&lt;/a&gt; 下載 Design Pattern 系列程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;需求&quot;&gt;需求&lt;/h2&gt;
+
+&lt;p&gt;我們收到了一個需求：公司現有的 保全系統，在偵測到不同類型的事件（如火警、竊盜警鈴）時，需要以多種通知方式向用戶發送警報訊息。支援的通知方式包括：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;APNS (Apple iOS Push)&lt;/li&gt;
+  &lt;li&gt;FCM (Google Android Push)&lt;/li&gt;
+  &lt;li&gt;Email&lt;/li&gt;
+  &lt;li&gt;SMS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;警報事件則可能包括：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Fire (火警)&lt;/li&gt;
+  &lt;li&gt;Burglar (竊盜警鈴)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;物件導向分析-ooa&quot;&gt;物件導向分析 (OOA)&lt;/h2&gt;
+
+&lt;p&gt;理解需求後，讓我們來快速實作物件導向分析吧!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_bridge_pattern_uml_1.png&quot; alt=&quot;bridge_pattern_uml_1&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;察覺-forces&quot;&gt;察覺 Forces&lt;/h2&gt;
+
+&lt;p&gt;在未使用設計模式的情況下，上述程式碼可以運行，但存在以下問題：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;高耦合性 (Tight Coupling)：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;警報類型 和 通知方式 被緊密地耦合在一起，這使得每次新增警報類型或通知方式時，都必須在多個類別中進行修改。&lt;/li&gt;
+  &lt;li&gt;系統的維護成本較高，每個新需求都可能導致代碼的重構。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;難以擴展 (Difficulty in Extending)：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;每增加一種新的警報類型或通知方式，都需要在每個組合中創建新的類別，導致代碼增長迅速。&lt;/li&gt;
+  &lt;li&gt;如果需求變更（例如新增一種新的通知方式或警報類型），則需要修改大量的程式碼。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;重複代碼 (Code Duplication)：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;由於每一種通知方式與警報事件的組合都需要實現一個具體的類別，導致了大量重複代碼，增加了程式碼維護的困難。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;靈活性差 (Lack of Flexibility)：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;當某一層次（例如警報事件類型或通知方式）需要進行修改時，必須修改多個相關類別，這樣的設計使得系統的變動成本高。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;套用-bridge-pattern--solution--得到新的-context--resulting-context-&quot;&gt;套用 Bridge Pattern ( Solution ) 得到新的 Context ( Resulting Context )&lt;/h2&gt;
+
+&lt;p&gt;做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Bridge Pattern 解決這個問題&lt;/p&gt;
+
+&lt;p&gt;先來看一下 Bridge Pattern 的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_bridge_pattern_uml_2.png&quot; alt=&quot;bridge_pattern_uml_2&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Abstraction (抽象層)：定義通知功能，負責使用具體的消息發送方式來發送通知。&lt;/li&gt;
+  &lt;li&gt;RefinedAbstraction (具體化的抽象層)：擴展抽象層，實現不同類型的警報通知，例如火警通知或竊盜警鈴通知。&lt;/li&gt;
+  &lt;li&gt;Implementor (實作層)：定義消息發送的接口，負責處理具體的消息發送邏輯。&lt;/li&gt;
+  &lt;li&gt;ConcreteImplementor (具體的實作層)：提供具體的消息發送實作，例如 APNS、FCM、Email、SMS。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;將 Bridge Pattern 套用到我們的應用吧&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_bridge_pattern_uml_3.png&quot; alt=&quot;bridge_pattern_uml_3&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向程式設計-oop&quot;&gt;物件導向程式設計 (OOP)&lt;/h2&gt;
+
+&lt;p&gt;[Abstraction: AlarmNotification]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt;
+
+    &lt;span class=&quot;nf&quot;&gt;init&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;notifyUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;details&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[RefinedAbstraction: FireAlarmNotification and BurglarAlarmNotification]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FireAlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;notifyUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;details&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;sendMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Fire Alarm: $details&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BurglarAlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;notifyUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;details&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;sendMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Theft Alarm: $details&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[Implementor: MessageSender]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sendMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[ConcreteImplementor: APNSSender, FCMSender, EmailSender, and SMSSender]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;APNSSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sendMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sending APNS Notification: $message&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FCMSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sendMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sending FCM Notification: $message&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EmailSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sendMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sending Email: $message&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SMSSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessageSender&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sendMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sending SMS: $message&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[Client]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Sending Fire Alarm via APNS&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;fireAPNS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AlarmNotification&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FireAlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;APNSSender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fireAPNS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;notifyUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Smoke detected in Zone 1.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// Sending Burglar Alarm via FCM&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;burglarFCM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AlarmNotification&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BurglarAlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;FCMSender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;burglarFCM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;notifyUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Unauthorized access detected at Main Door.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// Sending Fire Alarm via Email&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;fireEmail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AlarmNotification&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FireAlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;EmailSender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fireEmail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;notifyUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Temperature exceeds threshold in Zone 3.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// Sending Burglar Alarm via SMS&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;burglarSMS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AlarmNotification&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BurglarAlarmNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SMSSender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;burglarSMS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;notifyUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Motion detected in Warehouse.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+
+&lt;p&gt;通過套用 &lt;strong&gt;Bridge Pattern&lt;/strong&gt;，我們成功將通知的抽象層與實際的消息發送方式進行了分離，這樣一來，每種警報通知類型和發送方式可以獨立演進，並且能夠輕鬆地新增新型的通知方式或警報類型。這不僅提高了程式的靈活性，還減少了維護的難度，當需求變更時，也能夠更輕鬆地應對擴展需求。&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="Design Pattern" /><category term="Bridge Pattern" /><summary type="html">深入了解橋接模式如何解耦抽象與實現，打造更靈活且易於擴展的系統設計，滿足複雜需求的同時降低維護成本。</summary></entry><entry><title type="html">Design Pattern (11) - Adapter Pattern (轉接器模式)</title><link href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-11-adapter-pattern/" rel="alternate" type="text/html" title="Design Pattern (11) - Adapter Pattern (轉接器模式)" /><published>2024-12-07T15:00:00+00:00</published><updated>2024-12-07T15:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-11-adapter-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-11-adapter-pattern/">&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;design_pattern repo&lt;/a&gt; 下載 Design Pattern 系列程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;需求&quot;&gt;需求&lt;/h2&gt;
+
+&lt;p&gt;我們收到了一個需求：公司現有的 &lt;strong&gt;股票數據系統&lt;/strong&gt; 使用 &lt;strong&gt;XML 格式&lt;/strong&gt; 存儲與傳遞數據，而新引入的 &lt;strong&gt;第三方股票分析系統&lt;/strong&gt; 僅支援 &lt;strong&gt;JSON 格式&lt;/strong&gt;。為了整合兩個系統，我們需要設計一個解決方案，使得現有數據可以被第三方分析系統正確接收和處理。&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向分析-ooa&quot;&gt;物件導向分析 (OOA)&lt;/h2&gt;
+
+&lt;p&gt;理解需求後，讓我們來快速實作物件導向分析吧!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_adapter_pattern_uml_1.png&quot; alt=&quot;adapter_pattern_uml_1&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;察覺-forces&quot;&gt;察覺 Forces&lt;/h2&gt;
+
+&lt;p&gt;在未使用設計模式的情況下，上述程式碼可以運行，但存在以下問題：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;責任分散&lt;/strong&gt;：&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Client&lt;/code&gt; 負責數據轉換，這違反了單一職責原則（SRP）。&lt;/li&gt;
+      &lt;li&gt;一旦轉換邏輯變複雜，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Client&lt;/code&gt; 的程式碼將變得難以維護。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;重複性高&lt;/strong&gt;：&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;如果其他系統需要同樣的轉換邏輯，程式碼將無法重複使用，導致重複性問題。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;耦合性高&lt;/strong&gt;：&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Client&lt;/code&gt; 必須了解 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;XmlStockData&lt;/code&gt; 與 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JsonAnalyzer&lt;/code&gt; 的具體實現細節，導致高耦合性。&lt;/li&gt;
+      &lt;li&gt;未來若資料來源或目標格式改變，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Client&lt;/code&gt; 必須大幅修改。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;無法適應變化&lt;/strong&gt;：&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;若引入更多資料格式（如 CSV 或 YAML），每種格式都需要在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Client&lt;/code&gt; 中實現轉換邏輯，難以擴展。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;套用-adapter-pattern--solution--得到新的-context--resulting-context-&quot;&gt;套用 Adapter Pattern ( Solution ) 得到新的 Context ( Resulting Context )&lt;/h2&gt;
+
+&lt;p&gt;做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Adapter Pattern 解決這個問題&lt;/p&gt;
+
+&lt;p&gt;先來看一下 Adapter Pattern 的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_adapter_pattern_uml_2.png&quot; alt=&quot;adapter_pattern_uml_2&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Target (目標介面)：
+定義客戶端需要的介面。
+本例中是 JsonAnalyzer 的方法 analyzeJsonData，目標是處理 JSON 格式的股票數據。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Adaptee (被轉接者)：
+定義現有的不相容介面。本例中是 XmlStockData，它提供 XML 格式的股票數據。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Adapter (轉接器)：
+實現 Target 的介面，並內部持有 Adaptee。負責將 Adaptee 的數據轉換為 Target 所需的格式。本例中是 StockDataAdapter，它將 XML 格式的數據轉換為 JSON。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;將 Adapter Pattern 套用到我們的應用吧&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_adapter_pattern_uml_3.png&quot; alt=&quot;adapter_pattern_uml_3&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向程式設計-oop&quot;&gt;物件導向程式設計 (OOP)&lt;/h2&gt;
+
+&lt;p&gt;[JsonAnalyzer]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JsonAnalyzer&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;analyzeJsonData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[XmlStockData]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;XmlStockData&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getXmlData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+            &amp;lt;stocks&amp;gt;
+                &amp;lt;stock&amp;gt;
+                    &amp;lt;symbol&amp;gt;TSLA&amp;lt;/symbol&amp;gt;
+                    &amp;lt;price&amp;gt;675.50&amp;lt;/price&amp;gt;
+                &amp;lt;/stock&amp;gt;
+                &amp;lt;stock&amp;gt;
+                    &amp;lt;symbol&amp;gt;AMZN&amp;lt;/symbol&amp;gt;
+                    &amp;lt;price&amp;gt;3201.65&amp;lt;/price&amp;gt;
+                &amp;lt;/stock&amp;gt;
+            &amp;lt;/stocks&amp;gt;
+        &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[StockDataAdapter]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StockDataAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;xmlStockData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;XmlStockData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JsonAnalyzer&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;analyzeJsonData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Analyzing JSON data: $json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;convertAndAnalyze&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xmlStockData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;getXmlData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;XML&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;toJSONObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nf&quot;&gt;analyzeJsonData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[Client]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;xmlStockData&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;XmlStockData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;adapter&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StockDataAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xmlStockData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;convertAndAnalyze&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+
+&lt;p&gt;套用 &lt;strong&gt;Adapter Pattern&lt;/strong&gt; 後，我們成功將數據轉換的邏輯封裝到轉接器中，並減少了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Client&lt;/code&gt; 的責任。這樣的設計提高了系統的靈活性和可維護性，同時為未來擴展新格式提供了便利。&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="Design Pattern" /><category term="Adapter Pattern" /><summary type="html">了解如何使用轉接器模式來解決介面不兼容問題，讓不同類別無縫合作，增強程式設計靈活性。</summary></entry><entry><title type="html">Google AdSense</title><link href="https://nickhuangcyh.github.io/blog/google/google-adsense/" rel="alternate" type="text/html" title="Google AdSense" /><published>2024-12-01T07:00:00+00:00</published><updated>2024-12-01T07:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/google/google-adsense</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/google/google-adsense/">&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;我平時喜歡研究各種不同的技術，最近在想如何一邊分享技術幫助他人，一邊又能獲得一些收益用來再投入其他 Side Project 上，我還是想把我的內容免費提供給需要幫助的開發者，所以想採用置入一些廣告在網頁上的方式我想比較合適&lt;/p&gt;
+
+&lt;h2 id=&quot;什麼是-google-adsense&quot;&gt;什麼是 Google AdSense？&lt;/h2&gt;
+
+&lt;p&gt;Google AdSense 是一個廣告推送平台，讓網站擁有者可以在自己的網站上展示與內容相關的廣告，並透過點擊或展示量賺取收益。這是一種被動收入的好方式，適合部落客、內容創作者或網站管理員。&lt;/p&gt;
+
+&lt;h2 id=&quot;為什麼選擇-google-adsense&quot;&gt;為什麼選擇 Google AdSense？&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;免費使用&lt;/strong&gt;：註冊與使用 AdSense 完全免費。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;自動化廣告投放&lt;/strong&gt;：系統會自動根據您的網站內容匹配相關廣告。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;多樣化廣告形式&lt;/strong&gt;：可選擇文字、圖片、影片等多種形式的廣告。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;透明收益報告&lt;/strong&gt;：提供詳細的報表分析，幫助您了解廣告效益。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;開始使用-google-adsense-的步驟&quot;&gt;開始使用 Google AdSense 的步驟&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-註冊-adsense-帳戶&quot;&gt;1. &lt;strong&gt;註冊 AdSense 帳戶&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;前往 &lt;a href=&quot;https://www.google.com/adsense/&quot;&gt;Google AdSense 官方網站&lt;/a&gt;。&lt;/li&gt;
+  &lt;li&gt;使用您的 Google 帳號登入並申請 AdSense 帳戶。&lt;/li&gt;
+  &lt;li&gt;進入 AdSense 主頁面&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/google_adsense_main.png&quot; alt=&quot;google_adsense_main&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;2-輸入資訊&quot;&gt;2. &lt;strong&gt;輸入資訊&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;點擊”輸入資訊”提供資訊&lt;/li&gt;
+  &lt;li&gt;填寫你的網站 domain、國家以及接受協議&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/google_adsense_infomation.png&quot; alt=&quot;google_adsense_infomation&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;3-選擇廣告呈現樣式&quot;&gt;3. &lt;strong&gt;選擇廣告呈現樣式&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;點擊”探索”廣告在網站上的呈現模樣，並選擇&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/google_adsense_ad_style.png&quot; alt=&quot;google_adsense_ad_style&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;4-將-adsense-廣告程式碼加入網站並提交&quot;&gt;4. &lt;strong&gt;將 AdSense 廣告程式碼加入網站並提交&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;點擊”開始使用”，將你的網站連結到 AdSense&lt;/li&gt;
+  &lt;li&gt;將提供的程式碼插入 &amp;lt;head&amp;gt;&amp;lt;/head&amp;gt; 程式碼之間&lt;/li&gt;
+  &lt;li&gt;提交申請後，Google 會審核您的網站是否符合條件，通常需要幾天時間。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/google_adsense_code.png&quot; alt=&quot;google_adsense_code&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;結語&quot;&gt;結語&lt;/h2&gt;
+
+&lt;p&gt;Google AdSense 是一個簡單而有效的網路變現工具，只要專注於創作高質量內容，就能為你的網站帶來穩定的廣告收入。快來試試，將您的網站流量轉化為實際收益吧！&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="Google" /><category term="AdSense" /><summary type="html">如何透過 Google AdSense 爲我們的網站加入廣告賺取收益</summary></entry><entry><title type="html">Jenkins (2) - 如何架設 Jenkins 伺服器</title><link href="https://nickhuangcyh.github.io/blog/devops/jenkins-2-how-to-setup-jenkins-server/" rel="alternate" type="text/html" title="Jenkins (2) - 如何架設 Jenkins 伺服器" /><published>2024-08-15T09:00:00+00:00</published><updated>2024-08-15T09:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/devops/jenkins-2-how-to-setup-jenkins-server</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/devops/jenkins-2-how-to-setup-jenkins-server/">&lt;h2 id=&quot;如何架設-jenkins-伺服器&quot;&gt;如何架設 Jenkins 伺服器&lt;/h2&gt;
+
+&lt;p&gt;在這篇文章中，我們將介紹如何使用 Docker 映像檔來架設 Jenkins 伺服器。這種方法不僅簡單快捷，還能確保環境的一致性。&lt;/p&gt;
+
+&lt;h3 id=&quot;步驟一拉取-docker-映像檔&quot;&gt;步驟一：拉取 Docker 映像檔&lt;/h3&gt;
+
+&lt;p&gt;首先，我們需要從 GitHub Container Registry 拉取 Jenkins 的 Docker 映像檔。打開終端機並執行以下指令：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull jenkins/jenkins:lts-jdk17 &lt;span class=&quot;c&quot;&gt;# 單純 jenkins 環境&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull ghcr.io/nickhuangcyh/docker-jenkins-and-android-env:v1.0.0-jdk17 &lt;span class=&quot;c&quot;&gt;# jenkins 環境 + Android 建構環境&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;步驟二運行-jenkins-容器&quot;&gt;步驟二：運行 Jenkins 容器&lt;/h3&gt;
+
+&lt;p&gt;接下來，我們將運行 Jenkins 容器。請確保替換 ${volume path} 為你希望 Jenkins 資料儲存的本地路徑。執行以下指令：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;volume&lt;/span&gt;&lt;span class=&quot;p&quot;&gt; path&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;:/var/jenkins_home &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 8080:8080 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 50000:50000 jenkins/jenkins:lts-jdk17 &lt;span class=&quot;c&quot;&gt;# 單純 jenkins 環境&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;volume&lt;/span&gt;&lt;span class=&quot;p&quot;&gt; path&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;:/var/jenkins_home &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 8080:8080 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 50000:50000 ghcr.io/nickhuangcyh/docker-jenkins-and-android-env:v1.0.0-jdk17 &lt;span class=&quot;c&quot;&gt;# jenkins 環境 + Android 建構環境&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;這個指令會在背景運行 Jenkins 容器，並將 Jenkins 的資料儲存在你指定的路徑中。同時，容器會綁定本地的 8080 端口和 50000 端口，分別用於 Jenkins 的 Web 介面和代理通訊。&lt;/p&gt;
+
+&lt;h3 id=&quot;步驟三訪問-jenkins&quot;&gt;步驟三：訪問 Jenkins&lt;/h3&gt;
+
+&lt;p&gt;容器啟動後，你可以在瀏覽器中打開 http://localhost:8080 來訪問 Jenkins 的 Web 介面。首次訪問時，系統會要求你輸入初始管理員密碼。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/jenkins_setup_initialAdminPassword.png&quot; alt=&quot;jenkins_setup_initialAdminPassword&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;還記得我們剛剛在run container時有輸入 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;${volume path}&lt;/code&gt; 嗎? 根據底下路徑 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/var/jenkins_home/secrets/initialAdminPassword&lt;/code&gt; 去找到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;initialAdminPassword&lt;/code&gt; 並貼上&lt;/p&gt;
+
+&lt;p&gt;按照指示安裝 Plugin 完成初始配置，就成功架起來拉～🎉。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/jenkins_setup_main_page.png&quot; alt=&quot;jenkins_setup_main_page&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
+
+&lt;p&gt;通過以上步驟，我們成功地使用 Docker 映像檔架設了一個 Jenkins 伺服器。這種方法不僅簡單快捷，還能確保環境的一致性，對於開發團隊來說是一個非常實用的工具。如果你還沒有使用 Jenkins，現在就是開始的好時機！&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;想了解更多關於 Jenkins 的資訊，請參考 &lt;a href=&quot;https://jenkins.io/doc/&quot;&gt;Jenkins 官方文件&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Nick Huang</name></author><category term="DevOps" /><category term="Jenkins" /><category term="CI/CD" /><category term="DevOps" /><category term="Docker" /><summary type="html">學習如何使用 Docker 映像檔來架設 Jenkins 伺服器，提升開發團隊的自動化能力。</summary></entry><entry><title type="html">Jenkins (1) - 什麼是 Jenkins</title><link href="https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins/" rel="alternate" type="text/html" title="Jenkins (1) - 什麼是 Jenkins" /><published>2024-08-15T07:00:00+00:00</published><updated>2024-08-15T07:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins/">&lt;h2 id=&quot;什麼是-jenkins&quot;&gt;什麼是 Jenkins&lt;/h2&gt;
+
+&lt;p&gt;Jenkins 是一個開源的自動化伺服器，主要用於實現持續整合（CI）和持續交付（CD）。它能夠自動化各種任務，包括建置、測試和部署軟體，從而幫助開發團隊提升效率和品質。&lt;/p&gt;
+
+&lt;h2 id=&quot;為什麼選擇-jenkins&quot;&gt;為什麼選擇 Jenkins&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;開源且免費&lt;/strong&gt;：Jenkins 是一個開源專案，任何人都可以免費使用和修改。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;豐富的插件生態系統&lt;/strong&gt;：Jenkins 擁有超過 1,500 個插件，能夠擴展其功能以滿足不同的需求。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;社群支持&lt;/strong&gt;：Jenkins 擁有一個活躍的社群，提供豐富的資源和支援。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;易於整合&lt;/strong&gt;：Jenkins 可以與多種工具和平台整合，如 Git、Docker、Kubernetes 等。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;jenkins-的核心概念&quot;&gt;Jenkins 的核心概念&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Pipeline&lt;/strong&gt;：Jenkins Pipeline 是一套插件，支持實現和集成持續交付流水線。Pipeline 用程式碼來定義整個建置過程，包括建置、測試和部署。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Node&lt;/strong&gt;：Node 是 Jenkins 執行工作的機器，可以是 Jenkins 主伺服器或其他代理伺服器。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Job&lt;/strong&gt;：Job 是 Jenkins 中的基本建置單位，定義了具體的建置、測試和部署任務。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Executor&lt;/strong&gt;：Executor 是 Jenkins 用來執行 Job 的工作單元，每個 Node 可以有多個 Executor。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
+
+&lt;p&gt;Jenkins 是一個功能強大且靈活的自動化伺服器，能夠幫助開發團隊實現持續整合和持續交付。通過使用 Jenkins，團隊可以顯著提高開發效率和軟體品質。如果你還沒有使用 Jenkins，現在就是開始的好時機！&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;想了解更多關於 Jenkins 的資訊，請參考 &lt;a href=&quot;https://jenkins.io/doc/&quot;&gt;Jenkins 官方文件&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Nick Huang</name></author><category term="DevOps" /><category term="Jenkins" /><category term="CI/CD" /><category term="DevOps" /><summary type="html">了解Jenkins這個強大的自動化伺服器，如何幫助開發團隊實現持續整合與持續交付，提升軟體開發效率。</summary></entry><entry><title type="html">Design Pattern (10) - Singleton Pattern (單例模式)</title><link href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-10-singleton-pattern/" rel="alternate" type="text/html" title="Design Pattern (10) - Singleton Pattern (單例模式)" /><published>2024-08-10T07:00:00+00:00</published><updated>2024-08-10T07:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-10-singleton-pattern</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-10-singleton-pattern/">&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;design_pattern repo&lt;/a&gt; 下載 Design Pattern 系列程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;需求&quot;&gt;需求&lt;/h2&gt;
+
+&lt;p&gt;我們收到了一個需求：開發一個應用程式，該應用程式需要與資料庫進行頻繁的交互。為了確保資料庫連接的效率和資源的合理使用，我們需要設計一個系統來管理資料庫連接。&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向分析-ooa&quot;&gt;物件導向分析 (OOA)&lt;/h2&gt;
+
+&lt;p&gt;理解需求後，讓我們來快速實作物件導向分析吧!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_singleton_pattern_uml_1.png&quot; alt=&quot;design_pattern_singleton_pattern_uml_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我們有 CRUD 四個 function 以及 constructor 用來建立 DatabaseClient&lt;/p&gt;
+
+&lt;h2 id=&quot;察覺-forces&quot;&gt;察覺 Forces&lt;/h2&gt;
+
+&lt;p&gt;來看看上面這樣的設計會有哪些問題&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;資源管理：多個資料庫連接會消耗大量資源，導致性能下降。&lt;/li&gt;
+  &lt;li&gt;一致性：需要確保所有資料庫操作使用相同的連接，以避免數據不一致。&lt;/li&gt;
+  &lt;li&gt;效率：頻繁創建和銷毀資料庫連接會降低系統效率。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;套用-singleton-pattern--solution--得到新的-context--resulting-context-&quot;&gt;套用 Singleton Pattern ( Solution ) 得到新的 Context ( Resulting Context )&lt;/h2&gt;
+
+&lt;p&gt;做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Singleton Pattern 解決這個問題&lt;/p&gt;
+
+&lt;p&gt;先來看一下 Singleton Pattern 的 UML&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_singleton_pattern_uml_2.png&quot; alt=&quot;design_pattern_singleton_pattern_uml_2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我們可以發現，單例模式其實就是透過 getInstance() 方法去取得實體，而每次取的時都會去判斷內部 property instance 是否為 null，如果是 null 就創建一個新的，如果不是就回傳 instance property 的值，如此就能保證此 class 的實體只會有一個。&lt;/p&gt;
+
+&lt;p&gt;我們來將 DatabaseClient 套用 Singleton Pattern&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/design_pattern_singleton_pattern_uml_3.png&quot; alt=&quot;design_pattern_singleton_pattern_uml_3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如此我們就得到了一個全新的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Resulting Context&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;物件導向程式設計-oop&quot;&gt;物件導向程式設計 (OOP)&lt;/h2&gt;
+
+&lt;p&gt;再來我們就可以開始進行物件導向程式開發&lt;/p&gt;
+
+&lt;p&gt;[DatabaseClient]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;companion&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;mInstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mInstance&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;mInstance&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!!&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[Client]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;db&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;123&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;這樣就完成了，這邊稍微提一下，其實 kotlin 語言有提供 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;object&lt;/code&gt; 來讓我們輕鬆實作 Singleton Pattern，如下&lt;/p&gt;
+
+&lt;p&gt;[DatabaseClient]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tableName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conditions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[Client]&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;db&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DatabaseClient&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;123&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如此就能更簡單的操作 Singleton 的單例類別了!&lt;/p&gt;</content><author><name>Nick Huang</name></author><category term="Design Pattern" /><category term="Singleton Pattern" /><summary type="html">深入單例模式：如何確保一個類別只有一個實體，提供一個全域</summary></entry><entry><title type="html">How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8</title><link href="https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8/" rel="alternate" type="text/html" title="How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8" /><published>2024-08-02T11:50:00+00:00</published><updated>2024-08-02T11:50:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8/">&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;最近在修改公司的 jenkins CI/CD 架構，Dockerize 我們的 Android Building Environment。
+在我啟動 Debian 12 container 來建構我的環境時，配置 RSA Key 到公司的 GitLab server，卻無法抓取 source code，故有了這篇文章希望未來有遇到可以拿出來快速解決問題，也希望幫助到遇到一樣問題的人。&lt;/p&gt;
+
+&lt;p&gt;經過分析後才發現，原來 Debian 12 預設使用 OpenSSH 8.8，而 OpenSSH 8.8 預設將 RSA 加密算法關閉，因為安全是以及過時的問題
+但公司 GitLab server 較舊，目前只支援較舊的 ssh Key 演算法 RSA，因此需要找方法使其支援。&lt;/p&gt;
+
+&lt;h2 id=&quot;準備作業&quot;&gt;準備作業&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如果你已經有環境，可以跳過此段落&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;首先我先用 Docker 啟一台 Debian 12 的 container 如下&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; docker pull debian:bookworm
+bookworm: Pulling from library/debian
+9c5ed83eaf5c: Pull &lt;span class=&quot;nb&quot;&gt;complete
+&lt;/span&gt;Digest: sha256:45f2e735295654f13e3be10da2a6892c708f71a71be845818f6058982761a6d3
+Status: Downloaded newer image &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;debian:bookworm
+docker.io/library/debian:bookworm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; docker run &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; debian-bookworm-for-test-openssh debian:bookworm
+root@b5336f2395fd:/#
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;更新-apt&quot;&gt;更新 apt&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; apt update
+Get:1 http://deb.debian.org/debian bookworm InRelease &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;48.0 kB]
+Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;8688 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;13.7 kB]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;166 kB]
+Fetched 9122 kB &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;2s &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4556 kB/s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+All packages are up to date.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;安裝-git&quot;&gt;安裝 Git&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;確定-openssh-版本&quot;&gt;確定 openSSH 版本&lt;/h3&gt;
+
+&lt;p&gt;可以查看 openSSH 版本是否 &amp;gt; 8.8&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; ssh &lt;span class=&quot;nt&quot;&gt;-V&lt;/span&gt;
+OpenSSH_9.2p1 Debian-2+deb12u3, OpenSSL 3.0.13 30 Jan 2024
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;建立-ssh-rsa-key&quot;&gt;建立 SSH RSA Key&lt;/h3&gt;
+
+&lt;p&gt;建立 Key&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh-keygen &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; rsa &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; 4096 &lt;span class=&quot;nt&quot;&gt;-C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;your_email@example.com&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;將 ssh key 加入 ssh-agent&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;ssh-agent &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+Agent pid 3160
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; ssh-add ~/.ssh/id_rsa
+Identity added: /root/.ssh/id_rsa &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;your_email@example.com&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;將-public-key-上傳到-git-server&quot;&gt;將 Public Key 上傳到 Git server&lt;/h3&gt;
+
+&lt;p&gt;先 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cat&lt;/code&gt; 出 public key&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; ~/.ssh/id_rsa.pub
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上傳到你的 Git Server&lt;/p&gt;
+
+&lt;h2 id=&quot;測試-ssh-連線&quot;&gt;測試 SSH 連線&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x.x.x.x&lt;/code&gt; 請換成你的 git server IP or Domain&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh &lt;span class=&quot;nt&quot;&gt;-T&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; git@x.x.x.x
+OpenSSH_9.2p1 Debian-2+deb12u3, OpenSSL 3.0.13 30 Jan 2024
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 19: include /etc/ssh/ssh_config.d/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.conf matched no files
+debug1: /etc/ssh/ssh_config line 21: Applying options &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
+debug1: Connecting to x.x.x.x &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;x.x.x.x] port 22.
+debug1: Connection established.
+debug1: identity file /root/.ssh/id_rsa &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;0
+debug1: identity file /root/.ssh/id_rsa-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ecdsa &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ecdsa-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ecdsa_sk &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ecdsa_sk-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ed25519 &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ed25519-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ed25519_sk &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_ed25519_sk-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_xmss &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_xmss-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_dsa &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: identity file /root/.ssh/id_dsa-cert &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+debug1: Local version string SSH-2.0-OpenSSH_9.2p1 Debian-2+deb12u3
+debug1: Remote protocol version 2.0, remote software version OpenSSH_6.0p1 Debian-4+deb7u4
+debug1: compat_banner: match: OpenSSH_6.0p1 Debian-4+deb7u4 pat OpenSSH&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; compat 0x04000000
+debug1: Authenticating to x.x.x.x:22 as &lt;span class=&quot;s1&quot;&gt;&apos;git&apos;&lt;/span&gt;
+debug1: load_hostkeys: fopen /root/.ssh/known_hosts2: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug1: SSH2_MSG_KEXINIT sent
+debug1: SSH2_MSG_KEXINIT received
+debug1: kex: algorithm: ecdh-sha2-nistp256
+debug1: kex: host key algorithm: ecdsa-sha2-nistp256
+debug1: kex: server-&amp;gt;client cipher: aes128-ctr MAC: umac-64@openssh.com compression: none
+debug1: kex: client-&amp;gt;server cipher: aes128-ctr MAC: umac-64@openssh.com compression: none
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+debug1: SSH2_MSG_KEX_ECDH_REPLY received
+debug1: Server host key: ecdsa-sha2-nistp256 SHA256:PTKJPZC0PPuujGp7jIZvu/PyNzUg4aj4pNF0Nlgi290
+debug1: load_hostkeys: fopen /root/.ssh/known_hosts2: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug1: Host &lt;span class=&quot;s1&quot;&gt;&apos;x.x.x.x&apos;&lt;/span&gt; is known and matches the ECDSA host key.
+debug1: Found key &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; /root/.ssh/known_hosts:1
+debug1: rekey out after 4294967296 blocks
+debug1: SSH2_MSG_NEWKEYS sent
+debug1: expecting SSH2_MSG_NEWKEYS
+debug1: SSH2_MSG_NEWKEYS received
+debug1: rekey &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;after 4294967296 blocks
+debug1: get_agent_identities: bound agent to hostkey
+debug1: get_agent_identities: ssh_fetch_identitylist: agent contains no identities
+debug1: Will attempt key: /root/.ssh/id_rsa RSA SHA256:IPjmgGepFVyKiqZF74LyLzcywh2Qx4AcWerAw2tXqfU
+debug1: Will attempt key: /root/.ssh/id_ecdsa
+debug1: Will attempt key: /root/.ssh/id_ecdsa_sk
+debug1: Will attempt key: /root/.ssh/id_ed25519
+debug1: Will attempt key: /root/.ssh/id_ed25519_sk
+debug1: Will attempt key: /root/.ssh/id_xmss
+debug1: Will attempt key: /root/.ssh/id_dsa
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug1: Authentications that can &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;: publickey,password
+debug1: Next authentication method: publickey
+debug1: Offering public key: /root/.ssh/id_rsa RSA SHA256:IPjmgGepFVyKiqZF74LyLzcywh2Qx4AcWerAw2tXqfU
+debug1: send_pubkey_test: no mutual signature algorithm
+debug1: Trying private key: /root/.ssh/id_ecdsa
+debug1: Trying private key: /root/.ssh/id_ecdsa_sk
+debug1: Trying private key: /root/.ssh/id_ed25519
+debug1: Trying private key: /root/.ssh/id_ed25519_sk
+debug1: Trying private key: /root/.ssh/id_xmss
+debug1: Trying private key: /root/.ssh/id_dsa
+debug1: Next authentication method: password
+git@x.x.x.x&lt;span class=&quot;s1&quot;&gt;&apos;s password:
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;debug1: send_pubkey_test: no mutual signature algorithm&lt;/code&gt;
+發現原因是 ssh client 和 server 之間沒有共同的簽名算法引起的，導致公鑰驗證失敗&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;解決方法&quot;&gt;解決方法&lt;/h2&gt;
+
+&lt;p&gt;打開 &lt;a href=&quot;https://www.openssh.com/txt/release-8.8&quot;&gt;openSSH 8.8 release document&lt;/a&gt; 會發現提到這一段&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Incompatibility is more likely when connecting to older SSH
+implementations that have not been upgraded or have not closely tracked
+improvements in the SSH protocol. For these cases, it may be necessary
+to selectively re-enable RSA/SHA1 to allow connection and/or user
+authentication via the HostkeyAlgorithms and PubkeyAcceptedAlgorithms
+options. For example, the following stanza in ~/.ssh/config will enable
+RSA/SHA1 for host and user authentication for a single destination host:&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Host old-host
+  HostkeyAlgorithms +ssh-rsa
+  PubkeyAcceptedAlgorithms +ssh-rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;開啟 ~/.ssh/config 檔案並加上如下 config&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Host x.x.x.x
+  HostkeyAlgorithms +ssh-rsa
+  PubkeyAcceptedAlgorithms +ssh-rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;再跑一次 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ssh -T -v git@x.x.x.x&lt;/code&gt; 就會發現成功了 🎉&lt;/p&gt;
+
+&lt;h2 id=&quot;參考&quot;&gt;參考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.openssh.com/txt/release-8.8&quot;&gt;openSSH 8.8 release document&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Nick Huang</name></author><category term="Cryptography" /><category term="OpenSSH" /><category term="Security" /><category term="RSA Encryption" /><category term="OpenSSH 8.8" /><category term="Encryption Support" /><summary type="html">如何在 OpenSSH 8.8 中重新啟用 RSA 加密支援，確保可以繼續使用 RSA 金鑰。</summary></entry><entry><title type="html">Getting Started with GitHub Container Registry</title><link href="https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry/" rel="alternate" type="text/html" title="Getting Started with GitHub Container Registry" /><published>2024-07-23T10:00:00+00:00</published><updated>2024-07-23T10:00:00+00:00</updated><id>https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry</id><content type="html" xml:base="https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry/">&lt;h2 id=&quot;為什麼會寫這篇文章&quot;&gt;為什麼會寫這篇文章&lt;/h2&gt;
+
+&lt;p&gt;隨著公司專案數量增加，每個專案的環境需求也變得更加多樣化。我們決定將原本使用Docker建置的Android Jenkins Server轉型為更靈活的架構：一個主要的Jenkins Server（Master）搭配多個Android Build Environment（Slave），後者透過Docker創建乾淨的環境。這篇文章旨在記錄此過程，不僅作為個人學習的回顧，也希望能對其他開發者提供幫助。&lt;/p&gt;
+
+&lt;h2 id=&quot;文章簡介&quot;&gt;文章簡介&lt;/h2&gt;
+
+&lt;p&gt;本文將引導初學者及希望深入了解如何將GitHub的新工具融入CI/CD流程的開發者，透過簡明的指南和實用的技巧，學習如何將容器映像推送至GitHub Container Registry。我將一步步展示如何設定GitHub Actions，自動化構建與部署過程，讓你的開發工作變得更加高效。&lt;/p&gt;
+
+&lt;h2 id=&quot;開始之前&quot;&gt;開始之前&lt;/h2&gt;
+
+&lt;p&gt;在深入主題之前，讓我們先透過 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;express&lt;/code&gt; 框架，快速搭建一個運行於Node.js上的簡易應用。&lt;/p&gt;
+
+&lt;h3 id=&quot;create-a-node_sample-folder&quot;&gt;Create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;node_sample&lt;/code&gt; folder&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;node_sample
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;node_sample
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;install-node-package-express&quot;&gt;Install node package &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;express&lt;/code&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm init &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt;
+npm &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;express
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;create-an-appjs-file&quot;&gt;Create an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.js&lt;/code&gt; file&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vim app.js
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;Hello, World!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`Example app listening at http://localhost:&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;create-a-gitignore-file&quot;&gt;Create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; file&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;請至 &lt;a href=&quot;https://gitignore.io/&quot;&gt;gitignore.io&lt;/a&gt; 產生&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;run-appjs&quot;&gt;Run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.js&lt;/code&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;node app.js
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在 chrome 上打開網址 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost:3000&lt;/code&gt; 就會看到如下&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_sample_website.png&quot; alt=&quot;github_container_registry_sample_website&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-dockerfile&quot;&gt;Create a Dockerfile&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vim Dockerfile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-dockerfile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; node:latest&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;WORKDIR&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; /usr/src/app&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COPY&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; package*.json app.js ./&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;RUN &lt;/span&gt;npm &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;EXPOSE&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; 3000&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CMD&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; [&quot;node&quot;, &quot;app.js&quot;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;上傳-docker-image-到-github-container-registry&quot;&gt;上傳 Docker Image 到 Github Container Registry&lt;/h2&gt;
+
+&lt;p&gt;寫完 Dockerfile 後有兩種方式可以將 image 上傳到 Github Container Registry 上&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;用 Command line 方式手動上傳&lt;/li&gt;
+  &lt;li&gt;用 Github Action 方式，當 repository 有 Commit 時，自動執行 Github Action 上傳&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;用-command-line-方式手動上傳&quot;&gt;用 Command line 方式手動上傳&lt;/h2&gt;
+
+&lt;h3 id=&quot;利用-dockerfile-產生-image&quot;&gt;利用 Dockerfile 產生 image&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; node_sample &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_docker_build_image.png&quot; alt=&quot;github_container_registry_docker_build_image&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;查看-docker-images&quot;&gt;查看 Docker images&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker images
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_docker_images.png&quot; alt=&quot;github_container_registry_docker_images&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;創建-image-tag&quot;&gt;創建 image tag&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker tag node_sample:latest ghcr.io/&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;NAMESPACE&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/node_sample:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;記得將 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NAMESPACE&lt;/code&gt; 取代成你的 Github account name&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;generate-personal-access-tokens-classic&quot;&gt;Generate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Personal access tokens (classic)&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;準備好 image 後，在我們推上 &lt;strong&gt;Github Container Registry&lt;/strong&gt; 前，我們需要取得 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GITHUB_TOKEN&lt;/code&gt; 用來登入 &lt;strong&gt;Github Container Registry&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;打開 Github 網頁 -&amp;gt; 右上角 Profile -&amp;gt; Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens -&amp;gt; Tokens (classic) -&amp;gt; Generate new token&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;勾選 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;write:packages&lt;/code&gt; , &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;read:packages&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;delete:packages&lt;/code&gt; scopes，如下圖&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_generate_github_token.png&quot; alt=&quot;github_container_registry_generate_github_token&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;點擊 &lt;strong&gt;Generate token&lt;/strong&gt;，將 token 複製起來&lt;/p&gt;
+
+&lt;h3 id=&quot;登入-github-container-registry&quot;&gt;登入 &lt;strong&gt;Github Container Registry&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;將剛剛複製的 token 存到環境變數&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CR_PAT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;YOUR_TOKEN
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;登入 Container registry service at ghcr.io&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CR_PAT&lt;/span&gt; | docker login ghcr.io &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; USERNAME &lt;span class=&quot;nt&quot;&gt;--password-stdin&lt;/span&gt;
+Login Succeeded
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;上傳-images&quot;&gt;上傳 Images&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker push ghcr.io/&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;NAMESPACE&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;/node_sample:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;回到 Github 網頁上點擊 Packages，就能看到上傳成功了&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_github_package.png&quot; alt=&quot;github_container_registry_github_package&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;用-github-action-方式&quot;&gt;用 Github Action 方式&lt;/h2&gt;
+
+&lt;p&gt;使用 Github Action 的方式更簡單，在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;node_sample&lt;/code&gt; 目錄下&lt;/p&gt;
+
+&lt;h3 id=&quot;create-a-deploy-imageyml&quot;&gt;Create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;deploy-image.yml&lt;/code&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; .github
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; .github
+&lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;workflows
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;workflows
+vim deploy-image.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Create and publish a Docker image&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Configures this workflow to run every time a change is pushed to the branch called `release`.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;branches&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;release&quot;&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;REGISTRY&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ghcr.io&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;IMAGE_NAME&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# There is a single job in this workflow. It&apos;s configured to run on the latest available version of Ubuntu.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;jobs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;build-and-push-image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ubuntu-latest&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;permissions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;read&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;packages&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;write&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;attestations&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;write&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;id-token&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;write&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Checkout repository&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/checkout@v4&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Log in to the Container registry&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# This step uses [docker/metadata-action](https://github.com/docker/metadata-action#about) to extract tags and labels that will be applied to the specified image. The `id` &quot;meta&quot; allows the output of this step to be referenced in a subsequent step. The `images` value provides the base name for the tags and labels.&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Extract metadata (tags, labels) for Docker&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;meta&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;images&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$/$&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# This step uses the `docker/build-push-action` action to build the image, based on your repository&apos;s `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# It uses the `context` parameter to define the build&apos;s context as the set of files located in the specified path. For more information, see &quot;[Usage](https://github.com/docker/build-push-action#usage)&quot; in the README of the `docker/build-push-action` repository.&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# It uses the `tags` and `labels` parameters to tag and label the image with the output from the &quot;meta&quot; step.&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Build and push Docker image&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;push&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+
+      &lt;span class=&quot;c1&quot;&gt;# This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see &quot;[AUTOTITLE](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds).&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Generate artifact attestation&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/attest-build-provenance@v1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;subject-name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$/$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;subject-digest&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;$&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;push-to-registry&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;pushing-node_sample-repository&quot;&gt;Pushing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;node_sample&lt;/code&gt; repository&lt;/h3&gt;
+
+&lt;p&gt;將 node_sample 的 source code 推到你的 Github 上，如此每次只要 release branch 有 commit 就會觸發 Github Action 去自動 build image 並上傳到 &lt;strong&gt;Github Container Registry&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_github_package.png&quot; alt=&quot;github_container_registry_github_package&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;下載-image&quot;&gt;下載 image&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Install from the command line&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull ghcr.io/nickhuangcyh/node_sample:TAG
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Use as base image in Dockerfile:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-dockerfile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; ghcr.io/nickhuangcyh/node_sample:TAG&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/blog/assets/images/github_container_registry_download_image.png&quot; alt=&quot;github_container_registry_download_image&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;您可於此 &lt;a href=&quot;https://github.com/nickhuangcyh/design_pattern&quot;&gt;node_sample&lt;/a&gt; 下載 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;node_sample&lt;/code&gt; 的程式碼。&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Nick Huang</name></author><category term="DevOps" /><category term="Docker" /><category term="Container Registry" /><category term="GitHub Actions" /><category term="CI/CD" /><category term="DevOps Tools" /><summary type="html">A Guide to Using and Managing Container Images</summary></entry></feed>
