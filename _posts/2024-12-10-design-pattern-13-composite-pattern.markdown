@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Design Pattern (13) - Composite Pattern (組合模式)"
-date: 2024-12-10 23:00:00 +0800
+date: 2024-12-10 22:28:00 +0800
 excerpt: "深入了解組合模式如何以一致的方式操作單個物件與物件集合，實現對樹狀結構的靈活管理。"
 header:
   overlay_image: /assets/images/design_patterns.jpg
@@ -16,9 +16,9 @@ categories: [Design Pattern]
 
 我們收到了一個需求：實作一個檔案系統，其目錄可以包含檔案或子目錄，並且需要提供統一的操作介面來列出目錄內容。此系統應支援以下功能：
 
-* 支援樹狀結構的表示。
-* 可操作單一檔案和目錄。
-* 新增檔案或目錄時無需大幅修改現有程式碼。
+- 支援樹狀結構的表示。
+- 可操作單一檔案和目錄。
+- 新增檔案或目錄時無需大幅修改現有程式碼。
 
 ## 物件導向分析 (OOA)
 
@@ -32,16 +32,16 @@ categories: [Design Pattern]
 
 1. **高耦合性 (Tight Coupling)**：
    - 單一檔案和目錄集合的操作邏輯分散在多個類別中，導致系統維護困難。
-   
 2. **重複代碼 (Code Duplication)**：
+
    - 每次操作目錄內容時，需分別處理檔案與子目錄，導致相似邏輯多處重複。
 
 3. **難以擴展 (Difficulty in Extending)**：
+
    - 新增檔案或目錄類型時，需大幅修改程式碼，影響系統穩定性。
 
 4. **靈活性差 (Lack of Flexibility)**：
    - 操作層需清楚區分單一檔案與目錄集合，增加程式碼複雜度。
-  
 
 ## 套用 Composite Pattern ( Solution ) 得到新的 Context ( Resulting Context )
 
@@ -51,9 +51,13 @@ categories: [Design Pattern]
 
 ![composite_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_composite_pattern_uml_2.png)
 
-* **Component (組件介面)**：定義統一的操作介面，單一檔案與目錄都需實作此介面。
-* **Leaf (葉子節點)**：表示檔案，不能再包含子節點。
-* **Composite (組合節點)**：表示目錄，可包含子節點（檔案或子目錄），並實作遞迴操作的邏輯。
+- **Component (組件介面)**：定義統一的操作介面，單一檔案與目錄都需實作此介面。
+- **Leaf (葉子節點)**：表示檔案，不能再包含子節點。
+- **Composite (組合節點)**：表示目錄，可包含子節點（檔案或子目錄），並實作遞迴操作的邏輯。
+
+將 Composite Pattern 套用到我們的應用吧
+
+![composite_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_composite_pattern_uml_3.png)
 
 ## 物件導向程式設計 (OOP)
 
