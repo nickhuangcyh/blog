@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Design Pattern (14) - Decorator Pattern (裝飾者模式)"
-date: 2024-12-11 23:00:00 +0800
+date: 2024-12-11 23:30:00 +0800
 excerpt: "深入了解裝飾者模式如何動態為物件增加功能，同時保持系統的靈活性與開放性。"
 header:
   overlay_image: /assets/images/design_patterns.jpg
@@ -16,9 +16,9 @@ categories: [Design Pattern]
 
 我們收到了一個需求：咖啡店的 POS 系統需要計算不同咖啡及其附加選項（如牛奶、糖漿、奶泡等）的價格。具體需求如下：
 
-* 咖啡種類包括基本款的 Espresso 和 House Blend。
-* 每種咖啡都可以加不同的附加項，例如牛奶、巧克力糖漿、奶泡。
-* 系統應該支持動態組合不同的附加項，而不需要針對每種組合定義類別。
+- 咖啡種類包括基本款的 Espresso 和 House Blend。
+- 每種咖啡都可以加不同的附加項，例如牛奶、巧克力糖漿、奶泡。
+- 系統應該支持動態組合不同的附加項，而不需要針對每種組合定義類別。
 
 ## 物件導向分析 (OOA)
 
@@ -31,12 +31,15 @@ categories: [Design Pattern]
 在未使用設計模式的情況下，上述需求可能會遇到以下問題：
 
 1. **類別爆炸 (Class Explosion)**：
+
    - 為每一種咖啡及其附加選項組合創建類別，導致類別數量迅速增長。
 
 2. **高耦合性 (Tight Coupling)**：
+
    - 咖啡與附加選項緊密耦合，修改某一部分時可能影響整體。
 
 3. **靈活性差 (Lack of Flexibility)**：
+
    - 系統無法動態地添加或移除附加選項，只能依賴預先定義的組合。
 
 4. **重複代碼 (Code Duplication)**：
@@ -50,31 +53,35 @@ categories: [Design Pattern]
 
 ![decorator_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_decorator_pattern_uml_2.png)
 
-* **Component (組件介面)**：定義基本的行為或功能。
-* **ConcreteComponent (具體組件)**：實作基本功能的具體類別，例如基本咖啡。
-* **Decorator (裝飾者介面)**：維護對 Component 的引用，並在此基礎上添加新功能。
-* **ConcreteDecorator (具體裝飾者)**：實作新增的功能，例如牛奶、糖漿等附加選項。
+- **Component (組件介面)**：定義基本的行為或功能。
+- **ConcreteComponent (具體組件)**：實作基本功能的具體類別，例如基本咖啡。
+- **Decorator (裝飾者介面)**：維護對 Component 的引用，並在此基礎上添加新功能。
+- **ConcreteDecorator (具體裝飾者)**：實作新增的功能，例如牛奶、糖漿等附加選項。
+
+將 Decorator Pattern 套用到我們的應用吧
+
+![decorator_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_decorator_pattern_uml_3.png)
 
 ## 物件導向程式設計 (OOP)
 
 [Component: Beverage]
 
 ```kotlin
-abstract class Beverage {
-    abstract val description: String
-    abstract fun cost(): Double
+interface Beverage {
+    val description: String
+    fun cost(): Double
 }
 ```
 
 [ConcreteComponent: Espresso and HouseBlend]
 
 ```kotlin
-class Espresso : Beverage() {
+class Espresso : Beverage {
     override val description = "Espresso"
     override fun cost() = 1.99
 }
 
-class HouseBlend : Beverage() {
+class HouseBlend : Beverage {
     override val description = "House Blend Coffee"
     override fun cost() = 0.89
 }
@@ -111,11 +118,11 @@ class WhippedCream(beverage: Beverage) : CondimentDecorator(beverage) {
 
 ```kotlin
 fun main() {
-    // 製作一杯基本的 Espresso
+    // Make an Espresso
     val espresso = Espresso()
     println("${espresso.description}: $${espresso.cost()}")
 
-    // 製作一杯加了 Milk、Chocolate Syrup 和 Whipped Cream 的飲品
+    // Make an Espresso with Milk、Chocolate Syrup and Whipped Cream
     val customBeverage = WhippedCream(
         ChocolateSyrup(
             Milk(Espresso())
@@ -123,7 +130,7 @@ fun main() {
     )
     println("${customBeverage.description}: $${customBeverage.cost()}")
 
-    // 製作另一種加配料的飲品，例如加兩層 Whipped Cream 和一層 Milk
+    // Make an HouseBlend with Milk and double Whipped Cream
     val layeredBeverage = WhippedCream(
         WhippedCream(
             Milk(HouseBlend())
