@@ -58,9 +58,19 @@ categories: [Design Pattern]
 
 ## 物件導向程式設計 (OOP)
 
-[FFlyweight: Tree (樹類別)]
+[FFlyweight: Tree & TreeType (樹類別)]
 
 ```kotlin
+class Tree(
+    private val x: Int,
+    private val y: Int,
+    private val type: TreeType
+) {
+    fun draw() {
+        type.draw(x, y)
+    }
+}
+
 class TreeType(
     val name: String,
     val color: String,
@@ -79,9 +89,8 @@ object TreeFactory {
     private val treeTypes = mutableMapOf<String, TreeType>()
 
     fun getTreeType(name: String, color: String, texture: String): TreeType {
-        val key = "$name-$color-$texture"
-        return treeTypes.getOrPut(key) {
-            println("Creating new TreeType: $key")
+        return treeTypes.computeIfAbsent(name) {
+            println("Creating new TreeType: $name")
             TreeType(name, color, texture)
         }
     }
@@ -92,16 +101,17 @@ object TreeFactory {
 
 ```kotlin
 class Forest {
-    private val trees = mutableListOf<Triple<Int, Int, TreeType>>()
+    private val trees = mutableListOf<Tree>()
 
     fun plantTree(x: Int, y: Int, name: String, color: String, texture: String) {
         val treeType = TreeFactory.getTreeType(name, color, texture)
-        trees.add(Triple(x, y, treeType))
+        val tree = Tree(x, y, treeType)
+        trees.add(tree)
     }
 
     fun draw() {
-        for ((x, y, treeType) in trees) {
-            treeType.draw(x, y)
+        for (tree in trees) {
+            tree.draw()
         }
     }
 }
@@ -112,12 +122,13 @@ class Forest {
 ```kotlin
 fun main() {
     val forest = Forest()
-    // Planting multiple trees
-    forest.plantTree(1, 1, "Oak", "Green", "Rough")
-    forest.plantTree(2, 3, "Pine", "Dark Green", "Smooth")
-    forest.plantTree(4, 5, "Oak", "Green", "Rough") // Reusing TreeType
 
-    // draw forest
+    // Planting trees in the forest
+    forest.plantTree(10, 20, "Oak", "Green", "Rough")
+    forest.plantTree(15, 25, "Pine", "Dark Green", "Smooth")
+    forest.plantTree(10, 20, "Oak", "Green", "Rough") // Reuses the same TreeType as the first Oak
+
+    // Draw all trees
     forest.draw()
 }
 ```
@@ -125,24 +136,11 @@ fun main() {
 [Output]
 
 ```bash
-Creating flyweight for character: h
-Character: h, Font size: 12
-Creating flyweight for character: e
-Character: e, Font size: 14
-Creating flyweight for character: l
-Character: l, Font size: 16
-Creating flyweight for character: o
-Character: o, Font size: 18
-Creating flyweight for character:
-Character:  , Font size: 20
-Creating flyweight for character: w
-Character: w, Font size: 12
-Creating flyweight for character: r
-Character: r, Font size: 14
-Creating flyweight for character: d
-Character: d, Font size: 16
-Character: l, Font size: 18
-Character: o, Font size: 20
+Creating new TreeType: Oak
+Creating new TreeType: Pine
+Drawing tree: Oak, color: Green, texture: Rough at (10, 20)
+Drawing tree: Pine, color: Dark Green, texture: Smooth at (15, 25)
+Drawing tree: Oak, color: Green, texture: Rough at (10, 20)
 ```
 
 ## 結論
