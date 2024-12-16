@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Design Pattern (18) - Chain of Responsibility Pattern (責任鏈模式)"
-date: 2024-12-16 23:30:00:00 +0800
+date: 2024-12-16 23:00:00:00 +0800
 excerpt: "了解責任鏈模式如何讓請求能被多個對象動態處理，提升系統靈活性與可擴展性。"
 header:
   overlay_image: /assets/images/design_patterns.jpg
