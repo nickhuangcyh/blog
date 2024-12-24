@@ -24,7 +24,7 @@ categories: [Design Pattern]
 
 理解需求後，讓我們來快速實作物件導向分析吧!
 
-![mememto_pattern_uml_1]({{ site.baseurl }}/assets/images/design_pattern_mememto_pattern_uml_1.png)
+![memento_pattern_uml_1]({{ site.baseurl }}/assets/images/design_pattern_memento_pattern_uml_1.png)
 
 ### 察覺 Forces
 
@@ -48,7 +48,7 @@ categories: [Design Pattern]
 
 先來看一下 Memento Pattern 的 UML
 
-![mememto_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_mememto_pattern_uml_2.png)
+![memento_pattern_uml_2]({{ site.baseurl }}/assets/images/design_pattern_memento_pattern_uml_2.png)
 
 備忘錄模式引入了三個角色：
 
@@ -58,7 +58,7 @@ categories: [Design Pattern]
 
 將 Memento Pattern 套用到我們的應用吧
 
-![mememto_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_mememto_pattern_uml_3.png)
+![memento_pattern_uml_3]({{ site.baseurl }}/assets/images/design_pattern_memento_pattern_uml_3.png)
 
 ## 物件導向程式設計 (OOP)
 
