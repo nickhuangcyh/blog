@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Design Pattern (XX) - Interpreter Pattern (解譯器模式)"
+title: "Design Pattern (28) - Interpreter Pattern (解譯器模式)"
 date: 2024-12-29 16:30:00 +0800
 excerpt: "解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。"
 header:
