@@ -1,0 +1,1059 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式) - Nick’s Blog</title>
+<meta name="description" content="探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-7-abstract-factory-pattern/">
+
+
+  <meta property="og:description" content="探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/design_patterns.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2024-07-08T15:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-7-abstract-factory-pattern/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/design_patterns.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)
+
+        
+      </h1>
+      
+        <p class="page__lead">探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-07-08T15:00:00+00:00">July 8, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)">
+    <meta itemprop="description" content="探索如何使用抽象工廠模式創建一系列相關或依賴的物件，提升設計靈活性。">
+    <meta itemprop="datePublished" content="2024-07-08T15:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#引言全球化的挑戰擴展">引言：全球化的挑戰擴展</a></li><li><a href="#需求滿足全球化的味蕾">需求：滿足全球化的味蕾</a></li><li><a href="#物件導向分析ooa">物件導向分析(OOA)</a></li><li><a href="#察覺-forces">察覺 Forces</a></li><li><a href="#套用-solution">套用 Solution</a></li><li><a href="#物件導向程式設計-oop">物件導向程式設計 (OOP)</a></li><li><a href="#補充說明">補充說明</a></li><li><a href="#factory-method-pattern-vs-abstract-factory-pattern">Factory Method Pattern vs Abstract Factory Pattern</a><ul><li><a href="#factory-method-pattern-工廠方法模式">Factory Method Pattern 工廠方法模式</a></li><li><a href="#abstract-factory-pattern-抽象工廠模式">Abstract Factory Pattern 抽象工廠模式</a></li></ul></li><li><a href="#總結">總結</a></li><li><a href="#參考">參考</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>您可於此 <a href="https://github.com/nickhuangcyh/design_pattern">design_pattern repo</a> 下載 Design Pattern 系列程式碼。</p>
+</blockquote>
+
+<h2 id="引言全球化的挑戰擴展">引言：全球化的挑戰擴展</h2>
+
+<p>想像一下，隨著你的飲料點餐系統在全球範圍內的擴展，你面臨著如何滿足不同地區顧客特定偏好的挑戰。</p>
+
+<h2 id="需求滿足全球化的味蕾">需求：滿足全球化的味蕾</h2>
+
+<p>隨著業務的全球化擴展，不同地區的顧客有著不同的偏好。且我們也不能只賣紅茶及綠茶，需要為我們的菜單增加新的飲品，一邊新增菜單一邊擴展店舖。</p>
+
+<h2 id="物件導向分析ooa">物件導向分析(OOA)</h2>
+
+<p><img src="/blog/assets/images/design_pattern_factory_method_pattern_uml_3.png" alt="design_pattern_factory_method_pattern_uml_3" /></p>
+
+<ul class="tab" data-tab="375b5b76-4e1a-43a1-a31a-3cb440cf5257" data-name="data-struct">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="375b5b76-4e1a-43a1-a31a-3cb440cf5257" data-name="data-struct">
+  
+      <li class="active">
+<script src="https://gist.github.com/4efb9daca505d9a30c28c8c058d75f8b.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/b04fdc28c516d947869c8e9d789cc1ca.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>如何處理多個產品在不同分店的組合，這時就需要用到 <strong>Abstract Factory Pattern</strong></p>
+
+<h2 id="察覺-forces">察覺 Forces</h2>
+
+<p>當我們每增加一種飲品到菜單中，我們必須要修改所有的 Factory 中的方法，違反了 <strong>Open Closed Principle</strong></p>
+
+<h2 id="套用-solution">套用 Solution</h2>
+
+<p>看清楚整個 Context，察覺 Forces 後，就可以套用 Abstract Factory Pattern 來解決這個問題</p>
+
+<p>先來看一下 Abstract Factory Pattern 的 UML</p>
+
+<p><img src="/blog/assets/images/design_pattern_abstract_factory_pattern_uml_1.png" alt="design_pattern_abstract_factory_pattern_uml_1" /></p>
+
+<p>透過將工廠抽象，使子類別能創建一系列的實體物件。</p>
+
+<p>抽象工廠有個重要的判斷方式，當你所要創建的產品是一整個系列產品，且不同需求要創建不同系列，這個關係能夠畫成二維關係，這時就非常適合使用抽象工廠來建立產品</p>
+
+<p>如下圖</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Country / Tea</th>
+      <th>BlackTea</th>
+      <th>GreenTea</th>
+      <th>MilkTea</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>US Flavor</td>
+      <td>Ceylon(錫蘭)</td>
+      <td>Gyokuro(玉露)</td>
+      <td>Thai (泰奶)</td>
+    </tr>
+    <tr>
+      <td>EU Flavor</td>
+      <td>EarlGrey(伯爵)</td>
+      <td>Sencha(煎茶)</td>
+      <td>Masala Chai (印度馬薩拉))</td>
+    </tr>
+    <tr>
+      <td>JP Flavor</td>
+      <td>Assam(阿薩姆)</td>
+      <td>Matcha(抹茶)</td>
+      <td>Hokkaido(北海道奶茶)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>讓我們根據上面的茶家族修改一下 UML 及程式碼吧(這邊只是要表達二維關係的概念，僅先實作紅茶及綠茶的部分)</p>
+
+<p><img src="/blog/assets/images/design_pattern_abstract_factory_pattern_uml_2.png" alt="design_pattern_abstract_factory_pattern_uml_2" /></p>
+
+<p>如此我們就得到了一個全新的 Resulting Context</p>
+
+<h2 id="物件導向程式設計-oop">物件導向程式設計 (OOP)</h2>
+
+<p>再來我們就可以開始進行物件導向程式開發</p>
+
+<ul class="tab" data-tab="6c80ead3-96a7-47c6-90fa-3227316d1fe8" data-name="data-struct">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="6c80ead3-96a7-47c6-90fa-3227316d1fe8" data-name="data-struct">
+  
+      <li class="active">
+<script src="https://gist.github.com/49cf3ff30b5ea2766cd540a1146316ae.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/2b53e517b1132044ebec95f4057a1a54.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>使用抽象工廠後，分店不需要知道實際是什麼茶，只要知道跟自己地區的飲料工廠取得 紅/綠/奶茶，這邊也運用到了 Dependency Inversion Principle，工廠及產品兩者皆依賴於抽象。</p>
+
+<h2 id="補充說明">補充說明</h2>
+
+<p>下面舉幾種二維關係可以使用 Abstract Factory Pattern 的例子</p>
+
+<hr />
+
+<p>做跨平台應用時，會遇到不同平台與各種 UI 元件的組合</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>OS / UI Components</th>
+      <th>Button</th>
+      <th>Checkbox</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Linux</td>
+      <td>LinuxButton</td>
+      <td>LinuxCheckbox</td>
+    </tr>
+    <tr>
+      <td>MacOS</td>
+      <td>MacButton</td>
+      <td>MacCheckbox</td>
+    </tr>
+    <tr>
+      <td>Windows</td>
+      <td>WinButton</td>
+      <td>WinCheckbox</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>做 App 時，會遇到需要支持 Light/Dark Mode 與各種 UI 元件的組合</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Theme / UI Components</th>
+      <th>Button</th>
+      <th>Checkbox</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Light Mode</td>
+      <td>LightModeButton</td>
+      <td>LightModeCheckbox</td>
+    </tr>
+    <tr>
+      <td>Dark Mode</td>
+      <td>DarkModeButton</td>
+      <td>DarkModeCheckbox</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>做 IoT 系統時，會遇到 ZWave/Zigbeee 傳輸協議與各種 Iot 裝置的組合</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protocol / Device</th>
+      <th>Dimmer</th>
+      <th>Hue</th>
+      <th>Thermostat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ZWave</td>
+      <td>ZWDimmer</td>
+      <td>ZWHue</td>
+      <td>ZWThermostat</td>
+    </tr>
+    <tr>
+      <td>Zigbee</td>
+      <td>ZBDimmer</td>
+      <td>ZBHue</td>
+      <td>ZBThermostat</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="factory-method-pattern-vs-abstract-factory-pattern">Factory Method Pattern vs Abstract Factory Pattern</h2>
+
+<h3 id="factory-method-pattern-工廠方法模式">Factory Method Pattern 工廠方法模式</h3>
+
+<p>對每一種產品提供相應的工廠去建立產品，產品擴充性高。</p>
+
+<h3 id="abstract-factory-pattern-抽象工廠模式">Abstract Factory Pattern 抽象工廠模式</h3>
+
+<p>對一整個系列的產品進行抽象建立，工廠擴充性高，如加入新的系列產品，但產品擴充性低，所有的工廠都必須加入新產品。</p>
+
+<h2 id="總結">總結</h2>
+
+<p>在本文中，我們探討了工廠方法模式和抽象工廠模式的區別。工廠方法模式專注於單一產品的建立，提供高產品擴充性；而抽象工廠模式則針對一系列產品提供建立機制，提供工廠的高擴充性但產品擴充性較低。</p>
+
+<p>我們來看看工廠方法用到哪些 <a href="/blog/design%20pattern/design-pattern-1-design-principle/">Design Principle</a></p>
+
+<ul>
+  <li>Encapsulate What Varies</li>
+  <li>Loose Coupling</li>
+  <li>Program to Interfaces</li>
+  <li>Single Responsibility Principle</li>
+  <li>Open Closed Principle</li>
+  <li>Dependency Inversion Principle</li>
+</ul>
+
+<h2 id="參考">參考</h2>
+
+<ul>
+  <li><a href="https://www.tenlong.com.tw/products/9789867794529">Head First Design Patterns</a></li>
+  <li><a href="https://www.tenlong.com.tw/products/9789866761799">大話設計模式</a></li>
+  <li><a href="https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&amp;autoSkip=false&amp;autoplay=true&amp;resume=true">Advanced Design Patterns: Design Principles</a></li>
+  <li><a href="https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&amp;autoSkip=false&amp;autoplay=true&amp;resume=true">Programming Foundations: Design Patterns</a></li>
+  <li><a href="https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&amp;autoSkip=false&amp;autoplay=true&amp;resume=true">Design Patterns: Creational</a></li>
+  <li><a href="https://refactoring.guru/design-patterns/factory-method">refactoring</a></li>
+</ul>
+
+<p class="notice--success"><strong>Note:</strong> 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#abstract-factory-pattern" class="page__taxonomy-item" rel="tag">Abstract Factory Pattern</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#design-pattern" class="page__taxonomy-item" rel="tag">Design Pattern</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2024-07-08T15:00:00+00:00">July 8, 2024</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Design+Pattern+%287%29+-+Abstract+Factory+Pattern+%28%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%BB%A0%E6%A8%A1%E5%BC%8F%29%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-7-abstract-factory-pattern%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-7-abstract-factory-pattern%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-7-abstract-factory-pattern%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/design%20pattern/design-pattern-6-factory-method-pattern/" class="pagination--pager" title="Design Pattern (6) - Factory Method Pattern (工廠方法模式)
+">Previous</a>
+    
+    
+      <a href="/blog/design%20pattern/design-pattern-8-builder-pattern/" class="pagination--pager" title="Design Pattern (8) - Builder Pattern (建造者模式)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" rel="permalink">Design Pattern (28) - Interpreter Pattern (解譯器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-29T08:30:00+00:00">December 29, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-26-template-method-pattern/" rel="permalink">Design Pattern (26) - Template Method Pattern (模板方法模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T11:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">模板方法模式提供了一個框架，允許子類別重新定義特定步驟的實作，保持核心流程的一致性，實現高復用性與靈活性。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-25-strategy-pattern/" rel="permalink">Design Pattern (25) - Strategy Pattern (策略模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-26T15:50:00+00:00">December 26, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">策略模式提供了一種靈活的解決方案，讓系統能根據需求動態切換不同的行為邏輯，實現高可擴展性與低耦合性。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-7-abstract-factory-pattern/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/design%20pattern/design-pattern-7-abstract-factory-pattern"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

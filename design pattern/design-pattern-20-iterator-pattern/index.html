@@ -1,0 +1,1006 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>Design Pattern (20) - Iterator Pattern (迭代器模式) - Nick’s Blog</title>
+<meta name="description" content="了解迭代器模式如何提供一種順序來訪問集合內元素的方法，而不需要暴露集合的底層表示。">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="Design Pattern (20) - Iterator Pattern (迭代器模式)">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-20-iterator-pattern/">
+
+
+  <meta property="og:description" content="了解迭代器模式如何提供一種順序來訪問集合內元素的方法，而不需要暴露集合的底層表示。">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/design_patterns.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2024-12-22T06:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-20-iterator-pattern/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/design_patterns.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Design Pattern (20) - Iterator Pattern (迭代器模式)
+
+        
+      </h1>
+      
+        <p class="page__lead">了解迭代器模式如何提供一種順序來訪問集合內元素的方法，而不需要暴露集合的底層表示。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-22T06:00:00+00:00">December 22, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Design Pattern (20) - Iterator Pattern (迭代器模式)">
+    <meta itemprop="description" content="了解迭代器模式如何提供一種順序來訪問集合內元素的方法，而不需要暴露集合的底層表示。">
+    <meta itemprop="datePublished" content="2024-12-22T06:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#需求">需求</a></li><li><a href="#物件導向分析-ooa">物件導向分析 (OOA)</a></li><li><a href="#察覺-forces">察覺 Forces</a></li><li><a href="#套用-iterator-pattern-solution-得到新的-context-resulting-context">套用 Iterator Pattern (Solution) 得到新的 Context (Resulting Context)</a></li><li><a href="#物件導向程式設計-oop">物件導向程式設計 (OOP)</a></li><li><a href="#結論">結論</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>您可於此 <a href="https://github.com/nickhuangcyh/design_pattern">design_pattern repo</a> 下載 Design Pattern 系列程式碼。</p>
+</blockquote>
+
+<h2 id="需求">需求</h2>
+
+<p>我們的任務是設計一個檔案系統搜尋工具，需求如下：</p>
+
+<ul>
+  <li>使用者可以選擇不同的檔案搜尋方式，例如 <strong>廣度優先搜尋 (BFS)</strong> 或 <strong>深度優先搜尋 (DFS)</strong>。</li>
+  <li>客戶端不需要關心搜尋邏輯的實現細節，只需使用統一的迭代器介面來遍歷搜尋結果。</li>
+  <li>系統需要具備擴展性，方便新增其他搜尋法，例如基於檔案大小排序的搜尋。</li>
+</ul>
+
+<h2 id="物件導向分析-ooa">物件導向分析 (OOA)</h2>
+
+<p>理解需求後，讓我們來快速實作物件導向分析吧！</p>
+
+<p><img src="/blog/assets/images/design_pattern_iterator_pattern_uml_1.png" alt="iterator_pattern_uml_1" /></p>
+
+<h2 id="察覺-forces">察覺 Forces</h2>
+
+<p>在未使用設計模式的情況下，我們可能面臨以下挑戰：</p>
+
+<ol>
+  <li>
+    <p><strong>高耦合性 (High Coupling)</strong>：</p>
+
+    <ul>
+      <li>客戶端需要直接操作每種搜尋方式的實現細節，導致代碼臃腫且難以維護。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>缺乏一致性 (Lack of Consistency)</strong>：</p>
+
+    <ul>
+      <li>不同搜尋方式的結果訪問方式可能不一致。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>違反開放關閉原則 (Violates OCP)</strong>：</p>
+    <ul>
+      <li>若新增搜尋法或更改現有搜尋邏輯，需要修改客戶端程式碼。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="套用-iterator-pattern-solution-得到新的-context-resulting-context">套用 Iterator Pattern (Solution) 得到新的 Context (Resulting Context)</h2>
+
+<p>做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Iterator Pattern 解決這個問題。</p>
+
+<p>迭代器模式允許我們對搜尋結果進行順序訪問，而不需要暴露搜尋邏輯的細節。</p>
+
+<p>先來看一下 Iterator Pattern 的 UML：</p>
+
+<p><img src="/blog/assets/images/design_pattern_iterator_pattern_uml_2.png" alt="iterator_pattern_uml_2" /></p>
+
+<p>以下是 Iterator Pattern 的主要角色：</p>
+
+<ul>
+  <li><strong>Iterator (迭代器介面)</strong>：定義訪問搜尋結果的方法，例如 <code class="language-plaintext highlighter-rouge">hasNext()</code> 和 <code class="language-plaintext highlighter-rouge">next()</code>。</li>
+  <li><strong>ConcreteIterator (具體迭代器)</strong>：實現不同的搜尋邏輯，如 BFS 或 DFS。</li>
+  <li><strong>Aggregate (聚合介面)</strong>：定義方法來創建迭代器。</li>
+  <li><strong>ConcreteAggregate (具體聚合類別)</strong>：實現聚合介面，提供檔案系統資料的具體實現。</li>
+</ul>
+
+<p>將 Iterator Pattern 套用到我們的應用吧</p>
+
+<p><img src="/blog/assets/images/design_pattern_iterator_pattern_uml_3.png" alt="iterator_pattern_uml_3" /></p>
+
+<h2 id="物件導向程式設計-oop">物件導向程式設計 (OOP)</h2>
+
+<p>[Iterator]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">Iterator</span><span class="p">&lt;</span><span class="nc">T</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">hasNext</span><span class="p">():</span> <span class="nc">Boolean</span>
+    <span class="k">fun</span> <span class="nf">next</span><span class="p">():</span> <span class="nc">T</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[Aggregate: FileSystem]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">FileSystem</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">createIterator</span><span class="p">():</span> <span class="nc">Iterator</span><span class="p">&lt;</span><span class="nc">File</span><span class="p">&gt;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[ConcreteIterator: BFSIterator, DFSIterator]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">BFSIterator</span><span class="p">(</span><span class="k">private</span> <span class="kd">val</span> <span class="py">root</span><span class="p">:</span> <span class="nc">File</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Iterator</span><span class="p">&lt;</span><span class="nc">File</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">queue</span> <span class="p">=</span> <span class="nc">ArrayDeque</span><span class="p">&lt;</span><span class="nc">File</span><span class="p">&gt;()</span>
+
+    <span class="nf">init</span> <span class="p">{</span>
+        <span class="n">queue</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">hasNext</span><span class="p">():</span> <span class="nc">Boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">queue</span><span class="p">.</span><span class="nf">isNotEmpty</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">next</span><span class="p">():</span> <span class="nc">File</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="nf">hasNext</span><span class="p">())</span> <span class="k">throw</span> <span class="nc">NoSuchElementException</span><span class="p">()</span>
+        <span class="kd">val</span> <span class="py">current</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">removeFirst</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">current</span><span class="p">.</span><span class="n">isDirectory</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">queue</span><span class="p">.</span><span class="nf">addAll</span><span class="p">(</span><span class="n">current</span><span class="p">.</span><span class="nf">listFiles</span><span class="p">().</span><span class="nf">orEmpty</span><span class="p">())</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">current</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">DFSIterator</span><span class="p">(</span><span class="k">private</span> <span class="kd">val</span> <span class="py">root</span><span class="p">:</span> <span class="nc">File</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Iterator</span><span class="p">&lt;</span><span class="nc">File</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">stack</span> <span class="p">=</span> <span class="nc">ArrayDeque</span><span class="p">&lt;</span><span class="nc">File</span><span class="p">&gt;()</span>
+
+    <span class="nf">init</span> <span class="p">{</span>
+        <span class="n">stack</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">hasNext</span><span class="p">():</span> <span class="nc">Boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="p">.</span><span class="nf">isNotEmpty</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">next</span><span class="p">():</span> <span class="nc">File</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="nf">hasNext</span><span class="p">())</span> <span class="k">throw</span> <span class="nc">NoSuchElementException</span><span class="p">()</span>
+        <span class="kd">val</span> <span class="py">current</span> <span class="p">=</span> <span class="n">stack</span><span class="p">.</span><span class="nf">removeLast</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">current</span><span class="p">.</span><span class="n">isDirectory</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">stack</span><span class="p">.</span><span class="nf">addAll</span><span class="p">(</span><span class="n">current</span><span class="p">.</span><span class="nf">listFiles</span><span class="p">().</span><span class="nf">orEmpty</span><span class="p">())</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">current</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[ConcreteAggregate: DefaultFileSystem]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">DefaultFileSystem</span><span class="p">(</span><span class="k">private</span> <span class="kd">val</span> <span class="py">root</span><span class="p">:</span> <span class="nc">File</span><span class="p">,</span> <span class="k">private</span> <span class="kd">val</span> <span class="py">searchMethod</span><span class="p">:</span> <span class="nc">SearchMethod</span><span class="p">)</span> <span class="p">:</span> <span class="nc">FileSystem</span> <span class="p">{</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">createIterator</span><span class="p">():</span> <span class="nc">Iterator</span><span class="p">&lt;</span><span class="nc">File</span><span class="p">&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">when</span> <span class="p">(</span><span class="n">searchMethod</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nc">SearchMethod</span><span class="p">.</span><span class="nc">BFS</span> <span class="p">-&gt;</span> <span class="nc">BFSIterator</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+            <span class="nc">SearchMethod</span><span class="p">.</span><span class="nc">DFS</span> <span class="p">-&gt;</span> <span class="nc">DFSIterator</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">enum</span> <span class="kd">class</span> <span class="nc">SearchMethod</span> <span class="p">{</span>
+    <span class="nc">BFS</span><span class="p">,</span> <span class="nc">DFS</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[File]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">data class</span> <span class="nc">File</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">isDirectory</span><span class="p">:</span> <span class="nc">Boolean</span><span class="p">,</span> <span class="kd">val</span> <span class="py">children</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">File</span><span class="p">&gt;</span> <span class="p">=</span> <span class="nf">emptyList</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">listFiles</span><span class="p">():</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">File</span><span class="p">&gt;</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">isDirectory</span><span class="p">)</span> <span class="n">children</span> <span class="k">else</span> <span class="nf">emptyList</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[Client]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">fileSystem</span> <span class="p">=</span> <span class="nc">DefaultFileSystem</span><span class="p">(</span>
+        <span class="n">root</span> <span class="p">=</span> <span class="nc">File</span><span class="p">(</span>
+            <span class="n">name</span> <span class="p">=</span> <span class="s">"root"</span><span class="p">,</span>
+            <span class="n">isDirectory</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">children</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
+                <span class="nc">File</span><span class="p">(</span><span class="s">"file1.txt"</span><span class="p">,</span> <span class="k">false</span><span class="p">),</span>
+                <span class="nc">File</span><span class="p">(</span><span class="s">"folder1"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="nf">listOf</span><span class="p">(</span>
+                    <span class="nc">File</span><span class="p">(</span><span class="s">"file2.txt"</span><span class="p">,</span> <span class="k">false</span><span class="p">),</span>
+                    <span class="nc">File</span><span class="p">(</span><span class="s">"file3.txt"</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span>
+                <span class="p">)),</span>
+                <span class="nc">File</span><span class="p">(</span><span class="s">"folder2"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="nf">listOf</span><span class="p">(</span>
+                    <span class="nc">File</span><span class="p">(</span><span class="s">"file4.txt"</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span>
+                <span class="p">))</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">searchMethod</span> <span class="p">=</span> <span class="nc">SearchMethod</span><span class="p">.</span><span class="nc">BFS</span>
+    <span class="p">)</span>
+
+    <span class="kd">val</span> <span class="py">iterator</span> <span class="p">=</span> <span class="n">fileSystem</span><span class="p">.</span><span class="nf">createIterator</span><span class="p">()</span>
+    <span class="nf">println</span><span class="p">(</span><span class="s">"Files:"</span><span class="p">)</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="nf">hasNext</span><span class="p">())</span> <span class="p">{</span>
+        <span class="nf">println</span><span class="p">(</span><span class="s">"- ${iterator.next().name}"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[Output]</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Files:
+- root
+- file1.txt
+- folder1
+- folder2
+- file2.txt
+- file3.txt
+- file4.txt
+</code></pre></div></div>
+
+<h2 id="結論">結論</h2>
+
+<p>透過 Iterator Pattern，我們成功實現了不同搜尋法的整合，讓客戶端能以一致的方式訪問搜尋結果。此模式提升了系統的靈活性與擴展性，特別適合處理多種遍歷邏輯的場景，例如檔案搜尋、樹狀結構遍歷等。</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#iterator-pattern" class="page__taxonomy-item" rel="tag">Iterator Pattern</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#design-pattern" class="page__taxonomy-item" rel="tag">Design Pattern</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2024-12-22T06:00:00+00:00">December 22, 2024</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Design+Pattern+%2820%29+-+Iterator+Pattern+%28%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F%29%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-20-iterator-pattern%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-20-iterator-pattern%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-20-iterator-pattern%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/design%20pattern/design-pattern-19-command-pattern/" class="pagination--pager" title="Design Pattern (19) - Command Pattern (命令模式)
+">Previous</a>
+    
+    
+      <a href="/blog/design%20pattern/design-pattern-21-mediator-pattern/" class="pagination--pager" title="Design Pattern (21) - Mediator Pattern (中介者模式)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" rel="permalink">Design Pattern (28) - Interpreter Pattern (解譯器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-29T08:30:00+00:00">December 29, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-26-template-method-pattern/" rel="permalink">Design Pattern (26) - Template Method Pattern (模板方法模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T11:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">模板方法模式提供了一個框架，允許子類別重新定義特定步驟的實作，保持核心流程的一致性，實現高復用性與靈活性。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-25-strategy-pattern/" rel="permalink">Design Pattern (25) - Strategy Pattern (策略模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-26T15:50:00+00:00">December 26, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">策略模式提供了一種靈活的解決方案，讓系統能根據需求動態切換不同的行為邏輯，實現高可擴展性與低耦合性。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-20-iterator-pattern/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/design%20pattern/design-pattern-20-iterator-pattern"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>
