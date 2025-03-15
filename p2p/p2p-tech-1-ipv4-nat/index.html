@@ -1,0 +1,1024 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>搞懂 P2P 技術 (1) - P2P x IPv4 x NAT - Nick’s Blog</title>
+<meta name="description" content="P2P x IPv4 x NAT">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="搞懂 P2P 技術 (1) - P2P x IPv4 x NAT">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/p2p/p2p-tech-1-ipv4-nat/">
+
+
+  <meta property="og:description" content="P2P x IPv4 x NAT">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-01-03T15:45:03+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/p2p/p2p-tech-1-ipv4-nat/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/nasa-1lfI7wkGWZ4-unsplash.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          搞懂 P2P 技術 (1) - P2P x IPv4 x NAT
+
+        
+      </h1>
+      
+        <p class="page__lead">P2P x IPv4 x NAT
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-01-03T15:45:03+00:00">January 3, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="搞懂 P2P 技術 (1) - P2P x IPv4 x NAT">
+    <meta itemprop="description" content="P2P x IPv4 x NAT">
+    <meta itemprop="datePublished" content="2022-01-03T15:45:03+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#前言">前言</a></li><li><a href="#p2p">P2P</a><ul><li><a href="#為什麼會需要-p2p">為什麼會需要 P2P</a></li></ul></li><li><a href="#centralized-vs-decentralized-vs-distributed">Centralized vs Decentralized vs Distributed</a><ul><li><a href="#中心化網路-centralized">中心化網路 (Centralized)</a></li><li><a href="#去中心化網路-decentralized">去中心化網路 (Decentralized)</a></li><li><a href="#分佈式網路-distributed">分佈式網路 (Distributed)</a></li></ul></li><li><a href="#什麼是-p2p-peer-to-peer">什麼是 P2P (Peer to Peer)</a></li><li><a href="#ipv4">IPv4</a></li><li><a href="#nat-network-address-translation">NAT (Network Address Translation)</a></li><li><a href="#nat-類型">NAT 類型</a><ul><li><a href="#full-cone-nat-完全錐型-nat">Full-cone NAT (完全錐型 NAT)</a></li><li><a href="#restricted-cone-nat-受限錐型-nat">Restricted cone NAT (受限錐型 NAT)</a></li><li><a href="#port-restricted-cone-nat-端口受限錐型-nat">Port-Restricted cone NAT (端口受限錐型 NAT)</a></li><li><a href="#symmetric-nat-對稱型-nat">Symmetric NAT (對稱型 NAT)</a></li></ul></li><li><a href="#結論">結論</a></li><li><a href="#參考資源">參考資源</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="前言">前言</h2>
+
+<p>之前工作上遇到需要將自家 IPCam 與 iOS/Android 手機做 P2P 串流影音，研究了許多有關 P2P 的技術，因此想寫一系列有關 P2P 技術的文章．</p>
+
+<h2 id="p2p">P2P</h2>
+
+<h3 id="為什麼會需要-p2p">為什麼會需要 P2P</h3>
+
+<p>在了解一門技術前，我們先來看看為什麼會需要這門技術，這門技術是為了解決什麼問題</p>
+
+<h2 id="centralized-vs-decentralized-vs-distributed">Centralized vs Decentralized vs Distributed</h2>
+
+<h3 id="中心化網路-centralized">中心化網路 (Centralized)</h3>
+
+<p><img src="/blog/assets/images/p2p_centralized.png" alt="p2p_centralized" /></p>
+
+<p>所有 client 都連接到同一台 Server，Server 擁有所有 client 的數據訊息</p>
+
+<blockquote>
+  <p>可以想成是國家央行發行貨幣，所有人的錢都來自國家央行</p>
+</blockquote>
+
+<ul>
+  <li>優點
+    <ul>
+      <li>部署簡單好維護</li>
+      <li>集中管理數據</li>
+    </ul>
+  </li>
+  <li>缺點
+    <ul>
+      <li>安全及隱私風險 (中心 server 遭破解串改，全部都會受影響)</li>
+      <li>離 Server 較遠的 client 拿資料的時間會更長</li>
+      <li>server 一但故障，其他 client 都不可使用</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="去中心化網路-decentralized">去中心化網路 (Decentralized)</h3>
+
+<p><img src="/blog/assets/images/p2p_decentralized.png" alt="p2p_decentralized" /></p>
+
+<p>顧名思義就是不只有一台 server，會有多台 server ，所以當一台或多台 server 故障時，client 還是可以繼續從其他 server 存取數據</p>
+
+<blockquote>
+  <p>可以想成是很多銀行可以存錢領錢，有美銀、高盛、摩根、富國等等銀行，且每家都能互相轉錢</p>
+</blockquote>
+
+<ul>
+  <li>優點
+    <ul>
+      <li>比<code class="language-plaintext highlighter-rouge">中心化網路</code>有較高的容錯率 (因為有多個 server)</li>
+      <li>更好的性能 (在一些用戶多的地區新增節點)</li>
+    </ul>
+  </li>
+  <li>缺點
+    <ul>
+      <li>安全及隱私風險 (與中心化一樣)</li>
+      <li>較高維護成本 (系統設計較複雜多變)</li>
+      <li>較難部署</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="分佈式網路-distributed">分佈式網路 (Distributed)</h3>
+
+<p><img src="/blog/assets/images/p2p_distributed.png" alt="p2p_distributed" /></p>
+
+<p>類似 Decentralized ， 沒有唯一的中心 server，用戶間可以共享資料所有權，消除了中心 server 的概念，如此可以避免中心 server 故障導致所有 user 無法使用的問題，internet 就是一個分佈式網路，p2p 也屬於此類</p>
+
+<blockquote>
+  <p>可以想成是目前的區塊鏈比特幣，並沒有像央銀銀行的角色，貨幣是由鏈上的所有主機幫你做驗證交易紀錄等等，必須要串改超過 51% 以上的主機才能成功串改資訊，較安全</p>
+</blockquote>
+
+<ul>
+  <li>優點
+    <ul>
+      <li>極高的容錯率</li>
+      <li>資料透明安全，不易遭串改</li>
+      <li>資源共享</li>
+    </ul>
+  </li>
+  <li>缺點
+    <ul>
+      <li>較高維護成本 (系統設計較複雜多變)</li>
+      <li>較難部署</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>三種網路方式皆有各自優點，可以依照遇到的情況去設計．</p>
+</blockquote>
+
+<p>在 IoT 應用中，假如你要控制家中的 IPCam，就會有以下兩種做法</p>
+
+<ul>
+  <li>中心化方式為透過 Server 轉發 command 給 IPCam
+    <ul>
+      <li><img src="/blog/assets/images/p2p_centralized_connect.png" alt="p2p_centralized_connect" /></li>
+      <li>這種作法的優點在於好部署修改，有新增功能時只要 Server 改完部署，其他設備就可更新支援此功能，缺點就是 Server 只要故障就完全不能控制 IoT 裝置，且 Server 的硬體效能要很好才足以應對龐大的 client，需要每月一筆租 Server 機器及流量的費用</li>
+    </ul>
+  </li>
+  <li>分佈式方式為不透過 Server 直接向 IPCam 下達指令
+    <ul>
+      <li><img src="/blog/assets/images/p2p_distributed_connect.png" alt="p2p_distributed_connect" /></li>
+      <li>這種作法的優點在於不需要每月一筆租 server 機器及流量的費用，不會有 Server 故障導致無法操作 IoT 裝置的問題，硬體效能也不需要很好，缺點就是部署程式變得複雜，因為不是每個人都會定期更新手機 app 及 IoT Firmware，還有程式碼會變得複雜，需要處理 p2p tunnel 斷線重新 p2p 流程，也叫容易發生斷線重連，e.g. 手機由 4G/5G 環境走到有 Wifi 環境，網卡自動切換成 Wifi 就會導致斷線需重新 p2p．</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>疑問 : 分佈式方式在複雜的 Internet 下，如何讓手機與 IoT 裝置溝通，就是接下來我們要講解 P2P 技術的部分</p>
+</blockquote>
+
+<h2 id="什麼是-p2p-peer-to-peer">什麼是 P2P (Peer to Peer)</h2>
+
+<p>P2P 是一種無中心化的技術，每一個 client 既是 client 也是 server，在每台主機皆存在共享的數據，以此降低資料遺失安全性等等的風險．</p>
+
+<h2 id="ipv4">IPv4</h2>
+
+<p>Internet 能夠如此成功進入人類的生活中，IP 的設計可以說是非常重要的一個基礎，可以把 IP 想成你在 Internet 世界裡的地址，任何人要寄信給你都需要知道你的地址才能與你通信，IPv4 的設計就是希望可以容納大家上網，IPv4 總共有 4 * 8(bits) = 32 bits，大約為 43 億，在當時認為已經非常足夠使用，但如今在 Internet 高速發展下，IPv4 已經不夠用了，所以網路專家一方面尋找 IPv4 替代方案(也就是 IPv6)，一方面研究如何減緩 IPv4 耗盡的問題，於是 NAT 誕生了．</p>
+
+<h2 id="nat-network-address-translation">NAT (Network Address Translation)</h2>
+
+<p>就如同字面上的意思，他會在私有網域及公有網域之間做將封包的 IP 做轉換，根據 <a href="https://datatracker.ietf.org/doc/rfc1918/">RFC1918</a> 保留了三段 IP 地址給內部網路做使用，10.0.0.0-10.255.255.255；172.16.0.0-172.31.255.255；192.168.0.0-192.168.255.255，這些地址在公有網路上是沒有意義的，且不需像 IANA 做申請，如此就大大增加了 IPv4 環境可以容納的上網裝置，因為一個組織只需要一個公有 IP 即可讓所有內部裝置連上 Internet．</p>
+
+<p><img src="/blog/assets/images/p2p_nat_1.png" alt="p2p_nat_1" /></p>
+
+<p>但是 NAT 這樣的設計是有缺點的，外部網路主機無法直接與在 NAT 路由器內的內網主機進行連線</p>
+
+<p>一般沒有 NAT 情況下，Internet 上的兩台主機只要知道彼此 IP 就能進行通訊</p>
+
+<p><img src="/blog/assets/images/p2p_nat_2.png" alt="p2p_nat_2" /></p>
+
+<p>在有一方於 NAT 情況下，外部網路主機 B 要與內部網路主機 A 通訊，就會遇到 NAT 不知道要將來自 B 的封包轉給哪一台內部主機</p>
+
+<p><img src="/blog/assets/images/p2p_nat_3.png" alt="p2p_nat_3" /></p>
+
+<p>除非 A 已經先訪問過 B 主機的情況下，NAT 會將 A 的轉址紀錄在 mapping table 中，之後由 B 發給 A 的封包，NAT 就會透過 mapping table 轉址將封包正確轉發給 A</p>
+
+<p><img src="/blog/assets/images/p2p_nat_4.png" alt="p2p_nat_4" /></p>
+
+<p>但如果兩台主機皆在 NAT 下，此時不管是由 A 或 B 發起 (A → B 或 B → A)，都無法連接到對方，因為兩邊的 mapping table 都是空的沒有紀錄</p>
+
+<p><img src="/blog/assets/images/p2p_nat_5.png" alt="p2p_nat_5" /></p>
+
+<p>此時就必須要由任一方先發起封包，假設由 A 發起 (1)，此時 A 的 NAT mapping table 會留下 A 的轉換 IP (2)，但封包到了 B 的 NAT 時，因 B 的 NAT mapping table 為空，所以會先失敗 (3)，再來由 B 發起封包給 A (4)，會在 B NAT mapping table 留下 B 的轉換 IP (5)，封包到了 A NAT 後 (6)，因 A 的 NAT mapping table 存在 A 的 IP，所以封包可以順利到達 A (7)，A 在發送封包到 B (8)，此時雙方的 NAT mapping table 皆有紀錄(9, 10)，在 NAT 裡的 Client 就能順利相互通訊，此時 P2P 就成功了，反之亦然</p>
+
+<p><img src="/blog/assets/images/p2p_nat_6.png" alt="p2p_nat_6" /></p>
+
+<h2 id="nat-類型">NAT 類型</h2>
+
+<h3 id="full-cone-nat-完全錐型-nat">Full-cone NAT (完全錐型 NAT)</h3>
+
+<ul>
+  <li>一旦內部位址（iAddr:iPort）對映到外部位址（eAddr:ePort），所有發自 iAddr:iPort 的封包都經由 eAddr:ePort 向外傳送。</li>
+  <li>任意外部主機都能經由發送封包給 eAddr:ePort 到達 iAddr:iPort。</li>
+</ul>
+
+<p><img src="/blog/assets/images/p2p_full_cone_nat.png" alt="p2p_full_cone_nat" /></p>
+
+<h3 id="restricted-cone-nat-受限錐型-nat">Restricted cone NAT (受限錐型 NAT)</h3>
+
+<ul>
+  <li>一旦內部位址（iAddr:iPort）對映到外部位址（eAddr:ePort），所有發自 iAddr:iPort 的封包都經由 eAddr:ePort 向外傳送。</li>
+  <li>唯 iAddr:iPort 曾經發送封包到外部主機（nAddr:any），外部主機才能經由發送封包給 eAddr:ePort 到達 iAddr:iPort。（註：any 指外部主機源埠不受限制。）</li>
+</ul>
+
+<p><img src="/blog/assets/images/p2p_restricted_cone_nat.png" alt="p2p_full_cone_nat" /></p>
+
+<h3 id="port-restricted-cone-nat-端口受限錐型-nat">Port-Restricted cone NAT (端口受限錐型 NAT)</h3>
+
+<p>類似受限制錐形 NAT（Restricted cone NAT），但是還有埠限制。</p>
+
+<ul>
+  <li>一旦內部位址（iAddr:iPort）對映到外部位址（eAddr:ePort），所有發自 iAddr:iPort 的封包都經由 eAddr:ePort 向外傳送。</li>
+  <li>在受限圓錐型 NAT 基礎上增加了外部主機源埠必須是固定的。</li>
+</ul>
+
+<p><img src="/blog/assets/images/p2p_port_restricted_cone_nat.png" alt="p2p_full_cone_nat" /></p>
+
+<h3 id="symmetric-nat-對稱型-nat">Symmetric NAT (對稱型 NAT)</h3>
+
+<ul>
+  <li>每一個來自相同內部 IP 與埠，到一個特定目的地 IP 和埠的請求，都對映到一個獨特的外部 IP 和埠。
+同一內部 IP 與埠發到不同的目的地和埠的資訊包，都使用不同的對映</li>
+  <li>只有曾經收到過內部主機資料的外部主機，才能夠把封包發回</li>
+</ul>
+
+<p><img src="/blog/assets/images/p2p_symmetric_nat.png" alt="p2p_full_cone_nat" /></p>
+
+<blockquote>
+  <p>Symmetric NAT 無法實現 P2P ，原因就在於對稱型每次的請求都會對應到不同的外部 IP 和 Port</p>
+</blockquote>
+
+<h2 id="結論">結論</h2>
+
+<p>有關 P2P、IPv4、NAT 就先介紹到此，下一篇會介紹實現 P2P 需要哪些協定工具，STUN、TURN、ICE 是什麼</p>
+
+<h2 id="參考資源">參考資源</h2>
+
+<ul>
+  <li><a href="https://medium.com/berty-tech/berty-tech-centralized-vs-decentralized-vs-distributed-systems-2e9efd856c2">Centralized vs Decentralized vs Distributed Systems</a></li>
+  <li><a href="http://www.52im.net/thread-50-1-1.html">《P2P 技术详解》系列文章</a></li>
+  <li><a href="https://zh.wikipedia.org/wiki/%E5%B0%8D%E7%AD%89%E7%B6%B2%E8%B7%AF">對等網路</a></li>
+  <li><a href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2">網路位址轉換</a></li>
+  <li><a href="https://www.flaticon.com/">flaticon</a></li>
+</ul>
+
+<p class="notice--success"><strong>Note:</strong> 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#android" class="page__taxonomy-item" rel="tag">Android</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#ios" class="page__taxonomy-item" rel="tag">iOS</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#ipv4" class="page__taxonomy-item" rel="tag">IPv4</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#nat" class="page__taxonomy-item" rel="tag">NAT</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#p2p" class="page__taxonomy-item" rel="tag">P2P</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-01-03T15:45:03+00:00">January 3, 2022</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E6%90%9E%E6%87%82+P2P+%E6%8A%80%E8%A1%93+%281%29+-+P2P+x+IPv4+x+NAT%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fp2p%2Fp2p-tech-1-ipv4-nat%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fp2p%2Fp2p-tech-1-ipv4-nat%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fp2p%2Fp2p-tech-1-ipv4-nat%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/mobile/3d_graphic_tips/" class="pagination--pager" title="3D Graphic Engine Tips - 三角形 x UV mapping x Vertices &amp; Indices
+">Previous</a>
+    
+    
+      <a href="/blog/p2p/p2p-tech-2-stun-turn-ice/" class="pagination--pager" title="搞懂 P2P 技術 (2) - STUN x TURN x ICE
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/kelly-sikkema-lFtttcsx5Vk-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/" rel="permalink">🚀 如何使用 Excalidraw AI 快速生成專業級圖表，提升工作效率！
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-03-15T08:30:00+00:00">March 15, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">使用 Excalidraw AI 只需輸入文字描述，即可快速生成流程圖、技術架構圖、心智圖等，提升工作效率！
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/raul-per-e-K2w9VegUIb0-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/setup%20guide/setup-development-environment-on-a-new-macos/" rel="permalink">Setup Development Environment on a New macOS
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-01-11T07:00:00+00:00">January 11, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Step-by-step guide to setting up a mobile development environment on a new macOS system.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" rel="permalink">Design Pattern (28) - Interpreter Pattern (解譯器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-29T08:30:00+00:00">December 29, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/p2p/p2p-tech-1-ipv4-nat/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/p2p/p2p-tech-1-ipv4-nat"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

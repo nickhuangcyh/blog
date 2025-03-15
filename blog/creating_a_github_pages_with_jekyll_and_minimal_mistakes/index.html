@@ -1,0 +1,1086 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>使用 Jekyll + minimal-mistakes 在 Github pages 上架設自己的部落格 - Jekyll x Minimal-Mistakes x GitHub pages - Nick’s Blog</title>
+<meta name="description" content="原來架設 Blog 也能如此輕鬆簡單">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="使用 Jekyll + minimal-mistakes 在 Github pages 上架設自己的部落格 - Jekyll x Minimal-Mistakes x GitHub pages">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/blog/creating_a_github_pages_with_jekyll_and_minimal_mistakes/">
+
+
+  <meta property="og:description" content="原來架設 Blog 也能如此輕鬆簡單">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2021-12-29T07:45:03+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/blog/creating_a_github_pages_with_jekyll_and_minimal_mistakes/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/alfons-morales-YLSwjSy7stw-unsplash.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          使用 Jekyll + minimal-mistakes 在 Github pages 上架設自己的部落格 - Jekyll x Minimal-Mistakes x GitHub pages
+
+        
+      </h1>
+      
+        <p class="page__lead">原來架設 Blog 也能如此輕鬆簡單
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2021-12-29T07:45:03+00:00">December 29, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="使用 Jekyll + minimal-mistakes 在 Github pages 上架設自己的部落格 - Jekyll x Minimal-Mistakes x GitHub pages">
+    <meta itemprop="description" content="原來架設 Blog 也能如此輕鬆簡單">
+    <meta itemprop="datePublished" content="2021-12-29T07:45:03+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#為什麼寫-blog-文章">為什麼寫 Blog 文章</a></li><li><a href="#為什麼選用-jekyll--minimal-mistakes">為什麼選用 Jekyll + minimal-mistakes</a></li><li><a href="#為什麼選-github-pages">為什麼選 GitHub Pages</a></li><li><a href="#事前準備">事前準備</a><ul><li><a href="#申請-github-帳號">申請 Github 帳號</a></li><li><a href="#安裝-git">安裝 Git</a></li><li><a href="#安裝-rbenv">安裝 rbenv</a></li><li><a href="#安裝-ruby">安裝 ruby</a></li><li><a href="#檢查-rubygems">檢查 RubyGems</a></li><li><a href="#檢查-gcc--make">檢查 GCC / Make</a></li></ul></li><li><a href="#建立-jekyll-blog-網站">建立 Jekyll Blog 網站</a></li><li><a href="#在-local-測試-jekyll-blog-網站">在 local 測試 Jekyll Blog 網站</a></li><li><a href="#上傳-github-讓-github-pages-自動建置-blog">上傳 GitHub 讓 GitHub Pages 自動建置 Blog</a></li><li><a href="#加入-minimal-mistakes-主題">加入 Minimal-mistakes 主題</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="為什麼寫-blog-文章">為什麼寫 Blog 文章</h2>
+
+<p>工作上受到了很多教學網站及 Blog 文章非常多的幫助，因此想架設一個自己的 Blog，將工作及生活學到的技術知識記錄下來，幫助自己複習，也希望能幫助到有需要的人。</p>
+
+<h2 id="為什麼選用-jekyll--minimal-mistakes">為什麼選用 Jekyll + minimal-mistakes</h2>
+
+<p>選用 Jekyll 的原因</p>
+
+<ol>
+  <li>可用 Markdown 語法寫文章，Jekyll 會將 markdown 轉成 html 檔案</li>
+  <li>有非常豐富的主題</li>
+  <li>可客製化</li>
+</ol>
+
+<p>選用 Minimal-mistakes 主題的原因</p>
+
+<ol>
+  <li>較多人使用，Github 上 star 有 9k</li>
+  <li>支援 Dark skin</li>
+  <li>可以放大圖，跟 Medium 類似</li>
+</ol>
+
+<p>其實原本我是用 Octopress ，後來因為 Octopress 已不再維護，且主題沒有 Jekyll 來得豐富，最後決定使用 Jekyll 重新架一個 Blog</p>
+
+<blockquote>
+  <p><a href="http://octopress.org/">Octopress</a></p>
+</blockquote>
+
+<p>廢話不多說，現在讓我們一起用 Jekyll 在 Github pages 上架設一個專屬 Blog 吧!</p>
+
+<h2 id="為什麼選-github-pages">為什麼選 GitHub Pages</h2>
+
+<p>因為<code class="language-plaintext highlighter-rouge">免費</code>不用花錢租一台機器，也不需買 domain 跟 SSL，GitHub Pages 通通幫你搞定，當然之後要換自己買的 domain 跟 SSL 也是做得到</p>
+
+<h2 id="事前準備">事前準備</h2>
+
+<h3 id="申請-github-帳號">申請 <a href="https://github.com">Github</a> 帳號</h3>
+
+<h3 id="安裝-git">安裝 <a href="https://git-scm.com">Git</a></h3>
+
+<blockquote>
+  <p>做版本控管</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>git
+git <span class="nt">--version</span>       <span class="c">#檢查版本</span>
+</code></pre></div></div>
+
+<h3 id="安裝-rbenv">安裝 <a href="[https://](https://github.com/rbenv/rbenv)">rbenv</a></h3>
+
+<blockquote>
+  <p>管理 ruby 版本</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>rbenv
+rbenv init
+<span class="c"># 依照你使用的 Shell，如果是 bash 請替換為 ~/.bashrc</span>
+<span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.rbenv/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.zshrc
+<span class="nb">echo</span> <span class="s1">'eval "$(rbenv init -)"'</span> <span class="o">&gt;&gt;</span> ~/.zshrc
+rbenv <span class="nt">-v</span>        <span class="c">#檢查版本</span>
+</code></pre></div></div>
+
+<h3 id="安裝-ruby">安裝 <a href="https://www.ruby-lang.org/">ruby</a></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rbenv <span class="nb">install </span>3.0.0
+rbenv global 3.0.0
+rbenv rehash        <span class="c"># Rehash rbenv shims (run this after installing executables)</span>
+</code></pre></div></div>
+
+<p>用 <code class="language-plaintext highlighter-rouge">rbenv -v</code> 檢查版本</p>
+
+<h3 id="檢查-rubygems">檢查 <a href="https://rubygems.org/">RubyGems</a></h3>
+
+<blockquote>
+  <p>Gem 套件管理服務，讓你能立即地發佈及安裝你的 Gem 套件，裝 ruby 時會一起安裝</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem update <span class="nt">--system</span>
+gem <span class="nt">-v</span>
+</code></pre></div></div>
+
+<h3 id="檢查-gcc--make">檢查 <a href="https://gcc.gnu.org/install/">GCC</a> / <a href="https://www.gnu.org/software/make/">Make</a></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc <span class="nt">-v</span>
+g++ <span class="nt">-v</span>
+make <span class="nt">-v</span>
+</code></pre></div></div>
+
+<h2 id="建立-jekyll-blog-網站">建立 Jekyll Blog 網站</h2>
+
+<blockquote>
+  <p>這邊我是參考 GitHub 官網教學，如果英文可以的朋友可以直接參考 GitHub 的教學 <a href="https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll">Creating a GitHub Pages site with Jekyll</a></p>
+</blockquote>
+
+<p>打開終端機，cd 到要建立 Blog 的目錄</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>PARENT-FOLDER
+</code></pre></div></div>
+
+<p>創建一個 Git repo 目錄，REPOSITORY-NAME 替換為你 GitHub repo 想取的名字 <code class="language-plaintext highlighter-rouge">(e.g. blog)</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git init REPOSITORY-NAME
+</code></pre></div></div>
+
+<p>cd 到 repo 目錄</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>REPOSITORY-NAME
+</code></pre></div></div>
+
+<p>決定你 GitHub Pages 網站發佈抓取 source 的方式 <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#publishing-sources-for-github-pages-sites">Publishing sources for GitHub Pages sites</a></p>
+
+<ol>
+  <li>用 gh-pages branch 當發佈 source</li>
+  <li>用任何分支上的 /docs folder 作為發佈 source</li>
+</ol>
+
+<p>這邊我選擇使用<code class="language-plaintext highlighter-rouge">1. 用 gh-pages branch 當發佈 source</code></p>
+
+<p>創建 gh-pages branch</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">--orphan</span> gh-pages
+<span class="c"># Creates a new branch, with no history or contents, called gh-pages and switches to the gh-pages branch</span>
+</code></pre></div></div>
+
+<p>創建一個新的 Jekyll site</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jekyll new <span class="nt">--skip-bundle</span> <span class="nb">.</span>      <span class="c"># --skip-bundle : jekyll 創建時先不執行 `bundle install` 安裝 gem 套件</span>
+</code></pre></div></div>
+
+<p>打開 <code class="language-plaintext highlighter-rouge">Gemfile</code>，在 gem “jekyll” 前面加上 “#”，不安裝 jekyll
+加入 <code class="language-plaintext highlighter-rouge">github-pages</code> gem</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem <span class="s2">"github-pages"</span>, <span class="s2">"~&gt; GITHUB-PAGES-VERSION"</span>, group: :jekyll_plugins
+
+</code></pre></div></div>
+
+<blockquote>
+  <p>請將 GITHUB-PAGES-VERSION 替換成 <code class="language-plaintext highlighter-rouge">github-pages</code> 最後支援版本，請參考 <a href="https://pages.github.com/versions/">Dependency versions</a></p>
+</blockquote>
+
+<p>存檔 Gemfile，執行 <code class="language-plaintext highlighter-rouge">bundle install</code></p>
+
+<blockquote>
+  <p>安裝 Gemfile 中的 gem 套件</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">install</span>
+</code></pre></div></div>
+
+<p>修改 <code class="language-plaintext highlighter-rouge">_config.yml</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>domain: my-site.github.io       <span class="c"># if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com</span>
+url: https://my-site.github.io  <span class="c"># the base hostname and protocol for your site, e.g. http://example.com</span>
+baseurl: /REPOSITORY-NAME/      <span class="c"># place folder name if the site is served in a subfolder</span>
+</code></pre></div></div>
+
+<p>加入 webrick gem</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle add webrick
+</code></pre></div></div>
+
+<p>Fix <a href="https://github.com/jekyll/jekyll/issues/7329">favicon.ico not found issue</a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch </span>favicon.ico
+</code></pre></div></div>
+
+<h2 id="在-local-測試-jekyll-blog-網站">在 local 測試 Jekyll Blog 網站</h2>
+
+<p>打開終端機執行</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">install
+</span>bundle <span class="nb">exec </span>jekyll serve
+</code></pre></div></div>
+
+<p>點擊 Server address: <code class="language-plaintext highlighter-rouge">http://localhost:4000</code> 預覽你的網站</p>
+
+<p><img src="/blog/assets/images/jekyll_local_test.png" alt="create_a_new_repo_on_github" /></p>
+
+<p>恭喜，你已經完成了你的第一個 Jekyll 網站 🎉🎉🎉🎉🎉
+但我們只能在 local 欣賞，不能分享給朋友同事看，接上來我們將他推上去 GitHub，讓 GitHub Pages 幫我們建置 Blog 吧!</p>
+
+<h2 id="上傳-github-讓-github-pages-自動建置-blog">上傳 GitHub 讓 GitHub Pages 自動建置 Blog</h2>
+
+<p>首先要到 GitHub 網站創建一個 repository，請使用 Public 專案，名字隨便你取 <code class="language-plaintext highlighter-rouge">(e.g. blog)</code></p>
+
+<p><img src="/blog/assets/images/create_a_new_repo_on_github.png" alt="create_a_new_repo_on_github" /></p>
+
+<p>複製 repo 的 URL 等等會用到</p>
+
+<p>先回到終端機將我們的測試過的 code commit</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"[feature] Initial GitHub pages site with Jekyll"</span>
+</code></pre></div></div>
+
+<p>將剛剛複製的 repo URL 加入 git remote URL</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote add origin https://github.com/USER/REPOSITORY.git
+</code></pre></div></div>
+
+<p>將 code 推上 GitHub</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push <span class="nt">-u</span> origin BRANCH   <span class="c"># 因為上面是用 gh-pages 作為 source，這邊就直接將 BRANCH 換為 gh-pages 推上 GitHub 即可</span>
+</code></pre></div></div>
+
+<p>回到 GitHub 網頁 -&gt; Settings -&gt; Pages 點擊上面的網址 <code class="language-plaintext highlighter-rouge">https://USERNAME.github.io/</code></p>
+
+<p><img src="/blog/assets/images/jekyll_github_pages.png" alt="jekyll_github_pages" /></p>
+
+<p>恭喜，你已經成功將 Jekyll 網站推上 GitHub Pages，現在全世界都看得到你的 Blog 了 🎉🎉🎉🎉🎉</p>
+
+<p>但我們的 Blog 目前還非常的陽春，讓我們為 Blog 套上主題美化吧!</p>
+
+<h2 id="加入-minimal-mistakes-主題">加入 Minimal-mistakes 主題</h2>
+
+<blockquote>
+  <p>這邊我是參考 minimal-mistakes 官網教學，如果英文可以的朋友可以直接參考 minimal-mistakes 的教學 <a href="https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/">Quick-Start Guide</a></p>
+</blockquote>
+
+<p>這邊 minimal-mistakes 作者提供了三種方式來安裝主題</p>
+
+<ol>
+  <li>Gem-based method</li>
+  <li>Remote theme method</li>
+  <li>Fork</li>
+</ol>
+
+<p>GitHub Pages 很適合第 2 種方式，所以這邊我們選擇第二種安裝方式
+打開 <code class="language-plaintext highlighter-rouge">Gemfile</code> 並加入下面的 code</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> <span class="s2">"https://rubygems.org"</span>
+
+gem <span class="s2">"github-pages"</span>, group: :jekyll_plugins
+gem <span class="s2">"jekyll-include-cache"</span>, group: :jekyll_plugins
+</code></pre></div></div>
+
+<p>打開 _config.yml 找到 <code class="language-plaintext highlighter-rouge">plugins</code> 並加入 <code class="language-plaintext highlighter-rouge">jekyll-include-cache</code> plugin</p>
+
+<p>抓取及更新 bundle 的 gems 套件</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle
+</code></pre></div></div>
+
+<p>打開 <code class="language-plaintext highlighter-rouge">_config.yml</code> 加入 <code class="language-plaintext highlighter-rouge">remote_theme: "mmistakes/minimal-mistakes@4.24.0"</code>，並移除其他 <code class="language-plaintext highlighter-rouge">theme:</code> 及 <code class="language-plaintext highlighter-rouge">remote_theme</code></p>
+
+<p>編輯 _config.yml，這邊我是複製 <a href="https://github.com/mmistakes/minimal-mistakes/blob/master/_config.yml">Minimal Mistakes/index.html</a>，並保留之前修改過的 domain, url, baseurl</p>
+
+<ul>
+  <li>將 index.md 內容替換成 <a href="https://github.com/mmistakes/minimal-mistakes/blob/master/index.html">Minimal Mistakes/index.md</a></li>
+  <li>打開<code class="language-plaintext highlighter-rouge">_posts/0000-00-00-welcome-to-jekyll.markdown</code>，將<code class="language-plaintext highlighter-rouge">layout: post</code>改成<code class="language-plaintext highlighter-rouge">layout: single</code></li>
+  <li>刪除 <code class="language-plaintext highlighter-rouge">about.md</code></li>
+</ul>
+
+<p>好了，在測試一下結果如何</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">install
+</span>bundle <span class="nb">exec </span>jekyll serve
+</code></pre></div></div>
+
+<p><img src="/blog/assets/images/jekyll_with_minimal_mistakes_theme_local_test.png" alt="jekyll_with_minimal_mistakes_theme_local_test" /></p>
+
+<p>恭喜，你已經成功套用 <code class="language-plaintext highlighter-rouge">Minimal-mistakes</code> 主題進你的 Jekyll Blog 了 🎉🎉🎉🎉🎉</p>
+
+<p>最後我們將 code commit 推上 GitHub</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"[feature] Add Minimal-mistakes theme to Jekyll"</span>
+git push origin gh-pages
+</code></pre></div></div>
+
+<p><img src="/blog/assets/images/jekyll_with_minimal_mistakes_theme_github_pages.png" alt="jekyll_with_minimal_mistakes_theme_github_pages" /></p>
+
+<p>Done! 🎉🎉🎉🎉🎉</p>
+
+<p class="notice--success"><strong>Note:</strong> 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長🙂</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#jekyll" class="page__taxonomy-item" rel="tag">Jekyll</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#minimal-mistakes" class="page__taxonomy-item" rel="tag">Minimal-Mistakes</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#theme" class="page__taxonomy-item" rel="tag">Theme</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-12-29T07:45:03+00:00">December 29, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E4%BD%BF%E7%94%A8+Jekyll+%2B+minimal-mistakes+%E5%9C%A8+Github+pages+%E4%B8%8A%E6%9E%B6%E8%A8%AD%E8%87%AA%E5%B7%B1%E7%9A%84%E9%83%A8%E8%90%BD%E6%A0%BC+-+Jekyll+x+Minimal-Mistakes+x+GitHub+pages%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fblog%2Fcreating_a_github_pages_with_jekyll_and_minimal_mistakes%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fblog%2Fcreating_a_github_pages_with_jekyll_and_minimal_mistakes%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fblog%2Fcreating_a_github_pages_with_jekyll_and_minimal_mistakes%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/blog/how-to-add-your-octopress-blog-website-to-google-search-console/" class="pagination--pager" title="如何使 Octopress website 能被 Google 搜索到 - Google x Search x Blog
+">Previous</a>
+    
+    
+      <a href="/blog/blog/how-to-add-your-jekyll-blog-website-to-google-search-console/" class="pagination--pager" title="如何使 Jekyll website 能被 Google 搜索到 - Google x Search x Blog
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/kelly-sikkema-lFtttcsx5Vk-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/" rel="permalink">🚀 如何使用 Excalidraw AI 快速生成專業級圖表，提升工作效率！
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-03-15T08:30:00+00:00">March 15, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">使用 Excalidraw AI 只需輸入文字描述，即可快速生成流程圖、技術架構圖、心智圖等，提升工作效率！
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/raul-per-e-K2w9VegUIb0-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/setup%20guide/setup-development-environment-on-a-new-macos/" rel="permalink">Setup Development Environment on a New macOS
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-01-11T07:00:00+00:00">January 11, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Step-by-step guide to setting up a mobile development environment on a new macOS system.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" rel="permalink">Design Pattern (28) - Interpreter Pattern (解譯器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-29T08:30:00+00:00">December 29, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/blog/creating_a_github_pages_with_jekyll_and_minimal_mistakes/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/blog/creating_a_github_pages_with_jekyll_and_minimal_mistakes"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>
