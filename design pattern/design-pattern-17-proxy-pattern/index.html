@@ -1,0 +1,975 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>Design Pattern (17) - Proxy Pattern (代理模式) - Nick’s Blog</title>
+<meta name="description" content="了解代理模式如何通過控制對物件的訪問來提升系統的安全性、效能及靈活性。">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="Design Pattern (17) - Proxy Pattern (代理模式)">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-17-proxy-pattern/">
+
+
+  <meta property="og:description" content="了解代理模式如何通過控制對物件的訪問來提升系統的安全性、效能及靈活性。">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/design_patterns.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2024-12-15T13:30:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-17-proxy-pattern/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/design_patterns.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Design Pattern (17) - Proxy Pattern (代理模式)
+
+        
+      </h1>
+      
+        <p class="page__lead">了解代理模式如何通過控制對物件的訪問來提升系統的安全性、效能及靈活性。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-15T13:30:00+00:00">December 15, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Design Pattern (17) - Proxy Pattern (代理模式)">
+    <meta itemprop="description" content="了解代理模式如何通過控制對物件的訪問來提升系統的安全性、效能及靈活性。">
+    <meta itemprop="datePublished" content="2024-12-15T13:30:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#需求">需求</a></li><li><a href="#物件導向分析-ooa">物件導向分析 (OOA)</a></li><li><a href="#察覺-forces">察覺 Forces</a></li><li><a href="#套用-proxy-pattern-solution-得到新的-context-resulting-context">套用 Proxy Pattern (Solution) 得到新的 Context (Resulting Context)</a></li><li><a href="#物件導向程式設計-oop">物件導向程式設計 (OOP)</a></li><li><a href="#結論">結論</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>您可於此 <a href="https://github.com/nickhuangcyh/design_pattern">design_pattern repo</a> 下載 Design Pattern 系列程式碼。</p>
+</blockquote>
+
+<h2 id="需求">需求</h2>
+
+<p>我們的任務是建立一個影片播放系統，需求如下：</p>
+
+<ul>
+  <li>應用能播放多個影片，但避免每次都重複下載相同的影片。</li>
+  <li>影片需要在用戶第一次訪問時下載，之後從快取中取得以節省資源。</li>
+  <li>提供一個透明的介面，無需讓客戶端知道影片是透過代理取得的。</li>
+</ul>
+
+<h2 id="物件導向分析-ooa">物件導向分析 (OOA)</h2>
+
+<p>理解需求後，讓我們來快速實作物件導向分析吧！</p>
+
+<p><img src="/blog/assets/images/design_pattern_proxy_pattern_uml_1.png" alt="proxy_pattern_uml_1" /></p>
+
+<h2 id="察覺-forces">察覺 Forces</h2>
+
+<p>在未使用設計模式的情況下，我們可能面臨以下挑戰：</p>
+
+<ol>
+  <li>
+    <p><strong>高頻寬消耗 (High Bandwidth Usage)</strong>：</p>
+
+    <ul>
+      <li>如果每次播放影片都重新下載，將導致不必要的頻寬浪費。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>延遲時間 (High Latency)</strong>：</p>
+
+    <ul>
+      <li>每次下載影片會增加播放前的等待時間，影響用戶體驗。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>客戶端耦合 (Client Coupling)</strong>：</p>
+    <ul>
+      <li>如果客戶端需要處理影片的下載邏輯，會增加不必要的複雜性。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="套用-proxy-pattern-solution-得到新的-context-resulting-context">套用 Proxy Pattern (Solution) 得到新的 Context (Resulting Context)</h2>
+
+<p>做完 OOA，察覺 Forces，看清楚整個 Context 後，就可以來套用 Proxy Pattern 解決這個問題。</p>
+
+<p>Proxy Pattern 提供了解決方案，通過引入 Proxy 物件來控制對核心物件的訪問，實現快取功能並提升效能。</p>
+
+<p>先來看一下 Proxy Pattern 的 UML：</p>
+
+<p><img src="/blog/assets/images/design_pattern_proxy_pattern_uml_2.png" alt="proxy_pattern_uml_2" /></p>
+
+<p>以下是 Proxy Pattern 的主要角色：</p>
+
+<ul>
+  <li><strong>Subject (主題介面)</strong>：定義核心物件與代理物件的共同介面。</li>
+  <li><strong>RealSubject (具體主題)</strong>：核心物件，負責實際下載與播放影片。</li>
+  <li><strong>Proxy (代理)</strong>：代理物件，控制對核心物件的訪問，實現快取功能。</li>
+</ul>
+
+<p>將 Proxy Pattern 套用到我們的應用吧</p>
+
+<p><img src="/blog/assets/images/design_pattern_proxy_pattern_uml_3.png" alt="proxy_pattern_uml_3" /></p>
+
+<h2 id="物件導向程式設計-oop">物件導向程式設計 (OOP)</h2>
+
+<p>[Subject: VideoPlayer]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">VideoPlayer</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">download</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">):</span> <span class="nc">String</span>
+    <span class="k">fun</span> <span class="nf">play</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[RealSubject: YoutubeVideoPlayer]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">YoutubeVideoPlayer</span> <span class="p">:</span> <span class="nc">VideoPlayer</span> <span class="p">{</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">download</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">):</span> <span class="nc">String</span> <span class="p">{</span>
+        <span class="nf">println</span><span class="p">(</span><span class="s">"Downloading video from YouTube: $name"</span><span class="p">)</span>
+        <span class="c1">// 模擬下載結果返回的影片資料</span>
+        <span class="k">return</span> <span class="s">"VideoData($name)"</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">play</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">println</span><span class="p">(</span><span class="s">"Playing video: $data"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[Proxy: ProxyVideoPlayer]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">ProxyVideoPlayer</span><span class="p">(</span>
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">player</span><span class="p">:</span> <span class="nc">YoutubeVideoPlayer</span>
+<span class="p">)</span> <span class="p">:</span> <span class="nc">VideoPlayer</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">cacheVideoList</span> <span class="p">=</span> <span class="n">mutableMapOf</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;()</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">download</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">):</span> <span class="nc">String</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">if</span> <span class="p">(</span><span class="n">cacheVideoList</span><span class="p">.</span><span class="nf">containsKey</span><span class="p">(</span><span class="n">name</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nf">println</span><span class="p">(</span><span class="s">"Fetching video from cache: $name"</span><span class="p">)</span>
+            <span class="n">cacheVideoList</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">!!</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nf">println</span><span class="p">(</span><span class="s">"First time download for: $name"</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">videoData</span> <span class="p">=</span> <span class="n">player</span><span class="p">.</span><span class="nf">download</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">cacheVideoList</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="p">=</span> <span class="n">videoData</span>
+            <span class="n">videoData</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">play</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">player</span><span class="p">.</span><span class="nf">play</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[Client: VideoPlayerManager]</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">VideoPlayerManager</span><span class="p">(</span><span class="k">private</span> <span class="kd">val</span> <span class="py">player</span><span class="p">:</span> <span class="nc">VideoPlayer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">playVideo</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">println</span><span class="p">(</span><span class="s">"Request to play video: $name"</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">videoData</span> <span class="p">=</span> <span class="n">player</span><span class="p">.</span><span class="nf">download</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">player</span><span class="p">.</span><span class="nf">play</span><span class="p">(</span><span class="n">videoData</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Using ProxyVideoPlayer</span>
+    <span class="kd">val</span> <span class="py">youtubePlayer</span> <span class="p">=</span> <span class="nc">YoutubeVideoPlayer</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">proxyPlayer</span> <span class="p">=</span> <span class="nc">ProxyVideoPlayer</span><span class="p">(</span><span class="n">youtubePlayer</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">manager</span> <span class="p">=</span> <span class="nc">VideoPlayerManager</span><span class="p">(</span><span class="n">proxyPlayer</span><span class="p">)</span>
+
+    <span class="c1">// Play video</span>
+    <span class="n">manager</span><span class="p">.</span><span class="nf">playVideo</span><span class="p">(</span><span class="s">"funny_cats.mp4"</span><span class="p">)</span>
+    <span class="n">manager</span><span class="p">.</span><span class="nf">playVideo</span><span class="p">(</span><span class="s">"funny_cats.mp4"</span><span class="p">)</span> <span class="c1">// using cache</span>
+    <span class="n">manager</span><span class="p">.</span><span class="nf">playVideo</span><span class="p">(</span><span class="s">"epic_fail.mp4"</span><span class="p">)</span>
+    <span class="n">manager</span><span class="p">.</span><span class="nf">playVideo</span><span class="p">(</span><span class="s">"funny_cats.mp4"</span><span class="p">)</span> <span class="c1">// using cache</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>[Output]</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Request to play video: funny_cats.mp4
+First <span class="nb">time </span>download <span class="k">for</span>: funny_cats.mp4
+Downloading video from YouTube: funny_cats.mp4
+Playing video: VideoData<span class="o">(</span>funny_cats.mp4<span class="o">)</span>
+
+Request to play video: funny_cats.mp4
+Fetching video from cache: funny_cats.mp4
+Playing video: VideoData<span class="o">(</span>funny_cats.mp4<span class="o">)</span>
+
+Request to play video: epic_fail.mp4
+First <span class="nb">time </span>download <span class="k">for</span>: epic_fail.mp4
+Downloading video from YouTube: epic_fail.mp4
+Playing video: VideoData<span class="o">(</span>epic_fail.mp4<span class="o">)</span>
+
+Request to play video: funny_cats.mp4
+Fetching video from cache: funny_cats.mp4
+Playing video: VideoData<span class="o">(</span>funny_cats.mp4<span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="結論">結論</h2>
+
+<p>透過 <strong>Proxy Pattern</strong>，我們成功實現了影片快取的功能，解決了頻寬消耗與延遲時間過長的問題。此外，代理物件與核心物件共享相同的介面，對客戶端保持透明性，進一步降低耦合性。此模式特別適用於需要控制對資源訪問的場景，例如遠端代理、安全代理與智慧代理，為系統提供了靈活性與可擴展性。</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#proxy-pattern" class="page__taxonomy-item" rel="tag">Proxy Pattern</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#design-pattern" class="page__taxonomy-item" rel="tag">Design Pattern</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2024-12-15T13:30:00+00:00">December 15, 2024</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Design+Pattern+%2817%29+-+Proxy+Pattern+%28%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%29%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-17-proxy-pattern%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-17-proxy-pattern%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-17-proxy-pattern%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/design%20pattern/design-pattern-16-flyweight-pattern/" class="pagination--pager" title="Design Pattern (16) - Flyweight Pattern (享元模式)
+">Previous</a>
+    
+    
+      <a href="/blog/design%20pattern/design-pattern-18-chain-of-responsibility-pattern/" class="pagination--pager" title="Design Pattern (18) - Chain of Responsibility Pattern (責任鏈模式)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/kelly-sikkema-lFtttcsx5Vk-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/" rel="permalink">🚀 如何使用 Excalidraw AI 快速生成專業級圖表，提升工作效率！
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-03-15T08:30:00+00:00">March 15, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">使用 Excalidraw AI 只需輸入文字描述，即可快速生成流程圖、技術架構圖、心智圖等，提升工作效率！
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/raul-per-e-K2w9VegUIb0-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/setup%20guide/setup-development-environment-on-a-new-macos/" rel="permalink">Setup Development Environment on a New macOS
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-01-11T07:00:00+00:00">January 11, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Step-by-step guide to setting up a mobile development environment on a new macOS system.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" rel="permalink">Design Pattern (28) - Interpreter Pattern (解譯器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-29T08:30:00+00:00">December 29, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-17-proxy-pattern/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/design%20pattern/design-pattern-17-proxy-pattern"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

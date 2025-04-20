@@ -1,0 +1,1257 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>Design Pattern (2) - Design Principles (設計原則) - Nick’s Blog</title>
+<meta name="description" content="學習如何透過單一職責和開放封閉等設計原則提升程式碼質量，打造靈活、可維護的軟體系統。">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="Design Pattern (2) - Design Principles (設計原則)">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-2-design-principle/">
+
+
+  <meta property="og:description" content="學習如何透過單一職責和開放封閉等設計原則提升程式碼質量，打造靈活、可維護的軟體系統。">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/design_patterns.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2024-07-03T15:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-2-design-principle/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/design_patterns.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Design Pattern (2) - Design Principles (設計原則)
+
+        
+      </h1>
+      
+        <p class="page__lead">學習如何透過單一職責和開放封閉等設計原則提升程式碼質量，打造靈活、可維護的軟體系統。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-07-03T15:00:00+00:00">July 3, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Design Pattern (2) - Design Principles (設計原則)">
+    <meta itemprop="description" content="學習如何透過單一職責和開放封閉等設計原則提升程式碼質量，打造靈活、可維護的軟體系統。">
+    <meta itemprop="datePublished" content="2024-07-03T15:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#design-principle">Design Principle</a></li><li><a href="#solid-物件導向程式設計基本五大原則">SOLID 物件導向程式設計基本五大原則</a><ul><li><a href="#single-responsibility-principle-srp-單一職責原則">Single Responsibility Principle (SRP) 單一職責原則</a></li><li><a href="#open-closed-principle-ocp-開放封閉原則">Open Closed Principle (OCP) 開放封閉原則</a></li><li><a href="#liskov-substitution-principle-lsp-里氏替換原則">Liskov Substitution Principle (LSP) 里氏替換原則</a></li><li><a href="#interface-segregation-principle-isp-介面隔離原則">Interface Segregation Principle (ISP) 介面隔離原則</a></li><li><a href="#dependency-inversion-principle-dip-依賴反向原則">Dependency Inversion Principle (DIP) 依賴反向原則</a></li></ul></li><li><a href="#encapsulate-what-varies-封裝變化">Encapsulate What Varies 封裝變化</a></li><li><a href="#favor-composition-over-inheritance-多用合成少用繼承">Favor composition over inheritance 多用合成，少用繼承</a></li><li><a href="#loose-coupling-鬆耦合">Loose Coupling 鬆耦合</a></li><li><a href="#program-to-interfaces-基於介面編程">Program to Interfaces 基於介面編程</a></li><li><a href="#總結">總結</a></li><li><a href="#參考">參考</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>您可於此 <a href="https://github.com/nickhuangcyh/design_pattern">design_pattern repo</a> 下載 Design Pattern 系列程式碼。</p>
+</blockquote>
+
+<h2 id="design-principle">Design Principle</h2>
+
+<p>Design Principle 是用來幫助我們改善物件導向設計的建議，幫助我們設計出更好的軟體。</p>
+
+<h2 id="solid-物件導向程式設計基本五大原則">SOLID 物件導向程式設計基本五大原則</h2>
+
+<h3 id="single-responsibility-principle-srp-單一職責原則">Single Responsibility Principle (SRP) 單一職責原則</h3>
+
+<p>物件應該僅具有一種單一功能，應只會有一個理由去改變此物件</p>
+
+<p>e.g.
+我們要做登入頁面功能，我們會這樣寫</p>
+
+<ul class="tab" data-tab="a22e0f63-bd14-4c70-861c-5b428b5be34a" data-name="srp-1">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="a22e0f63-bd14-4c70-861c-5b428b5be34a" data-name="srp-1">
+  
+      <li class="active">
+<script src="https://gist.github.com/f07646e50fa8d3bcac3758b214339a9c.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/fbfdba6544f6ad8f13a578e0eb118806.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>依照單一職責原則，我們應該要將 API 及 DB 的功能分開，修改如下</p>
+
+<ul class="tab" data-tab="0f6a0598-c1be-4915-842e-aa44008d9086" data-name="srp-2">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="0f6a0598-c1be-4915-842e-aa44008d9086" data-name="srp-2">
+  
+      <li class="active">
+<script src="https://gist.github.com/05d0878df1f90659159a5416f7078fea.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/8fed9a96831bc8cffeaace60fd474399.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>有些文章會說 save, delete function 也須拆開在不同 class(DeleteDBService, SaveDBService)處理, 因為 save. delete 是不同職責修改項目, 不應動到另一個 class, 但我認為這樣 Over Design 反而不好維護, 拆分職責應適當不過度</p>
+
+<h3 id="open-closed-principle-ocp-開放封閉原則">Open Closed Principle (OCP) 開放封閉原則</h3>
+
+<p>對於擴充開放，對於修改封閉</p>
+
+<p>e.g.
+我們常常會需要檢查使用者登入的帳密等等，我們來做一個檢查器吧</p>
+
+<ul class="tab" data-tab="423141bd-4499-4a84-927d-7f5aa7bbde0a" data-name="ocp-1">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="423141bd-4499-4a84-927d-7f5aa7bbde0a" data-name="ocp-1">
+  
+      <li class="active">
+<script src="https://gist.github.com/abada6874d79516946038fab2ca7e395.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/66cfe3ac77321120241f1dd5efae8db8.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>但假如今天客戶想要增加 Email、Phone Number、Device Mac 等等的格式檢查，那我們必須修改到 Validator class 的程式碼，這樣會影響到其他程式碼，打破了 Open-Closed Principle，對於擴充開放，對於修改封閉，那我們可以怎麼改進，如下</p>
+
+<ul class="tab" data-tab="c1557b00-2151-437e-9219-38a25c57b6d1" data-name="ocp-2">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="c1557b00-2151-437e-9219-38a25c57b6d1" data-name="ocp-2">
+  
+      <li class="active">
+<script src="https://gist.github.com/4781d9bdbc57915e0e38e99bdee48dc6.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/21cf84cbe4b4c0790e62c9025e37ef9c.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>如此要新增 Email、Phone Number、Device Mac 格式檢查，我們只需要新增相對應的檢查器即可 EmailValidator、PhoneNumberValidator 及 DeviceMacValidator，既不會影響其他程式碼(對修改封閉)，也容易擴充新的檢查器(對擴充開放)</p>
+
+<h3 id="liskov-substitution-principle-lsp-里氏替換原則">Liskov Substitution Principle (LSP) 里氏替換原則</h3>
+
+<p>程式中的物件應該是可以在不改變程式正確性的前提下被它的子類所替換的</p>
+
+<p>e.g. 我們需要計算正方形及長方形的面積</p>
+
+<ul class="tab" data-tab="23049581-2e68-4c1c-b90a-f18676ce7ace" data-name="lsp-1">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="23049581-2e68-4c1c-b90a-f18676ce7ace" data-name="lsp-1">
+  
+      <li class="active">
+<script src="https://gist.github.com/b4cc5cbc43afc9239a63e568ea7581ed.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/09845484c41ce34c42edd8f096550089.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>上面的例子我們將正方形繼承長方形，但正方形的 getArea() 卻不符合長方形的結果，這就打破了 LSP。</p>
+
+<ul>
+  <li>增加程式碼的健全度，在使用不同的子類別的時候，可以大幅度的保證彼此之間的相容性。只要父類別可以使用，基本上子類別也可以使用</li>
+  <li>子類別如果要新增功能，獨立在父類別的功能之外，才不會在搬移到其他子類別的時候發生奇怪的問題，也可以將功能切分乾淨，區分職責</li>
+</ul>
+
+<h3 id="interface-segregation-principle-isp-介面隔離原則">Interface Segregation Principle (ISP) 介面隔離原則</h3>
+
+<p>多個特定客戶端介面要好於一個寬泛用途的介面</p>
+
+<p>e.g.
+今天需要設計如何讓使用者操作車子</p>
+
+<ul class="tab" data-tab="92ae7f36-7fd9-4d9a-bbad-dffce7ee8140" data-name="isp-1">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="92ae7f36-7fd9-4d9a-bbad-dffce7ee8140" data-name="isp-1">
+  
+      <li class="active">
+<script src="https://gist.github.com/5be469e13f08dcd903d165f74649c9ce.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/68390dc1d479837df0fe70d2057d8c97.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>工程師可以開啟 DebugMode, 但駕駛使用者不應該可以開啟 DebugMode，因此我們來改變程式碼將 enableDebugMode() 隔離成獨立介面吧!</p>
+
+<ul class="tab" data-tab="70a6998e-6bb6-4e19-a282-2df9c6d8a894" data-name="isp-2">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="70a6998e-6bb6-4e19-a282-2df9c6d8a894" data-name="isp-2">
+  
+      <li class="active">
+<script src="https://gist.github.com/0a935483e1713954181eb0b8ad4c71ca.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/5e8adc0ccfcde8a411a555fc40f960e9.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>如此就只有工程師能進入 DebugMode</p>
+
+<h3 id="dependency-inversion-principle-dip-依賴反向原則">Dependency Inversion Principle (DIP) 依賴反向原則</h3>
+
+<p>高階模組不應該依賴於低階模組，兩者都應該依賴抽象，
+抽象不應該依賴細節，細節應該依賴抽象。</p>
+
+<p>e.g. 設計一個能不同房間加入不同 IoT 設備的系統，可以新增刪除房間，例如客廳有智慧音箱、溫度控制器，廚房有煙霧偵測器等…</p>
+
+<ul class="tab" data-tab="35ab3cb0-20ce-4a19-a0f5-38729aa7f0c7" data-name="dip-1">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="35ab3cb0-20ce-4a19-a0f5-38729aa7f0c7" data-name="dip-1">
+  
+      <li class="active">
+<script src="https://gist.github.com/f2ec088e47cf7d24bc89ee7ef9f82fc5.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/ae27a0ba9c9bac8489d15c9f032d620b.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>如果今天 SQLite 因某些問題(速度過慢等等…)因素，導致我們必須換成 CoreData 或其他 Database 呢?
+你會發現我們無法抽換，但如果依賴於抽象編寫，程式碼就會非常好抽換及測試，下面讓我們修改一下程式碼</p>
+
+<ul class="tab" data-tab="2e7954e3-8404-4532-adeb-dbf8f1d3f7b3" data-name="dip-2">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="2e7954e3-8404-4532-adeb-dbf8f1d3f7b3" data-name="dip-2">
+  
+      <li class="active">
+<script src="https://gist.github.com/a6483dc7bb915e331dfdc1bac3f9e4da.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/217e20c99e2528576d13ed36df60a0ab.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>抽象 - interface, protocol, abstract class</p>
+
+<ul>
+  <li>依賴於抽象可以使我們的程式碼更加有彈性, 也更好抽換依賴物件</li>
+  <li>養成多寫一層抽象成能使程式碼更好維護、測試</li>
+  <li>抽象層能使我們非常容易的製作假物件快速測試程式邏輯</li>
+</ul>
+
+<h2 id="encapsulate-what-varies-封裝變化">Encapsulate What Varies 封裝變化</h2>
+
+<p>找出程式中可能需要更動之處，把它們獨立出來，不要和那些不需要更動的程式碼混再一起。</p>
+
+<p>假設今天要設計一間鬆餅店，可以訂購鬆餅</p>
+
+<ul class="tab" data-tab="a2e63fc0-f454-40a5-b03c-eae5c3ad72e1" data-name="encapsulate-what-varies-1">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="a2e63fc0-f454-40a5-b03c-eae5c3ad72e1" data-name="encapsulate-what-varies-1">
+  
+      <li class="active">
+<script src="https://gist.github.com/835acb7a2496ff7b39cda8a47e665c08.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/0f4b98c8be72d377a2b38aa81f5a8dbf.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>但老闆今天想增加新口味 <code class="language-plaintext highlighter-rouge">ChocolateChip</code> ，但 cook(), plate(), addButter() 這些程式並不需要修改，所以我們應該將會變化的程式碼抽出來封裝，減少對不需變動的程式碼產生影響。</p>
+
+<ul class="tab" data-tab="fd53a17a-6915-4f07-a190-8487f316e636" data-name="encapsulate-what-varies-2">
+  
+      <li class="active">
+          <a href="#">Swift </a>
+      </li>
+  
+      <li>
+          <a href="#">Kotlin </a>
+      </li>
+  
+</ul>
+<ul class="tab-content" id="fd53a17a-6915-4f07-a190-8487f316e636" data-name="encapsulate-what-varies-2">
+  
+      <li class="active">
+<script src="https://gist.github.com/07f751fc0716f9194e1aca18b2bc88e4.js"> </script>
+
+</li>
+  
+      <li>
+<script src="https://gist.github.com/22a42676343d12b474b15c5ffe7cb063.js"> </script>
+
+</li>
+  
+</ul>
+
+<p>如此我們就可以隨時添加新口味且不會影響其他不會變動的程式碼。</p>
+
+<h2 id="favor-composition-over-inheritance-多用合成少用繼承">Favor composition over inheritance 多用合成，少用繼承</h2>
+
+<p>HAS-A (composition) can be better than IS-A (inheritance)</p>
+
+<p>盡量使用合成來取代繼承，並不是完全不使用繼承，而是多數情況下你應該考慮使用合成而不是繼承</p>
+
+<p>假設今天要設計一間咖啡店，裡面有賣很多咖啡，我們可以這樣設計</p>
+
+<p><img src="/blog/assets/images/design_pattern_design_principle_favor_composition_over_inheritance_1.png" alt="design_pattern_design_principle_favor_composition_over_inheritance_1" /></p>
+
+<p>但如果今天客人要加 Butter 及 Milk，我們又要定義一個新的 class CoffeeWithButterAndMilk 繼承 Coffee
+我們會發現，隨著調味料種類越多，咖啡的組合也會越來越多，以及牛奶價格上漲，那所有包含牛奶的 Coffee 都必須修改</p>
+
+<p>如果我們用合成取代繼承呢，從牛奶咖啡是(is-A)咖啡，變成咖啡有(has-A)各種調味料</p>
+
+<p><img src="/blog/assets/images/design_pattern_design_principle_favor_composition_over_inheritance_2.png" alt="design_pattern_design_principle_favor_composition_over_inheritance_2" /></p>
+
+<p>你會發現使用合成取代繼承有下列好處</p>
+
+<ol>
+  <li>可以在 Run time 替換不同的調料物件</li>
+  <li>新增一種新調料只需新增一個對應的 class</li>
+  <li>沒有重複的程式碼</li>
+  <li>避免 class 數量爆炸性增加</li>
+</ol>
+
+<blockquote>
+  <p>再次強調不是完全不用繼承，而是”盡量”用合成取代繼承，像圖中例子 Mocha、Butter 及 Milk 也是有使用到繼承去繼承 Condiment</p>
+</blockquote>
+
+<h2 id="loose-coupling-鬆耦合">Loose Coupling 鬆耦合</h2>
+
+<p>將每個組件獨立開來，使部件之間的相互影響降低</p>
+
+<p>再來看一個範例，今天要做一個 Weather App，他可以取得溫度並顯示在螢幕上。</p>
+
+<p><img src="/blog/assets/images/design_pattern_design_principle_loose_coupling_1.png" alt="design_pattern_design_principle_loose_coupling_1" /></p>
+
+<p>你會發現 WeatherApp 與 LCDScreen 緊密耦合，今天如果老闆想改成在 Widget 或 LED 上來顯示，WeatherApp 的 screen 屬性及 display 方法都要修改，且不能在 Run time 任意替換。</p>
+
+<p>我們改一下 UML 來將兩者之間做解耦</p>
+
+<p><img src="/blog/assets/images/design_pattern_design_principle_loose_coupling_2.png" alt="design_pattern_design_principle_loose_coupling_2" /></p>
+
+<p>這樣不管老闆想改成什麼螢幕都能夠很輕易替換，因為 WeatherApp 依賴的是介面，不再是實體，善用抽象介面解耦兩個實體物件吧!</p>
+
+<h2 id="program-to-interfaces-基於介面編程">Program to Interfaces 基於介面編程</h2>
+
+<p>寫程式是針對介面而寫，而不是針對實踐方式而寫。</p>
+
+<p>當你針對介面編寫，你會發現任何物件都變得非常好抽換，當你需要注入假資料測試，你可以作假物件實作此介面即可，當你在做 MVC MVP 等架構，只需要實作此介面就能輕易替換組件，當你開始已介面去思考，你會發現程式碼變得非常有彈性、且好擴充測試，Apple 甚至在 WWDC15 中提到 Swift 的 <a href="https://developer.apple.com/videos/play/wwdc2015/408/">Protocol-Oriented Programming</a>，代表介面(協議)思考的重要性，所以從現在起開始從介面思考吧!</p>
+
+<p>來個例子，今天我們要設計一個基本網站，有一個 WebSystem 及 DB 來存讀資料</p>
+
+<p><img src="/blog/assets/images/design_pattern_design_principle_program_to_interface_1.png" alt="design_pattern_design_principle_program_to_interface_1" /></p>
+
+<p>今天我們想在上 Production 前，將 CommercialDB 換成 TestDB
+做測試，但目前 KillerWebSystem 的 db 型別為 CommercialDB 無法抽換</p>
+
+<p>讓我們修改一下</p>
+
+<p><img src="/blog/assets/images/design_pattern_design_principle_program_to_interface_2.png" alt="design_pattern_design_principle_program_to_interface_2" /></p>
+
+<p>寫一個 AbstractDB 的介面或抽象類別，讓 CommercialDB 及 TestDB 都實作此介面，這樣就能很輕鬆的在測試環境替換 DB</p>
+
+<h2 id="總結">總結</h2>
+
+<p>在本篇文章中，我們深入探討了設計原則的重要性，並透過實際的例子，如何在不同環境下靈活切換數據庫實例，展示了這些原則在實際開發中的應用。通過引入 AbstractDB 介面，我們看到了如何將具體的數據庫實現（如 CommercialDB 和 TestDB）與系統的其他部分解耦，從而提高了程式碼的靈活性和可維護性。</p>
+
+<p>這一過程不僅鞏固了我們對物件導向概念的理解，也為我們進一步探索設計模式鋪平了道路。設計原則是構建健壯、可擴展和靈活系統的基石，而設計模式則提供了一套解決特定設計問題的模板和最佳實踐。</p>
+
+<p>隨著我們即將進入設計模式的探索，期待您能夠將這些原則與即將學習的模式結合起來，進一步提升您的軟件設計和開發能力。下一篇文章將帶您深入設計模式的世界，探索如何通過這些模式解決更加複雜的設計挑戰，敬請期待。</p>
+
+<p><img src="/blog/assets/images/design_pattern_design_principle_architecture.png" alt="design_pattern_design_principle_architecture" /></p>
+
+<blockquote>
+  <p>Object-Oriented Concepts -&gt; Design Principle -&gt; Design Pattern</p>
+</blockquote>
+
+<h2 id="參考">參考</h2>
+
+<ul>
+  <li><a href="https://www.tenlong.com.tw/products/9789867794529">Head First Design Patterns</a></li>
+  <li><a href="https://www.tenlong.com.tw/products/9789866761799">大話設計模式</a></li>
+  <li><a href="https://www.linkedin.com/learning/advanced-design-patterns-design-principles/what-are-design-principles?autoAdvance=true&amp;autoSkip=false&amp;autoplay=true&amp;resume=true">Advanced Design Patterns: Design Principles</a></li>
+  <li><a href="https://www.linkedin.com/learning/programming-foundations-design-patterns-2/trying-interfaces?autoAdvance=true&amp;autoSkip=false&amp;autoplay=true&amp;resume=true">Programming Foundations: Design Patterns</a></li>
+  <li><a href="https://www.linkedin.com/learning/design-patterns-creational/think-about-how-you-create-objects?autoAdvance=true&amp;autoSkip=false&amp;autoplay=true&amp;resume=true">Design Patterns: Creational</a></li>
+  <li><a href="https://www.youtube.com/watch?v=yOe-uywb2qs&amp;list=PLicQRHHL75d7EXEI9nWfUYJyrPdI79M70&amp;pp=iAQB">水球潘 - Design Pattern 之路</a></li>
+</ul>
+
+<p class="notice--success"><strong>Note:</strong> 如果有任何建議、問題或不同想法，歡迎留言或寄信給我，可以一起討論進步成長 🙂</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#design-principle" class="page__taxonomy-item" rel="tag">Design Principle</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#design-pattern" class="page__taxonomy-item" rel="tag">Design Pattern</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2024-07-03T15:00:00+00:00">July 3, 2024</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Design+Pattern+%282%29+-+Design+Principles+%28%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87%29%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-2-design-principle%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-2-design-principle%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdesign%2520pattern%2Fdesign-pattern-2-design-principle%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/design%20pattern/design-pattern-1-object-oriented-concepts/" class="pagination--pager" title="Design Pattern (1) - Object-Oriented Concepts (物件導向概念)
+">Previous</a>
+    
+    
+      <a href="/blog/design%20pattern/design-pattern-3-design-pattern/" class="pagination--pager" title="Design Pattern (3) - Design Patterns (設計模式)
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/kelly-sikkema-lFtttcsx5Vk-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/" rel="permalink">🚀 如何使用 Excalidraw AI 快速生成專業級圖表，提升工作效率！
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-03-15T08:30:00+00:00">March 15, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">使用 Excalidraw AI 只需輸入文字描述，即可快速生成流程圖、技術架構圖、心智圖等，提升工作效率！
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/raul-per-e-K2w9VegUIb0-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/setup%20guide/setup-development-environment-on-a-new-macos/" rel="permalink">Setup Development Environment on a New macOS
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-01-11T07:00:00+00:00">January 11, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Step-by-step guide to setting up a mobile development environment on a new macOS system.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" rel="permalink">Design Pattern (28) - Interpreter Pattern (解譯器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-29T08:30:00+00:00">December 29, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/design%20pattern/design-pattern-2-design-principle/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/design%20pattern/design-pattern-2-design-principle"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,985 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>Setup Development Environment on a New macOS - Nick’s Blog</title>
+<meta name="description" content="Step-by-step guide to setting up a mobile development environment on a new macOS system.">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="Setup Development Environment on a New macOS">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/setup%20guide/setup-development-environment-on-a-new-macos/">
+
+
+  <meta property="og:description" content="Step-by-step guide to setting up a mobile development environment on a new macOS system.">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/raul-per-e-K2w9VegUIb0-unsplash.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2025-01-11T07:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/setup%20guide/setup-development-environment-on-a-new-macos/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/raul-per-e-K2w9VegUIb0-unsplash.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Setup Development Environment on a New macOS
+
+        
+      </h1>
+      
+        <p class="page__lead">Step-by-step guide to setting up a mobile development environment on a new macOS system.
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-01-11T07:00:00+00:00">January 11, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Setup Development Environment on a New macOS">
+    <meta itemprop="description" content="Step-by-step guide to setting up a mobile development environment on a new macOS system.">
+    <meta itemprop="datePublished" content="2025-01-11T07:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#setup-development-environment-on-a-new-macos">Setup Development Environment on a New macOS</a><ul><li><a href="#install-homebrew">Install Homebrew</a><ul><li><a href="#common-issue">Common Issue</a></li></ul></li><li><a href="#install-git">Install Git</a><ul><li><a href="#setup-git-email--name">Setup Git Email &amp; Name</a></li><li><a href="#setup-git-alias">Setup Git Alias</a></li></ul></li><li><a href="#install-iterm2">Install iTerm2</a></li><li><a href="#iterm2--zsh-setup">iTerm2 + Zsh Setup</a><ul><li><a href="#install-zsh">Install Zsh</a></li><li><a href="#install-oh-my-zsh">Install Oh-My-Zsh</a></li><li><a href="#setup-colors">Setup Colors</a></li><li><a href="#install-fonts">Install Fonts</a></li><li><a href="#install-powerlevel10k-theme">Install Powerlevel10k Theme</a></li><li><a href="#install-zsh-syntax-highlighting">Install Zsh-Syntax-Highlighting</a></li><li><a href="#install-zsh-autosuggestions">Install Zsh-Autosuggestions</a></li></ul></li><li><a href="#ios-environment-install-xcode">iOS Environment: Install Xcode</a><ul><li><a href="#install-xcodes-tool">Install Xcodes Tool</a></li><li><a href="#common-issue-1">Common Issue</a></li><li><a href="#alternative-use-xcodesapp">Alternative: Use XcodesApp</a></li></ul></li><li><a href="#install-jetbrains-toolbox">Install JetBrains Toolbox</a></li><li><a href="#install-openjdk">Install OpenJDK</a></li><li><a href="#ssh-key-setup">SSH Key Setup</a><ul><li><a href="#github">GitHub</a></li><li><a href="#gitlab">GitLab</a></li></ul></li><li><a href="#android-build-issue">Android Build Issue</a></li></ul></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h1 id="setup-development-environment-on-a-new-macos">Setup Development Environment on a New macOS</h1>
+
+<h2 id="install-homebrew">Install <a href="https://brew.sh/index_zh-tw">Homebrew</a></h2>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/bin/bash <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="common-issue">Common Issue</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Warning: /opt/homebrew/bin is not <span class="k">in </span>your PATH
+</code></pre></div></div>
+
+<p>To resolve this, add Homebrew’s bin directory to your PATH:</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim ~/.zshrc
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span>/opt/homebrew/bin:<span class="nv">$PATH</span>
+:wq
+<span class="nb">source</span> ~/.zshrc
+</code></pre></div></div>
+
+<p>Refer to <a href="https://stackoverflow.com/questions/65487249/getting-a-warning-when-installing-homebrew-on-macos-big-sur-m1-chip">this StackOverflow thread</a> for more details.</p>
+
+<h2 id="install-git">Install Git</h2>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>git
+</code></pre></div></div>
+
+<h3 id="setup-git-email--name"><a href="https://stackoverflow.com/questions/46941346/how-to-know-the-git-username-and-email-saved-during-configuration/53940971">Setup Git Email &amp; Name</a></h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> user.email <span class="s2">"you@example.com"</span>
+git config <span class="nt">--global</span> user.name <span class="s2">"Your Name"</span>
+</code></pre></div></div>
+
+<h3 id="setup-git-alias"><a href="https://stackoverflow.com/questions/2553786/how-do-i-alias-commands-in-git">Setup Git Alias</a></h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> alias.co checkout
+git config <span class="nt">--global</span> alias.ci commit
+git config <span class="nt">--global</span> alias.st status
+git config <span class="nt">--global</span> alias.br branch
+</code></pre></div></div>
+
+<h2 id="install-iterm2">Install <a href="https://formulae.brew.sh/cask/iterm2">iTerm2</a></h2>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap homebrew/cask
+brew <span class="nb">install</span> <span class="nt">--cask</span> iterm2
+</code></pre></div></div>
+
+<p>Switch from the default Terminal to iTerm2.</p>
+
+<h2 id="iterm2--zsh-setup">iTerm2 + Zsh Setup</h2>
+
+<h3 id="install-zsh">Install <a href="https://formulae.brew.sh/formula/zsh#default">Zsh</a></h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>zsh
+</code></pre></div></div>
+
+<h3 id="install-oh-my-zsh">Install <a href="https://ohmyz.sh/#install">Oh-My-Zsh</a></h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h3 id="setup-colors">Setup Colors</h3>
+
+<p>Navigate to Preferences -&gt; Profiles -&gt; Colors -&gt; Select ‘Solarized’.</p>
+
+<h3 id="install-fonts">Install Fonts</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap homebrew/cask-fonts
+brew search font-meslo-lg-nerd-font
+brew <span class="nb">install</span> <span class="nt">--cask</span> font-meslo-lg-nerd-font
+</code></pre></div></div>
+
+<p>Set your terminal font to <code class="language-plaintext highlighter-rouge">font-meslo-lg-nerd-font</code> in Preferences.</p>
+
+<h3 id="install-powerlevel10k-theme">Install <a href="https://github.com/romkatv/powerlevel10k">Powerlevel10k</a> Theme</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--depth</span><span class="o">=</span>1 https://github.com/romkatv/powerlevel10k.git <span class="k">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/.oh-my-zsh/custom</span><span class="k">}</span>/themes/powerlevel10k
+</code></pre></div></div>
+
+<p>Update your <code class="language-plaintext highlighter-rouge">~/.zshrc</code> to use Powerlevel10k:</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">ZSH_THEME</span><span class="o">=</span><span class="s2">"powerlevel10k/powerlevel10k"</span>
+</code></pre></div></div>
+
+<p>Run the following to configure the theme:</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>p10k configure
+</code></pre></div></div>
+
+<h3 id="install-zsh-syntax-highlighting">Install <a href="https://github.com/zsh-users/zsh-syntax-highlighting">Zsh-Syntax-Highlighting</a></h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="k">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="p">~/.oh-my-zsh/custom</span><span class="k">}</span>/plugins/zsh-syntax-highlighting
+</code></pre></div></div>
+
+<p>Activate the plugin in <code class="language-plaintext highlighter-rouge">~/.zshrc</code>:</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">plugins</span><span class="o">=(</span>... zsh-syntax-highlighting<span class="o">)</span>
+</code></pre></div></div>
+
+<h3 id="install-zsh-autosuggestions">Install <a href="https://github.com/zsh-users/zsh-autosuggestions">Zsh-Autosuggestions</a></h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/zsh-users/zsh-autosuggestions <span class="k">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="p">~/.oh-my-zsh/custom</span><span class="k">}</span>/plugins/zsh-autosuggestions
+</code></pre></div></div>
+
+<p>Activate the plugin in <code class="language-plaintext highlighter-rouge">~/.zshrc</code>:</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">plugins</span><span class="o">=(</span>... zsh-autosuggestions<span class="o">)</span>
+</code></pre></div></div>
+
+<p>Restart your terminal to apply changes.</p>
+
+<h2 id="ios-environment-install-xcode">iOS Environment: Install Xcode</h2>
+
+<h3 id="install-xcodes-tool">Install Xcodes Tool</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>robotsandpencils/made/xcodes
+</code></pre></div></div>
+
+<h3 id="common-issue-1">Common Issue</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: terminated<span class="o">(</span>72<span class="o">)</span>: /usr/bin/xcrun <span class="nt">--sdk</span> macosx <span class="nt">--find</span> xctest output:
+    xcrun: error: unable to find utility <span class="s2">"xctest"</span>, not a developer tool or <span class="k">in </span>PATH
+</code></pre></div></div>
+
+<p>Refer to <a href="https://github.com/RobotsAndPencils/xcodes/issues/148">this GitHub issue</a> for resolution.</p>
+
+<h3 id="alternative-use-xcodesapp">Alternative: Use XcodesApp</h3>
+
+<p>If issues persist, download Xcode via the <a href="https://apps.apple.com/">App Store</a>.</p>
+
+<h2 id="install-jetbrains-toolbox">Install JetBrains Toolbox</h2>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install</span> <span class="nt">--cask</span> jetbrains-toolbox
+</code></pre></div></div>
+
+<p>Use JetBrains Toolbox to manage IDEs like Android Studio, IntelliJ IDEA, and PyCharm.</p>
+
+<h2 id="install-openjdk">Install OpenJDK</h2>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>openjdk@11
+</code></pre></div></div>
+
+<p>Add OpenJDK to your PATH:</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s1">'export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.zshrc
+</code></pre></div></div>
+
+<p>For compilers, set:</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">"-I/opt/homebrew/opt/openjdk@11/include"</span>
+</code></pre></div></div>
+
+<h2 id="ssh-key-setup">SSH Key Setup</h2>
+
+<p>Create unique keys for each platform (e.g., GitHub, GitLab).</p>
+
+<h3 id="github">GitHub</h3>
+
+<p>Follow <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">GitHub’s guide</a>.</p>
+
+<h3 id="gitlab">GitLab</h3>
+
+<p>Follow <a href="http://10.1.2.150:53180/help/ssh/README">GitLab’s SSH setup guide</a>.</p>
+
+<h2 id="android-build-issue">Android Build Issue</h2>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Caused by: java.lang.Exception: No native library is found <span class="k">for </span>os.name<span class="o">=</span>Mac and os.arch<span class="o">=</span>aarch64. <span class="nv">path</span><span class="o">=</span>/org/sqlite/native/Mac/aarch64
+</code></pre></div></div>
+
+<p>Refer to <a href="https://stackoverflow.com/questions/68884589/caused-by-java-lang-exception-no-native-library-is-found-for-os-name-mac-and-o">this StackOverflow solution</a>.</p>
+
+<hr />
+
+<p>🎉 Your macOS development environment setup is complete!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#development" class="page__taxonomy-item" rel="tag">Development</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#macos" class="page__taxonomy-item" rel="tag">macOS</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#mobile-development" class="page__taxonomy-item" rel="tag">Mobile Development</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#setup-guide" class="page__taxonomy-item" rel="tag">Setup Guide</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2025-01-11T07:00:00+00:00">January 11, 2025</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Setup+Development+Environment+on+a+New+macOS%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fsetup%2520guide%2Fsetup-development-environment-on-a-new-macos%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fsetup%2520guide%2Fsetup-development-environment-on-a-new-macos%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fsetup%2520guide%2Fsetup-development-environment-on-a-new-macos%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" class="pagination--pager" title="Design Pattern (28) - Interpreter Pattern (解譯器模式)
+">Previous</a>
+    
+    
+      <a href="/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/" class="pagination--pager" title="🚀 如何使用 Excalidraw AI 快速生成專業級圖表，提升工作效率！
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/kelly-sikkema-lFtttcsx5Vk-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/" rel="permalink">🚀 如何使用 Excalidraw AI 快速生成專業級圖表，提升工作效率！
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-03-15T08:30:00+00:00">March 15, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">使用 Excalidraw AI 只需輸入文字描述，即可快速生成流程圖、技術架構圖、心智圖等，提升工作效率！
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" rel="permalink">Design Pattern (28) - Interpreter Pattern (解譯器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-29T08:30:00+00:00">December 29, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-26-template-method-pattern/" rel="permalink">Design Pattern (26) - Template Method Pattern (模板方法模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T11:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">模板方法模式提供了一個框架，允許子類別重新定義特定步驟的實作，保持核心流程的一致性，實現高復用性與靈活性。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/setup%20guide/setup-development-environment-on-a-new-macos/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/setup%20guide/setup-development-environment-on-a-new-macos"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>

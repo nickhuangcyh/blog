@@ -1,0 +1,1056 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+
+<!-- begin _includes/seo.html --><title>Getting Started with GitHub Container Registry - Nick’s Blog</title>
+<meta name="description" content="A Guide to Using and Managing Container Images">
+
+
+  <meta name="author" content="Nick Huang">
+  
+  <meta property="article:author" content="Nick Huang">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Nick's Blog">
+<meta property="og:title" content="Getting Started with GitHub Container Registry">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry/">
+
+
+  <meta property="og:description" content="A Guide to Using and Managing Container Images">
+
+
+
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/github_container_registry.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2024-07-23T10:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nick Huang",
+      "url": "https://nickhuangcyh.github.io/blog/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+ 
+<link
+  href="/blog/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="Nick's Blog Feed"
+/>
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/blog/assets/css/main.css" />
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"
+/></noscript>
+<link rel="stylesheet" href="/blog/assets/css/custom.css" />
+
+
+
+<script
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1889198908569610"
+  crossorigin="anonymous"
+></script>
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    
+    
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/blog/">
+          Nick's Blog
+          <span class="site-subtitle">Just do it!</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/categories/">Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/tags/">Tags</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/github_container_registry.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Getting Started with GitHub Container Registry
+
+        
+      </h1>
+      
+        <p class="page__lead">A Guide to Using and Managing Container Images
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-07-23T10:00:00+00:00">July 23, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+    <span class="page__hero-caption">Photo credit: <a href="https://unsplash.com"><strong>Unsplash</strong></a>
+</span>
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/blog/assets/images/bio-photo.jpg" alt="Nick Huang" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nick Huang</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>iOS/Android Developer. Focus on IoT.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Taiwan, Taipei</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">Youtube</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="mailto:nick25932219@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Getting Started with GitHub Container Registry">
+    <meta itemprop="description" content="A Guide to Using and Managing Container Images">
+    <meta itemprop="datePublished" content="2024-07-23T10:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
+              <ul class="toc__menu"><li><a href="#為什麼會寫這篇文章">為什麼會寫這篇文章</a></li><li><a href="#文章簡介">文章簡介</a></li><li><a href="#開始之前">開始之前</a><ul><li><a href="#create-a-node_sample-folder">Create a node_sample folder</a></li><li><a href="#install-node-package-express">Install node package express</a></li><li><a href="#create-an-appjs-file">Create an app.js file</a></li><li><a href="#create-a-gitignore-file">Create a .gitignore file</a></li><li><a href="#run-appjs">Run app.js</a></li></ul></li><li><a href="#create-a-dockerfile">Create a Dockerfile</a></li><li><a href="#上傳-docker-image-到-github-container-registry">上傳 Docker Image 到 Github Container Registry</a></li><li><a href="#用-command-line-方式手動上傳">用 Command line 方式手動上傳</a><ul><li><a href="#利用-dockerfile-產生-image">利用 Dockerfile 產生 image</a></li><li><a href="#查看-docker-images">查看 Docker images</a></li><li><a href="#創建-image-tag">創建 image tag</a></li><li><a href="#generate-personal-access-tokens-classic">Generate Personal access tokens (classic)</a></li><li><a href="#登入-github-container-registry">登入 Github Container Registry</a></li><li><a href="#上傳-images">上傳 Images</a></li></ul></li><li><a href="#用-github-action-方式">用 Github Action 方式</a><ul><li><a href="#create-a-deploy-imageyml">Create a deploy-image.yml</a></li><li><a href="#pushing-node_sample-repository">Pushing node_sample repository</a></li></ul></li><li><a href="#下載-image">下載 image</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="為什麼會寫這篇文章">為什麼會寫這篇文章</h2>
+
+<p>隨著公司專案數量增加，每個專案的環境需求也變得更加多樣化。我們決定將原本使用Docker建置的Android Jenkins Server轉型為更靈活的架構：一個主要的Jenkins Server（Master）搭配多個Android Build Environment（Slave），後者透過Docker創建乾淨的環境。這篇文章旨在記錄此過程，不僅作為個人學習的回顧，也希望能對其他開發者提供幫助。</p>
+
+<h2 id="文章簡介">文章簡介</h2>
+
+<p>本文將引導初學者及希望深入了解如何將GitHub的新工具融入CI/CD流程的開發者，透過簡明的指南和實用的技巧，學習如何將容器映像推送至GitHub Container Registry。我將一步步展示如何設定GitHub Actions，自動化構建與部署過程，讓你的開發工作變得更加高效。</p>
+
+<h2 id="開始之前">開始之前</h2>
+
+<p>在深入主題之前，讓我們先透過 <code class="language-plaintext highlighter-rouge">express</code> 框架，快速搭建一個運行於Node.js上的簡易應用。</p>
+
+<h3 id="create-a-node_sample-folder">Create a <code class="language-plaintext highlighter-rouge">node_sample</code> folder</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>node_sample
+<span class="nb">cd </span>node_sample
+</code></pre></div></div>
+
+<h3 id="install-node-package-express">Install node package <code class="language-plaintext highlighter-rouge">express</code></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm init <span class="nt">-y</span>
+npm <span class="nb">install </span>express
+</code></pre></div></div>
+
+<h3 id="create-an-appjs-file">Create an <code class="language-plaintext highlighter-rouge">app.js</code> file</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim app.js
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">Hello, World!</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Example app listening at http://localhost:</span><span class="p">${</span><span class="nx">port</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="create-a-gitignore-file">Create a <code class="language-plaintext highlighter-rouge">.gitignore</code> file</h3>
+
+<blockquote>
+  <p>請至 <a href="https://gitignore.io/">gitignore.io</a> 產生</p>
+</blockquote>
+
+<h3 id="run-appjs">Run <code class="language-plaintext highlighter-rouge">app.js</code></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node app.js
+</code></pre></div></div>
+
+<p>在 chrome 上打開網址 <code class="language-plaintext highlighter-rouge">localhost:3000</code> 就會看到如下</p>
+
+<p><img src="/blog/assets/images/github_container_registry_sample_website.png" alt="github_container_registry_sample_website" /></p>
+
+<h2 id="create-a-dockerfile">Create a Dockerfile</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim Dockerfile
+</code></pre></div></div>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> node:latest</span>
+<span class="k">WORKDIR</span><span class="s"> /usr/src/app</span>
+<span class="k">COPY</span><span class="s"> package*.json app.js ./</span>
+<span class="k">RUN </span>npm <span class="nb">install</span>
+<span class="k">EXPOSE</span><span class="s"> 3000</span>
+<span class="k">CMD</span><span class="s"> ["node", "app.js"]</span>
+</code></pre></div></div>
+
+<h2 id="上傳-docker-image-到-github-container-registry">上傳 Docker Image 到 Github Container Registry</h2>
+
+<p>寫完 Dockerfile 後有兩種方式可以將 image 上傳到 Github Container Registry 上</p>
+<ol>
+  <li>用 Command line 方式手動上傳</li>
+  <li>用 Github Action 方式，當 repository 有 Commit 時，自動執行 Github Action 上傳</li>
+</ol>
+
+<h2 id="用-command-line-方式手動上傳">用 Command line 方式手動上傳</h2>
+
+<h3 id="利用-dockerfile-產生-image">利用 Dockerfile 產生 image</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nt">-t</span> node_sample <span class="nb">.</span>
+</code></pre></div></div>
+
+<p><img src="/blog/assets/images/github_container_registry_docker_build_image.png" alt="github_container_registry_docker_build_image" /></p>
+
+<h3 id="查看-docker-images">查看 Docker images</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker images
+</code></pre></div></div>
+
+<p><img src="/blog/assets/images/github_container_registry_docker_images.png" alt="github_container_registry_docker_images" /></p>
+
+<h3 id="創建-image-tag">創建 image tag</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag node_sample:latest ghcr.io/<span class="o">{</span>NAMESPACE<span class="o">}</span>/node_sample:latest
+</code></pre></div></div>
+
+<blockquote>
+  <p>記得將 <code class="language-plaintext highlighter-rouge">NAMESPACE</code> 取代成你的 Github account name</p>
+</blockquote>
+
+<h3 id="generate-personal-access-tokens-classic">Generate <code class="language-plaintext highlighter-rouge">Personal access tokens (classic)</code></h3>
+
+<p>準備好 image 後，在我們推上 <strong>Github Container Registry</strong> 前，我們需要取得 <code class="language-plaintext highlighter-rouge">GITHUB_TOKEN</code> 用來登入 <strong>Github Container Registry</strong></p>
+
+<blockquote>
+  <p>打開 Github 網頁 -&gt; 右上角 Profile -&gt; Settings -&gt; Developer settings -&gt; Personal access tokens -&gt; Tokens (classic) -&gt; Generate new token</p>
+</blockquote>
+
+<p>勾選 <code class="language-plaintext highlighter-rouge">write:packages</code> , <code class="language-plaintext highlighter-rouge">read:packages</code> 和 <code class="language-plaintext highlighter-rouge">delete:packages</code> scopes，如下圖</p>
+
+<p><img src="/blog/assets/images/github_container_registry_generate_github_token.png" alt="github_container_registry_generate_github_token" /></p>
+
+<p>點擊 <strong>Generate token</strong>，將 token 複製起來</p>
+
+<h3 id="登入-github-container-registry">登入 <strong>Github Container Registry</strong></h3>
+
+<p>將剛剛複製的 token 存到環境變數</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">CR_PAT</span><span class="o">=</span>YOUR_TOKEN
+</code></pre></div></div>
+
+<p>登入 Container registry service at ghcr.io</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="nb">echo</span> <span class="nv">$CR_PAT</span> | docker login ghcr.io <span class="nt">-u</span> USERNAME <span class="nt">--password-stdin</span>
+Login Succeeded
+</code></pre></div></div>
+
+<h3 id="上傳-images">上傳 Images</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push ghcr.io/<span class="o">{</span>NAMESPACE<span class="o">}</span>/node_sample:latest
+</code></pre></div></div>
+
+<p>回到 Github 網頁上點擊 Packages，就能看到上傳成功了</p>
+
+<p><img src="/blog/assets/images/github_container_registry_github_package.png" alt="github_container_registry_github_package" /></p>
+
+<h2 id="用-github-action-方式">用 Github Action 方式</h2>
+
+<p>使用 Github Action 的方式更簡單，在 <code class="language-plaintext highlighter-rouge">node_sample</code> 目錄下</p>
+
+<h3 id="create-a-deploy-imageyml">Create a <code class="language-plaintext highlighter-rouge">deploy-image.yml</code></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> .github
+<span class="nb">cd</span> .github
+<span class="nb">mkdir </span>workflows
+<span class="nb">cd </span>workflows
+vim deploy-image.yml
+</code></pre></div></div>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#</span>
+<span class="na">name</span><span class="pi">:</span> <span class="s">Create and publish a Docker image</span>
+
+<span class="c1"># Configures this workflow to run every time a change is pushed to the branch called `release`.</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">release"</span><span class="pi">]</span>
+
+<span class="c1"># Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.</span>
+<span class="na">env</span><span class="pi">:</span>
+  <span class="na">REGISTRY</span><span class="pi">:</span> <span class="s">ghcr.io</span>
+  <span class="na">IMAGE_NAME</span><span class="pi">:</span> <span class="s">$</span>
+
+<span class="c1"># There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">build-and-push-image</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="c1"># Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+      <span class="na">packages</span><span class="pi">:</span> <span class="s">write</span>
+      <span class="na">attestations</span><span class="pi">:</span> <span class="s">write</span>
+      <span class="na">id-token</span><span class="pi">:</span> <span class="s">write</span>
+      <span class="c1">#</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout repository</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span>
+      <span class="c1"># Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Log in to the Container registry</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">registry</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">username</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">password</span><span class="pi">:</span> <span class="s">$</span>
+      <span class="c1"># This step uses [docker/metadata-action](https://github.com/docker/metadata-action#about) to extract tags and labels that will be applied to the specified image. The `id` "meta" allows the output of this step to be referenced in a subsequent step. The `images` value provides the base name for the tags and labels.</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Extract metadata (tags, labels) for Docker</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">meta</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">images</span><span class="pi">:</span> <span class="s">$/$</span>
+      <span class="c1"># This step uses the `docker/build-push-action` action to build the image, based on your repository's `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.</span>
+      <span class="c1"># It uses the `context` parameter to define the build's context as the set of files located in the specified path. For more information, see "[Usage](https://github.com/docker/build-push-action#usage)" in the README of the `docker/build-push-action` repository.</span>
+      <span class="c1"># It uses the `tags` and `labels` parameters to tag and label the image with the output from the "meta" step.</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Build and push Docker image</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">push</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">context</span><span class="pi">:</span> <span class="s">.</span>
+          <span class="na">push</span><span class="pi">:</span> <span class="no">true</span>
+          <span class="na">tags</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">labels</span><span class="pi">:</span> <span class="s">$</span>
+
+      <span class="c1"># This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see "[AUTOTITLE](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds)."</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Generate artifact attestation</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/attest-build-provenance@v1</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">subject-name</span><span class="pi">:</span> <span class="s">$/$</span>
+          <span class="na">subject-digest</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">push-to-registry</span><span class="pi">:</span> <span class="no">true</span>
+
+</code></pre></div></div>
+
+<h3 id="pushing-node_sample-repository">Pushing <code class="language-plaintext highlighter-rouge">node_sample</code> repository</h3>
+
+<p>將 node_sample 的 source code 推到你的 Github 上，如此每次只要 release branch 有 commit 就會觸發 Github Action 去自動 build image 並上傳到 <strong>Github Container Registry</strong></p>
+
+<p><img src="/blog/assets/images/github_container_registry_github_package.png" alt="github_container_registry_github_package" /></p>
+
+<h2 id="下載-image">下載 image</h2>
+
+<ul>
+  <li>Install from the command line</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull ghcr.io/nickhuangcyh/node_sample:TAG
+</code></pre></div></div>
+
+<ul>
+  <li>Use as base image in Dockerfile:</li>
+</ul>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> ghcr.io/nickhuangcyh/node_sample:TAG</span>
+</code></pre></div></div>
+
+<p><img src="/blog/assets/images/github_container_registry_download_image.png" alt="github_container_registry_download_image" /></p>
+
+<blockquote>
+  <p>您可於此 <a href="https://github.com/nickhuangcyh/design_pattern">node_sample</a> 下載 <code class="language-plaintext highlighter-rouge">node_sample</code> 的程式碼。</p>
+</blockquote>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/tags/#ci-cd" class="page__taxonomy-item" rel="tag">CI/CD</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#container-registry" class="page__taxonomy-item" rel="tag">Container Registry</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#devops-tools" class="page__taxonomy-item" rel="tag">DevOps Tools</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#docker" class="page__taxonomy-item" rel="tag">Docker</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#github-actions" class="page__taxonomy-item" rel="tag">GitHub Actions</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/blog/categories/#devops" class="page__taxonomy-item" rel="tag">DevOps</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2024-07-23T10:00:00+00:00">July 23, 2024</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Getting+Started+with+GitHub+Container+Registry%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fgetting-started-with-github-container-registry%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fgetting-started-with-github-container-registry%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fgetting-started-with-github-container-registry%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/blog/design%20pattern/design-pattern-9-prototype-pattern/" class="pagination--pager" title="Design Pattern (9) - Prototype Pattern (原型模式)
+">Previous</a>
+    
+    
+      <a href="/blog/cryptography/openssh/security/how-to-enable-rsa-encryption-algorithm-key-in-openssh-8.8/" class="pagination--pager" title="How to Enable RSA Encryption Algorithm Key in OpenSSH 8.8
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a comment</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You may also enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/kelly-sikkema-lFtttcsx5Vk-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/" rel="permalink">🚀 如何使用 Excalidraw AI 快速生成專業級圖表，提升工作效率！
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-03-15T08:30:00+00:00">March 15, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">使用 Excalidraw AI 只需輸入文字描述，即可快速生成流程圖、技術架構圖、心智圖等，提升工作效率！
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/raul-per-e-K2w9VegUIb0-unsplash.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/setup%20guide/setup-development-environment-on-a-new-macos/" rel="permalink">Setup Development Environment on a New macOS
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-01-11T07:00:00+00:00">January 11, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Step-by-step guide to setting up a mobile development environment on a new macOS system.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-28-interpreter-pattern/" rel="permalink">Design Pattern (28) - Interpreter Pattern (解譯器模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-29T08:30:00+00:00">December 29, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+      <script src="/blog/assets/js/tabs.js"></script>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://www.linkedin.com/in/nick-huang-5485b315a/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://github.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/channel/UC6Dnl0rB-HAhfL2XWRIZXmg" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/nickhuangcyh/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+        
+          <li><a href="https://twitter.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://www.facebook.com/nickhuangcyh" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i> Facebook</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/blog/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Nick Huang. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/blog/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/blog/assets/js/lunr/lunr-en.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7ZWQE4FFM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7ZWQE4FFM');
+</script>
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://nickhuangcyh.github.io/blog/devops/getting-started-with-github-container-registry/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/devops/getting-started-with-github-container-registry"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://nickhuangcyh.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>
