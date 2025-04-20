@@ -123,5 +123,3 @@ Excalidraw AI 會根據你的描述，自動生成對應的流程圖，你可以
 
 - [Excalidraw 官方網站](https://excalidraw.com/)
 - [Excalidraw AI GitHub 專案](https://github.com/excalidraw/excalidraw)
-
-這個版本經過 SEO 優化，可以最大程度 吸引點擊、提升閱讀體驗，讓你的文章在搜尋引擎和社群平台上表現更佳！ 🚀🎯
