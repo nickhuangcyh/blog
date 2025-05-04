@@ -66,7 +66,7 @@ var store = [{
         "teaser": "/blog/assets/images/design_patterns.jpg"
       },{
         "title": "Design Pattern (2) - Design Principles (設計原則)",
-        "excerpt":"您可於此 design_pattern repo 下載 Design Pattern 系列程式碼。 Design Principle Design Principle 是用來幫助我們改善物件導向設計的建議，幫助我們設計出更好的軟體。 SOLID 物件導向程式設計基本五大原則 Single Responsibility Principle (SRP) 單一職責原則 物件應該僅具有一種單一功能，應只會有一個理由去改變此物件 e.g. 我們要做登入頁面功能，我們會這樣寫 Swift Kotlin 依照單一職責原則，我們應該要將 API 及 DB 的功能分開，修改如下 Swift Kotlin 有些文章會說 save, delete function 也須拆開在不同 class(DeleteDBService, SaveDBService)處理, 因為 save. delete 是不同職責修改項目, 不應動到另一個 class, 但我認為這樣 Over Design 反而不好維護, 拆分職責應適當不過度 Open...","categories": ["Design Pattern"],
+        "excerpt":"您可於此 design_pattern repo 下載 Design Pattern 系列程式碼。 Design Principle Design Principle 是用來幫助我們改善物件導向設計的建議，幫助我們設計出更好的軟體。 SOLID 物件導向程式設計基本五大原則 Single Responsibility Principle (SRP) 單一職責原則 物件應該僅具有一種單一功能，應只會有一個理由去改變此物件 e.g. 我們要做登入頁面功能，我們會這樣寫 Swift Kotlin 400: Invalid request 400: Invalid request 依照單一職責原則，我們應該要將 API 及 DB 的功能分開，修改如下 Swift Kotlin 400: Invalid request 400: Invalid request 有些文章會說 save, delete function 也須拆開在不同 class(DeleteDBService, SaveDBService)處理,...","categories": ["Design Pattern"],
         "tags": ["Design Principle"],
         "url": "/blog/design%20pattern/design-pattern-2-design-principle/",
         "teaser": "/blog/assets/images/design_patterns.jpg"
@@ -90,19 +90,19 @@ var store = [{
         "teaser": "/blog/assets/images/design_patterns.jpg"
       },{
         "title": "Design Pattern (5) - Simple Factory Pattern (簡單工廠模式)",
-        "excerpt":"您可於此 design_pattern repo 下載 Design Pattern 系列程式碼。 需求 我們的目標是創建一套能夠根據用戶選擇動態生成飲料對象的點餐系統。首先，讓我們通過UML來分析系統的基本結構。 物件導向分析 (OOA) Swift Kotlin 察覺 Forces 隨著飲料店越來越多新飲品，我們也需要修改 order 方法，但這樣容易影響不會變動的程式碼，於是我們需要找出 需要變動 以及 不需變動 的程式碼，把它們分隔開來 需要變動的程式碼 Swift Kotlin 不需變動的程式碼 Swift Kotlin 找出後該如何做呢，這時候需要用到 簡單工廠模式 來將其分離 套用 Solution 套用 Simple Factory Pattern 得到新的 Context (Resulting Context) 先來看一下 Simple Factory Pattern 的 UML 其實就是定義一個工廠類別來專門處理創建物件的邏輯 我們來將飲料點餐系統套用 Simple...","categories": ["Design Pattern"],
+        "excerpt":"您可於此 design_pattern repo 下載 Design Pattern 系列程式碼。 需求 我們的目標是創建一套能夠根據用戶選擇動態生成飲料對象的點餐系統。首先，讓我們通過UML來分析系統的基本結構。 物件導向分析 (OOA) Swift Kotlin 400: Invalid request 400: Invalid request 察覺 Forces 隨著飲料店越來越多新飲品，我們也需要修改 order 方法，但這樣容易影響不會變動的程式碼，於是我們需要找出 需要變動 以及 不需變動 的程式碼，把它們分隔開來 需要變動的程式碼 Swift Kotlin 400: Invalid request 400: Invalid request 不需變動的程式碼 Swift Kotlin 400: Invalid request 400: Invalid request 找出後該如何做呢，這時候需要用到 簡單工廠模式 來將其分離 套用...","categories": ["Design Pattern"],
         "tags": ["Simple Factory Pattern"],
         "url": "/blog/design%20pattern/design-pattern-5-simple-factory-pattern/",
         "teaser": "/blog/assets/images/design_patterns.jpg"
       },{
         "title": "Design Pattern (6) - Factory Method Pattern (工廠方法模式)",
-        "excerpt":"您可於此 design_pattern repo 下載 Design Pattern 系列程式碼。 引言：一個全球化的挑戰 想像一下，你的飲料點餐系統在全球範圍內大受歡迎。隨著業務的擴展，你面臨著一個挑戰：如何滿足不同地區顧客的特定偏好？ 上一篇我們利用簡單工廠模式模式成功地將需要變動 以及 不需變動 的程式碼分離。今天，我們將探討如何進一步提升我們系統的靈活性和擴展性。 需求：滿足全球化的味蕾 飲料點餐系統受到客戶的喜愛，業績非常好，於是客戶在世界各地迅速擴店。但很快的問題出現了——不同地區的顧客有著不同的偏好。 案例分析: 美國喜歡錫蘭紅茶 歐洲喜歡伯爵紅茶 我們的目標是，不增加過多成本的同時，滿足這些多樣化的需求。 (成本考量我們不將所有紅茶種類都加入菜單，只用最符合當地口味的茶葉製作紅茶) 物件導向分析(OOA) 於是我們修改簡單工廠的程式碼，新增 USBeverageFactory 及 EUBeverageFactory 來製作符合美國及歐洲當地口味的飲品 Swift Kotlin 察覺 Forces 這樣做雖然可以滿足分店從不同工廠取得該地區的飲品，但每當有新的分店加入，就必須動到 BeverageShop 的程式碼來添加新的分店工廠，違反了 Open Closed Principle 套用 Solution 看清楚整個 Context，察覺 Forces 後，就可以套用 Factory Method Pattern 來解決這個問題 先來看一下 Factory Method Pattern...","categories": ["Design Pattern"],
+        "excerpt":"您可於此 design_pattern repo 下載 Design Pattern 系列程式碼。 引言：一個全球化的挑戰 想像一下，你的飲料點餐系統在全球範圍內大受歡迎。隨著業務的擴展，你面臨著一個挑戰：如何滿足不同地區顧客的特定偏好？ 上一篇我們利用簡單工廠模式模式成功地將需要變動 以及 不需變動 的程式碼分離。今天，我們將探討如何進一步提升我們系統的靈活性和擴展性。 需求：滿足全球化的味蕾 飲料點餐系統受到客戶的喜愛，業績非常好，於是客戶在世界各地迅速擴店。但很快的問題出現了——不同地區的顧客有著不同的偏好。 案例分析: 美國喜歡錫蘭紅茶 歐洲喜歡伯爵紅茶 我們的目標是，不增加過多成本的同時，滿足這些多樣化的需求。 (成本考量我們不將所有紅茶種類都加入菜單，只用最符合當地口味的茶葉製作紅茶) 物件導向分析(OOA) 於是我們修改簡單工廠的程式碼，新增 USBeverageFactory 及 EUBeverageFactory 來製作符合美國及歐洲當地口味的飲品 Swift Kotlin 400: Invalid request 400: Invalid request 察覺 Forces 這樣做雖然可以滿足分店從不同工廠取得該地區的飲品，但每當有新的分店加入，就必須動到 BeverageShop 的程式碼來添加新的分店工廠，違反了 Open Closed Principle 套用 Solution 看清楚整個 Context，察覺 Forces 後，就可以套用 Factory Method...","categories": ["Design Pattern"],
         "tags": ["Factory Method Pattern"],
         "url": "/blog/design%20pattern/design-pattern-6-factory-method-pattern/",
         "teaser": "/blog/assets/images/design_patterns.jpg"
       },{
         "title": "Design Pattern (7) - Abstract Factory Pattern (抽象工廠模式)",
-        "excerpt":"您可於此 design_pattern repo 下載 Design Pattern 系列程式碼。 引言：全球化的挑戰擴展 想像一下，隨著你的飲料點餐系統在全球範圍內的擴展，你面臨著如何滿足不同地區顧客特定偏好的挑戰。 需求：滿足全球化的味蕾 隨著業務的全球化擴展，不同地區的顧客有著不同的偏好。且我們也不能只賣紅茶及綠茶，需要為我們的菜單增加新的飲品，一邊新增菜單一邊擴展店舖。 物件導向分析(OOA) Swift Kotlin 如何處理多個產品在不同分店的組合，這時就需要用到 Abstract Factory Pattern 察覺 Forces 當我們每增加一種飲品到菜單中，我們必須要修改所有的 Factory 中的方法，違反了 Open Closed Principle 套用 Solution 看清楚整個 Context，察覺 Forces 後，就可以套用 Abstract Factory Pattern 來解決這個問題 先來看一下 Abstract Factory Pattern 的 UML 透過將工廠抽象，使子類別能創建一系列的實體物件。 抽象工廠有個重要的判斷方式，當你所要創建的產品是一整個系列產品，且不同需求要創建不同系列，這個關係能夠畫成二維關係，這時就非常適合使用抽象工廠來建立產品 如下圖 Country / Tea BlackTea GreenTea...","categories": ["Design Pattern"],
+        "excerpt":"您可於此 design_pattern repo 下載 Design Pattern 系列程式碼。 引言：全球化的挑戰擴展 想像一下，隨著你的飲料點餐系統在全球範圍內的擴展，你面臨著如何滿足不同地區顧客特定偏好的挑戰。 需求：滿足全球化的味蕾 隨著業務的全球化擴展，不同地區的顧客有著不同的偏好。且我們也不能只賣紅茶及綠茶，需要為我們的菜單增加新的飲品，一邊新增菜單一邊擴展店舖。 物件導向分析(OOA) Swift Kotlin 400: Invalid request 400: Invalid request 如何處理多個產品在不同分店的組合，這時就需要用到 Abstract Factory Pattern 察覺 Forces 當我們每增加一種飲品到菜單中，我們必須要修改所有的 Factory 中的方法，違反了 Open Closed Principle 套用 Solution 看清楚整個 Context，察覺 Forces 後，就可以套用 Abstract Factory Pattern 來解決這個問題 先來看一下 Abstract Factory Pattern 的 UML 透過將工廠抽象，使子類別能創建一系列的實體物件。 抽象工廠有個重要的判斷方式，當你所要創建的產品是一整個系列產品，且不同需求要創建不同系列，這個關係能夠畫成二維關係，這時就非常適合使用抽象工廠來建立產品...","categories": ["Design Pattern"],
         "tags": ["Abstract Factory Pattern"],
         "url": "/blog/design%20pattern/design-pattern-7-abstract-factory-pattern/",
         "teaser": "/blog/assets/images/design_patterns.jpg"
