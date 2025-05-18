@@ -10,8 +10,8 @@
   <head>
     <meta charset="utf-8" />
 
-<!-- begin _includes/seo.html --><title>Jenkins (1) - 什麼是 Jenkins - Nick’s Blog</title>
-<meta name="description" content="了解Jenkins這個強大的自動化伺服器，如何幫助開發團隊實現持續整合與持續交付，提升軟體開發效率。">
+<!-- begin _includes/seo.html --><title>💡 一台電腦操作多個 GitHub 帳號：最簡單快速的 SSH 設定方法 - Nick’s Blog</title>
+<meta name="description" content="讓你的電腦同時操作多個 GitHub 帳號，適合有多個身分或工作/個人帳號的開發者使用。">
 
 
   <meta name="author" content="Nick Huang">
@@ -23,32 +23,32 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Nick's Blog">
-<meta property="og:title" content="Jenkins (1) - 什麼是 Jenkins">
-<meta property="og:url" content="https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins/">
+<meta property="og:title" content="💡 一台電腦操作多個 GitHub 帳號：最簡單快速的 SSH 設定方法">
+<meta property="og:url" content="https://nickhuangcyh.github.io/blog/devops/productivity/github/how-to-use-multiple-github-accounts-using-ssh/">
 
 
-  <meta property="og:description" content="了解Jenkins這個強大的自動化伺服器，如何幫助開發團隊實現持續整合與持續交付，提升軟體開發效率。">
-
-
-
-  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/jenkins.jpg">
+  <meta property="og:description" content="讓你的電腦同時操作多個 GitHub 帳號，適合有多個身分或工作/個人帳號的開發者使用。">
 
 
 
-
-
-  <meta property="article:published_time" content="2024-08-15T07:00:00+00:00">
+  <meta property="og:image" content="https://nickhuangcyh.github.io/blog/assets/images/github-multi-account.jpg">
 
 
 
 
 
-  
+  <meta property="article:published_time" content="2025-05-18T06:00:00+00:00">
+
+
+
+
 
   
 
+  
 
-<link rel="canonical" href="https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins/">
+
+<link rel="canonical" href="https://nickhuangcyh.github.io/blog/devops/productivity/github/how-to-use-multiple-github-accounts-using-ssh/">
 
 
 
@@ -179,18 +179,18 @@
 
 
 <div class="page__hero--overlay"
-  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/jenkins.jpg');"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/blog/assets/images/github-multi-account.jpg');"
 >
   
     <div class="wrapper">
       <h1 id="page-title" class="page__title" itemprop="headline">
         
-          Jenkins (1) - 什麼是 Jenkins
+          💡 一台電腦操作多個 GitHub 帳號：最簡單快速的 SSH 設定方法
 
         
       </h1>
       
-        <p class="page__lead">了解Jenkins這個強大的自動化伺服器，如何幫助開發團隊實現持續整合與持續交付，提升軟體開發效率。
+        <p class="page__lead">讓你的電腦同時操作多個 GitHub 帳號，適合有多個身分或工作/個人帳號的開發者使用。
 </p>
       
       
@@ -201,7 +201,7 @@
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
         
-        <time datetime="2024-08-15T07:00:00+00:00">August 15, 2024</time>
+        <time datetime="2025-05-18T06:00:00+00:00">May 18, 2025</time>
       </span>
     
 
@@ -372,9 +372,9 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Jenkins (1) - 什麼是 Jenkins">
-    <meta itemprop="description" content="了解Jenkins這個強大的自動化伺服器，如何幫助開發團隊實現持續整合與持續交付，提升軟體開發效率。">
-    <meta itemprop="datePublished" content="2024-08-15T07:00:00+00:00">
+    <meta itemprop="headline" content="💡 一台電腦操作多個 GitHub 帳號：最簡單快速的 SSH 設定方法">
+    <meta itemprop="description" content="讓你的電腦同時操作多個 GitHub 帳號，適合有多個身分或工作/個人帳號的開發者使用。">
+    <meta itemprop="datePublished" content="2025-05-18T06:00:00+00:00">
     
 
     <div class="page__inner-wrap">
@@ -385,39 +385,91 @@
           <aside class="sidebar__right sticky">
             <nav class="toc">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of contents</h4></header>
-              <ul class="toc__menu"><li><a href="#什麼是-jenkins">什麼是 Jenkins</a></li><li><a href="#為什麼選擇-jenkins">為什麼選擇 Jenkins</a></li><li><a href="#jenkins-的核心概念">Jenkins 的核心概念</a></li><li><a href="#總結">總結</a></li></ul>
+              <ul class="toc__menu"><li><a href="#-為什麼需要多個-github-帳號">🚀 為什麼需要多個 GitHub 帳號？</a></li><li><a href="#-最簡單的多帳號操作方法使用-ssh-config-配對金鑰">🛠 最簡單的多帳號操作方法：使用 SSH Config 配對金鑰</a><ul><li><a href="#1️⃣-檢查目前已載入的金鑰">1️⃣ 檢查目前已載入的金鑰</a></li><li><a href="#2️⃣-載入第二組帳號的金鑰">2️⃣ 載入第二組帳號的金鑰</a></li><li><a href="#3️⃣-設定-ssh-config-區分不同帳號">3️⃣ 設定 SSH config 區分不同帳號</a></li></ul></li><li><a href="#-驗證-ssh-是否成功指向正確帳號">🔍 驗證 SSH 是否成功指向正確帳號</a></li><li><a href="#-延伸閱讀與官方教學">📚 延伸閱讀與官方教學</a></li><li><a href="#-結語">✅ 結語</a></li></ul>
             </nav>
           </aside>
         
-        <h2 id="什麼是-jenkins">什麼是 Jenkins</h2>
+        <h2 id="-為什麼需要多個-github-帳號">🚀 <strong>為什麼需要多個 GitHub 帳號？</strong></h2>
 
-<p>Jenkins 是一個開源的自動化伺服器，主要用於實現持續整合（CI）和持續交付（CD）。它能夠自動化各種任務，包括建置、測試和部署軟體，從而幫助開發團隊提升效率和品質。</p>
+<p>在工作與個人開發之間，許多開發者會同時擁有兩個以上的 GitHub 帳號。為了避免權限混淆或 push 錯誤，我們可以透過 SSH config 的方式，讓同一台電腦安全切換不同帳號。</p>
 
-<h2 id="為什麼選擇-jenkins">為什麼選擇 Jenkins</h2>
+<hr />
 
-<ol>
-  <li><strong>開源且免費</strong>：Jenkins 是一個開源專案，任何人都可以免費使用和修改。</li>
-  <li><strong>豐富的插件生態系統</strong>：Jenkins 擁有超過 1,500 個插件，能夠擴展其功能以滿足不同的需求。</li>
-  <li><strong>社群支持</strong>：Jenkins 擁有一個活躍的社群，提供豐富的資源和支援。</li>
-  <li><strong>易於整合</strong>：Jenkins 可以與多種工具和平台整合，如 Git、Docker、Kubernetes 等。</li>
-</ol>
+<h2 id="-最簡單的多帳號操作方法使用-ssh-config-配對金鑰">🛠 <strong>最簡單的多帳號操作方法：使用 SSH Config 配對金鑰</strong></h2>
 
-<h2 id="jenkins-的核心概念">Jenkins 的核心概念</h2>
+<p>以下是最精簡、有效的操作流程（假設你已有不同帳號的 SSH 金鑰）：</p>
 
-<ol>
-  <li><strong>Pipeline</strong>：Jenkins Pipeline 是一套插件，支持實現和集成持續交付流水線。Pipeline 用程式碼來定義整個建置過程，包括建置、測試和部署。</li>
-  <li><strong>Node</strong>：Node 是 Jenkins 執行工作的機器，可以是 Jenkins 主伺服器或其他代理伺服器。</li>
-  <li><strong>Job</strong>：Job 是 Jenkins 中的基本建置單位，定義了具體的建置、測試和部署任務。</li>
-  <li><strong>Executor</strong>：Executor 是 Jenkins 用來執行 Job 的工作單元，每個 Node 可以有多個 Executor。</li>
-</ol>
+<h3 id="1️⃣-檢查目前已載入的金鑰">1️⃣ 檢查目前已載入的金鑰</h3>
 
-<h2 id="總結">總結</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-add <span class="nt">-l</span>
+</code></pre></div></div>
 
-<p>Jenkins 是一個功能強大且靈活的自動化伺服器，能夠幫助開發團隊實現持續整合和持續交付。通過使用 Jenkins，團隊可以顯著提高開發效率和軟體品質。如果你還沒有使用 Jenkins，現在就是開始的好時機！</p>
+<p>如果只看到預設金鑰（例如 id_ed25519），代表還沒載入其他帳號的 key。</p>
 
-<blockquote>
-  <p>想了解更多關於 Jenkins 的資訊，請參考 <a href="https://jenkins.io/doc/">Jenkins 官方文件</a>。</p>
-</blockquote>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>256 SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx nick25932219@gmail.com<span class="o">(</span>ED25519<span class="o">)</span>
+</code></pre></div></div>
+
+<h3 id="2️⃣-載入第二組帳號的金鑰">2️⃣ 載入第二組帳號的金鑰</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-add ~/.ssh/id_ed25519_company
+</code></pre></div></div>
+
+<p>再次確認：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh-add <span class="nt">-l</span>
+</code></pre></div></div>
+
+<p>你應該會看到 id_ed25519_company 被成功載入。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>256 SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx nick25932219@gmail.com
+256 SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx nickhuang@company.com.tw <span class="o">(</span>ED25519<span class="o">)</span>
+</code></pre></div></div>
+
+<h3 id="3️⃣-設定-ssh-config-區分不同帳號">3️⃣ 設定 SSH config 區分不同帳號</h3>
+
+<p>在 ~/.ssh/config 加入以下設定：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># GitHub account: company</span>
+Host github.com_company
+  HostName github.com
+  AddKeysToAgent <span class="nb">yes</span>
+  <span class="c"># macOS 專用，可省略於 Linux</span>
+  UseKeychain <span class="nb">yes
+  </span>PreferredAuthentications publickey
+  IdentityFile ~/.ssh/id_ed25519_company
+</code></pre></div></div>
+
+<p>如此一來，只要將你的 Git remote 設定為：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git@github.com_company:nickhuangCompany/repo.git
+</code></pre></div></div>
+
+<p>就會自動使用 nickhuangCompany 的帳號。</p>
+
+<p>設定方式如下</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote set-url origin git@github.com_company:nickhuangCompany/repo.git
+</code></pre></div></div>
+
+<h2 id="-驗證-ssh-是否成功指向正確帳號">🔍 驗證 SSH 是否成功指向正確帳號</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-T</span> git@github.com_company
+</code></pre></div></div>
+
+<p>如果一切順利，會看到這樣的訊息：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hi nickhuangCompany! You<span class="s1">'ve successfully authenticated, but GitHub does not provide shell access.
+</span></code></pre></div></div>
+
+<h2 id="-延伸閱讀與官方教學">📚 延伸閱讀與官方教學</h2>
+
+<p>若你尚未建立多組金鑰或不確定如何產生，請參考 GitHub 官方教學：</p>
+
+<p><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">GitHub Docs：Connecting to GitHub with SSH</a></p>
+
+<h2 id="-結語">✅ 結語</h2>
+
+<p>無需建立新金鑰，也不必更動全域設定，只需善用 SSH config 搭配 ssh-add，你就能在同一台電腦上輕鬆操作多個 GitHub 帳號。非常適合同時擁有工作與個人帳號的開發者，立即實作試試看吧！</p>
 
         
       </section>
@@ -434,11 +486,15 @@
     <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
     <span itemprop="keywords">
     
-      <a href="/blog/tags/#ci-cd" class="page__taxonomy-item p-category" rel="tag">CI/CD</a><span class="sep">, </span>
+      <a href="/blog/tags/#git" class="page__taxonomy-item p-category" rel="tag">Git</a><span class="sep">, </span>
     
-      <a href="/blog/tags/#devops" class="page__taxonomy-item p-category" rel="tag">DevOps</a><span class="sep">, </span>
+      <a href="/blog/tags/#github" class="page__taxonomy-item p-category" rel="tag">GitHub</a><span class="sep">, </span>
     
-      <a href="/blog/tags/#jenkins" class="page__taxonomy-item p-category" rel="tag">Jenkins</a>
+      <a href="/blog/tags/#ssh" class="page__taxonomy-item p-category" rel="tag">SSH</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#%E5%A4%9A%E5%B8%B3%E8%99%9F" class="page__taxonomy-item p-category" rel="tag">多帳號</a><span class="sep">, </span>
+    
+      <a href="/blog/tags/#%E9%96%8B%E7%99%BC%E8%80%85%E6%8A%80%E5%B7%A7" class="page__taxonomy-item p-category" rel="tag">開發者技巧</a>
     
     </span>
   </p>
@@ -455,7 +511,11 @@
     <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
     <span itemprop="keywords">
     
-      <a href="/blog/categories/#devops" class="page__taxonomy-item p-category" rel="tag">DevOps</a>
+      <a href="/blog/categories/#devops" class="page__taxonomy-item p-category" rel="tag">DevOps</a><span class="sep">, </span>
+    
+      <a href="/blog/categories/#github" class="page__taxonomy-item p-category" rel="tag">GitHub</a><span class="sep">, </span>
+    
+      <a href="/blog/categories/#productivity" class="page__taxonomy-item p-category" rel="tag">Productivity</a>
     
     </span>
   </p>
@@ -463,26 +523,26 @@
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2024-08-15T07:00:00+00:00">August 15, 2024</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-05-18T06:00:00+00:00">May 18, 2025</time></p>
 
       </footer>
 
       <section class="page__share">
   <h4 class="page__share-title">Share on</h4>
 
-  <a href="https://x.com/intent/tweet?text=Jenkins+%281%29+-+%E4%BB%80%E9%BA%BC%E6%98%AF+Jenkins%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fjenkins-1-what-is-jenkins%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on X">
+  <a href="https://x.com/intent/tweet?text=%F0%9F%92%A1+%E4%B8%80%E5%8F%B0%E9%9B%BB%E8%85%A6%E6%93%8D%E4%BD%9C%E5%A4%9A%E5%80%8B+GitHub+%E5%B8%B3%E8%99%9F%EF%BC%9A%E6%9C%80%E7%B0%A1%E5%96%AE%E5%BF%AB%E9%80%9F%E7%9A%84+SSH+%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fproductivity%2Fgithub%2Fhow-to-use-multiple-github-accounts-using-ssh%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on X">
     <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
   </a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fjenkins-1-what-is-jenkins%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fproductivity%2Fgithub%2Fhow-to-use-multiple-github-accounts-using-ssh%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook">
     <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
   </a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn">
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://nickhuangcyh.github.io/blog/devops/productivity/github/how-to-use-multiple-github-accounts-using-ssh/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn">
     <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
   </a>
 
-  <a href="https://bsky.app/intent/compose?text=Jenkins+%281%29+-+%E4%BB%80%E9%BA%BC%E6%98%AF+Jenkins%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fjenkins-1-what-is-jenkins%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Bluesky">
+  <a href="https://bsky.app/intent/compose?text=%F0%9F%92%A1+%E4%B8%80%E5%8F%B0%E9%9B%BB%E8%85%A6%E6%93%8D%E4%BD%9C%E5%A4%9A%E5%80%8B+GitHub+%E5%B8%B3%E8%99%9F%EF%BC%9A%E6%9C%80%E7%B0%A1%E5%96%AE%E5%BF%AB%E9%80%9F%E7%9A%84+SSH+%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95%20https%3A%2F%2Fnickhuangcyh.github.io%2Fblog%2Fdevops%2Fproductivity%2Fgithub%2Fhow-to-use-multiple-github-accounts-using-ssh%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Bluesky">
     <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
   </a>
 </section>
@@ -491,10 +551,10 @@
       
   <nav class="pagination">
     
-      <a href="/blog/design%20pattern/design-pattern-10-singleton-pattern/" class="pagination--pager" title="Design Pattern (10) - Singleton Pattern (單例模式)">Previous</a>
+      <a href="/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/" class="pagination--pager" title="🚀 如何使用 Excalidraw AI 快速生成專業級圖表，提升工作效率！">Previous</a>
     
     
-      <a href="/blog/devops/jenkins-2-how-to-setup-jenkins-server/" class="pagination--pager" title="Jenkins (2) - 如何架設 Jenkins 伺服器">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -518,58 +578,6 @@
   
   <h2 class="page__related-title">You may also enjoy</h2>
   <div class="grid__wrapper">
-    
-      
-      
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src="/blog/assets/images/github-multi-account.jpg" alt="">
-      </div>
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/blog/devops/productivity/github/how-to-use-multiple-github-accounts-using-ssh/" rel="permalink">💡 一台電腦操作多個 GitHub 帳號：最簡單快速的 SSH 設定方法
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        
-        <time datetime="2025-05-18T06:00:00+00:00">May 18, 2025</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          less than 1 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">讓你的電腦同時操作多個 GitHub 帳號，適合有多個身分或工作/個人帳號的開發者使用。
-</p>
-  </article>
-</div>
-
     
       
       
@@ -662,7 +670,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          2 minute read
+          1 minute read
         
       </span>
     
@@ -722,6 +730,58 @@
 
 
     <p class="archive__item-excerpt" itemprop="description">解譯器模式用於構建一個可解讀特定語言或語法的系統，適合於處理複雜的規則判斷或指令語法。
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/blog/assets/images/design_patterns.jpg" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/blog/design%20pattern/design-pattern-27-visitor-pattern/" rel="permalink">Design Pattern (27) - Visitor Pattern (訪問者模式)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2024-12-28T13:30:00+00:00">December 28, 2024</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">訪問者模式提供了一種方式，讓我們能在不修改物件結構的前提下，為其增加新的操作邏輯，實現高擴展性。
 </p>
   </article>
 </div>
@@ -828,8 +888,8 @@
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://nickhuangcyh.github.io/blog/devops/jenkins-1-what-is-jenkins/";  /* Replace PAGE_URL with your page's canonical URL variable */
-      this.page.identifier = "/devops/jenkins-1-what-is-jenkins"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+      this.page.url = "https://nickhuangcyh.github.io/blog/devops/productivity/github/how-to-use-multiple-github-accounts-using-ssh/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/devops/productivity/github/how-to-use-multiple-github-accounts-using-ssh"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
     };
     (function() { /* DON'T EDIT BELOW THIS LINE */
       var d = document, s = d.createElement('script');

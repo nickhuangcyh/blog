@@ -292,4 +292,10 @@ var store = [{
         "tags": ["Excalidraw","AI Drawing","Diagram Tool","Flowchart","Mind Map"],
         "url": "/blog/ai%20tools/visualization/productivity/ai-tools-excalidraw-chart-guide/",
         "teaser": "/blog/assets/images/kelly-sikkema-lFtttcsx5Vk-unsplash.jpg"
+      },{
+        "title": "💡 一台電腦操作多個 GitHub 帳號：最簡單快速的 SSH 設定方法",
+        "excerpt":"🚀 為什麼需要多個 GitHub 帳號？ 在工作與個人開發之間，許多開發者會同時擁有兩個以上的 GitHub 帳號。為了避免權限混淆或 push 錯誤，我們可以透過 SSH config 的方式，讓同一台電腦安全切換不同帳號。 🛠 最簡單的多帳號操作方法：使用 SSH Config 配對金鑰 以下是最精簡、有效的操作流程（假設你已有不同帳號的 SSH 金鑰）： 1️⃣ 檢查目前已載入的金鑰 ssh-add -l 如果只看到預設金鑰（例如 id_ed25519），代表還沒載入其他帳號的 key。 256 SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx nick25932219@gmail.com(ED25519) 2️⃣ 載入第二組帳號的金鑰 ssh-add ~/.ssh/id_ed25519_company 再次確認： ssh-add -l 你應該會看到 id_ed25519_company 被成功載入。 256 SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx nick25932219@gmail.com 256 SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx nickhuang@company.com.tw (ED25519) 3️⃣ 設定 SSH...","categories": ["DevOps","Productivity","GitHub"],
+        "tags": ["GitHub","SSH","多帳號","開發者技巧","Git"],
+        "url": "/blog/devops/productivity/github/how-to-use-multiple-github-accounts-using-ssh/",
+        "teaser": "/blog/assets/images/github-multi-account.jpg"
       }]
